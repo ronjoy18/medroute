@@ -24,44 +24,97 @@ body {
   flex-direction: column;
 }
 
+/* Main Navigation Bar */
 .clinical-nav {
   background: var(--sterile-white);
   border-bottom: 1px solid var(--border-slate);
-  padding: 1rem 2rem;
+  padding: 0.85rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
+}
+
+/* Left Section: Brand & Global Doctors */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 .clinical-nav .brand {
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: var(--primary-deep);
   text-decoration: none;
+  white-space: nowrap; /* Keeps Medroute Diagnostics on one single line */
+  line-height: 1.2;
 }
 
+/* Right Section: About Us + Auth Buttons */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.nav-link {
+  color: var(--primary-deep);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+/* Base Button Style */
 .clinical-btn {
   padding: 0.65rem 1.25rem;
   border-radius: 6px;
-  border: 1px solid transparent;
-  font-weight: 400;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  display: flex;
-  gap: 12xp;
+  display: inline-flex;
+  gap: 8px;
   align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
+/* Login: Primary Deep Blue */
 .btn-primary {
   background-color: var(--primary-deep);
   color: var(--sterile-white);
+  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
   background-color: #083c53;
 }
 
+/* Sign In / Sign Up: White Background, Black Text, No Borders */
+.btn-signup-clean {
+  background-color: #ffffff;
+  color: #000000;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.btn-signup-clean:hover {
+  background-color: #f1f5f9;
+}
+
+/* Utility buttons */
 .btn-teal {
   background-color: var(--secondary-teal);
   color: var(--sterile-white);
@@ -71,14 +124,15 @@ body {
   background-color: #028a7b;
 }
 
-.btn-outline {
-  border-color: var(--primary-deep);
-  color: var(--primary-deep);
-  background: transparent;
+.btn-whatsapp {
+  background-color: #25D366;
+  color: #ffffff;
 }
 
-.btn-outline:hover {
-  background: var(--neutral-soft);
+.btn-phone {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
 }
 
 .main-content {
@@ -89,96 +143,57 @@ body {
   width: 100%;
 }
 
-/* Card Structures */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.card {
+.clinical-nav {
   background: var(--sterile-white);
-  border: 1px solid var(--border-slate);
-  border-radius: 8px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Password Engine Elements */
-.rule-tracker {
-  list-style: none;
-  margin-top: 0.75rem;
-  padding: 0.5rem;
-  background: var(--neutral-soft);
-  border-radius: 6px;
-}
-
-.rule-tracker li {
-  font-size: 0.825rem;
-  color: #64748B;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.rule-tracker li.valid {
-  color: var(--success-green);
-  font-weight: 600;
-}
-
-.rule-tracker li.valid::before {
-  content: "✔";
-}
-
-.rule-tracker li.invalid::before {
-  content: "○";
-}
-
-/* Data Table Architecture */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--sterile-white);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-slate);
-  margin-top: 1rem;
-}
-
-.data-table th, .data-table td {
-  padding: 1rem;
-  text-align: left;
   border-bottom: 1px solid var(--border-slate);
-}
-
-.data-table th {
-  background: var(--neutral-soft);
-  font-weight: 700;
-}
-
-.auth-btn {
-   padding: 0.65rem 1.25rem;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
+  padding: 0.85rem 2rem;
   display: flex;
-  gap: 12xp;
+  justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
 }
 
-.btn-whatsapp {
-  background-color: #25D366;
-  color: white;
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
-.btn-phone {
-  background-color: white;
-  color: black;
+.clinical-nav .brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary-deep);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-link {
+  color: var(--primary-deep);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.user-badge {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--neutral-slate);
+  white-space: nowrap;
+}
+
+/* White background, black text, zero borders */
+.btn-signup-clean {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-signup-clean:hover {
+  background-color: #f1f5f9;
 }

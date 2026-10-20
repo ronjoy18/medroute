@@ -10,30 +10,34 @@
 <!-- CORRECT -->
 <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
 
-  <nav class="clinical-nav">
-    <a href="/" class="brand">Medroute <span style="color: var(--secondary-teal);">Diagnostics</span></a>
-    <div>
-      {% if request.user.is_authenticated %}
-        <span style="margin-right: 1rem; font-weight: 600;">
-          {{ request.user.get_full_name|default:request.user.username }} [{{ request.user.get_role_display }}]
-        </span>
-        <a href="/dashboard/" class="clinical-btn btn-outline" style="margin-right: 0.5rem;">Clear</a>
-        <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href='/')" class="clinical-btn btn-primary">Sign Out</button>
-      {% else %}
-        <!--a href="/auth/?mode=login&role=doctor" class="clinical-btn btn-outline" style="margin-right: 0.5rem;">Doctor Portal</a>-->
-        
-          <a href="/auth/?mode=register&role=patient" class=" clinical-btn btn-phone">sign up</a>
-          <a href="/auth/?mode=login&role=patient" class=" clinical-btn btn-primary">login</a>
-        
-      {% endif %}
-    </div>
-  </nav>
-  <div class="auth-button">
-    <a href="/about-us/" class="clinical-btn btn-primary" style="margin-right: 0.5rem;">About us</a>
-    <a href="/directory/doctors/" class="nav-link" style="color: var(--primary-deep); font-weight: 600; text-decoration: none;">
-  Global Doctors
-    </a>
+<nav class="clinical-nav">
+  <!-- Left Side: Brand + Global Doctors -->
+  <div class="nav-left">
+    <a href="/" class="brand">Medroute Diagnostics</a>
+    <a href="/directory/doctors/" class="nav-link">Global Doctors</a>
   </div>
+
+  <!-- Right Side: About Us + Conditional Auth Elements -->
+  <div class="nav-right">
+    <a href="/about-us/" class="nav-link">About Us</a>
+
+    {% if request.user.is_authenticated %}
+      <span class="user-badge">
+        {{ request.user.get_full_name|default:request.user.username }} [{{ request.user.get_role_display }}]
+      </span>
+      <a href="/dashboard/" class="clinical-btn btn-outline">Clear</a>
+      <button 
+        type="button" 
+        onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href='/')" 
+        class="clinical-btn btn-primary">
+        Sign Out
+      </button>
+    {% else %}
+      <a href="/signup/" class="clinical-btn btn-signup-clean">Sign Up</a>
+      <a href="/login/" class="clinical-btn btn-primary">Login</a>
+    {% endif %}
+  </div>
+</nav>
   <main class="main-content">
     {% block content %}{% endblock %}
   </main>

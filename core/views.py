@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import generics, status, views, permissions
 from rest_framework.response import Response
-from django.db import transaction
+from django.db import transaction, DatabaseError
 from django.utils.dateparse import parse_datetime
 import uuid
 from .models import User, CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
@@ -697,3 +697,25 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
 
 class AboutUsAPIView(views.APIView):
     permission_classes=[permissions.AllowAny]
+
+    def count(self, request):
+        error_message = None
+        number_services = 0
+        active_services = LabService.objects.all()
+        
+        try:
+            if active_services.exists():
+               active_services 
+               number_services = LabService.objects.count()
+            else:
+               number_services
+               error_message = "failed to load services"
+        except DatabaseError:
+        # This catches database crashes, connection timeouts, or missing tables
+           error_message = "Services failed to load due to a system error. Please try again later."
+
+        context = {
+            'services': active_services,
+            'error_message': error_message,
+        }
+        return render(request, 'contactus.html', context)
