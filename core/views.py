@@ -695,5 +695,5 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)   
 
 
-class AboutUsAPIView:
+class AboutUsAPIView(views.APIView):
     permission_classes=[permissions.AllowAny]
