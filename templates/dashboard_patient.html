@@ -27,39 +27,6 @@
   </div>
 </div>
 
-<!-- Service Booking Section -->
-<!--<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-  # 1. Lab Request #
-  <div class="card">
-    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
-      <h3 style="color: var(--primary-deep);">🧪 Request Laboratory Diagnostics</h3>
-      <p style="font-size: 0.8rem; color: #64748B;">Search catalog tests or write your custom requirements.</p>
-    </div>
-
-    <form id="patient-lab-form">
-      <div style="margin-bottom: 0.5rem; position: relative;">
-        <label style="font-size: 0.8rem; font-weight: 600;">Search Catalog Tests</label>
-        <input type="text" id="patient-catalog-search" placeholder="Type test name (e.g. Metabolic, Lipid)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
-        <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"></div>
-      </div>
-      <div id="patient-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
-
-      <div style="margin-bottom: 1rem;">
-        <label style="font-size: 0.8rem; font-weight: 600;">Custom / Unlisted Tests & Notes</label>
-        <textarea name="custom_test_names" id="lab-custom-notes" placeholder="Enter tests not listed in catalog or doctor's instructions..." rows="2" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"></textarea>
-      </div>
-
-      <button type="submit" id="submit-lab-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Diagnostic Request</button>
-    </form>
-  </div>
-
-  # 2. Medical Companionship #
-  <div class="card">
-    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
-      <h3 style="color: var(--primary-deep);">🤝 Medical Companionship & Escort</h3>
-      <p style="font-size: 0.8rem; color: #64748B;">Hospital escort, dialysis accompaniment, or clinic navigation.</p>
-    </div-->
-
 <!-- Booking Section -->
 <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
   <div class="card">
@@ -71,11 +38,11 @@
     <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
       <div style="margin-bottom: 0.5rem; position: relative;">
         <label style="font-size: 0.8rem; font-weight: 600;">Search Errand services</label>
-        <input type="text" id="patientt-catalog-search" placeholder="Type service name (e.g.)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
-        <div id="patientttt-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
+        <input type="text" id="patient-catalog-search" placeholder="Type service name (e.g.)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
+        <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
       </div>
 
-      <div id="patienttttt-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
+      <div id="patient-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
 
       <div style="margin-bottom: 0.75rem;">
         <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">
@@ -83,749 +50,87 @@
         </label>
         <input 
           type="datetime-local" 
-          id="service-start-time" 
+          id="services-start-time" 
           step="1800" 
           required 
           style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"
         >
         <small style="color: #64748B; font-size: 0.75rem;">
-          Operating hours: <strong>06:00 AM – 06:00 PM</strong> book witin the working hours window
+          Operating hours: <strong>06:00 AM – 06:00 PM</strong> book within the working hours window
         </small>
       </div>
 
-      <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule caregiver</button>
+      <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule Caregiver</button>
     </form>
   </div>
 </div>
 
-<!-- Current Orders & Invoices Table -->
+<!-- Section 1: Confirmed Service Schedules -->
 <div class="card" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">💳 Active Requests & Payment Status</h3>
-    <p style="font-size: 0.85rem; color: #64748B;">All submitted requests appear here. Click "Pay Now" to settle invoices.</p>
+    <h3 style="color: var(--primary-deep); margin: 0;">📅 My Confirmed service Schedules</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live timetable with your automatically assigned caregivers.</p>
+  </div>
+
+  <table class="data-table" id="patient-schedules-table">
+    <thead>
+      <tr>
+        <th>Activity</th>
+        <th>Assigned Caregiver</th>
+        <th>Start Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="4" style="text-align: center; color: #64748B;">Loading confirmed services...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Section 2: Active Bookings & Billing Table -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div style="margin-bottom: 0.75rem;">
+    <h3 style="color: var(--primary-deep);">💳 Active Bookings & Payment Status</h3>
+    <p style="font-size: 0.85rem; color: #64748B;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
   </div>
 
   <table class="data-table" id="billing-table">
     <thead>
       <tr>
-        <th>Intake Code</th>
-        <th>Requested Services / Items</th>
+        <th>Booking Code</th>
+        <th>Requested Activities / Lessons</th>
         <th>Total Amount</th>
         <th>Status</th>
         <th>Payment Action</th>
       </tr>
     </thead>
-    <tbody><tr><td colspan="5">Checking billing traces...</td></tr></tbody>
+    <tbody>
+      <tr><td colspan="5" style="text-align: center; color: #64748B;">Checking booking records...</td></tr>
+    </tbody>
   </table>
 </div>
 
-<!-- Reports Archive Table -->
-<div class="card">
+<!-- Section 3: Reports Archive Table -->
+<div class="card" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
     <h3 style="color: var(--primary-deep);">📄 Days reports Archive</h3>
-    <!--p style="font-size: 0.85rem; color: #64748B;">Download verified clinical PDF results once analysis is completed by the lab.</p-->
   </div>
 
   <table class="data-table" id="results-table">
     <thead>
       <tr>
         <th>Intake Code</th>
-        <!--th>Laboratory Status</th-->
-        <!--th>Diagnostic Report File</th-->
         <th>Submission Date</th>
       </tr>
     </thead>
-    <tbody><tr><td colspan="4">Loading authorized reports...</td></tr></tbody>
+    <tbody>
+      <tr><td colspan="2" style="text-align: center; color: #64748B;">Loading authorized reports...</td></tr>
+    </tbody>
   </table>
 </div>
-{% endblock %}
 
-{% block extra_scripts %}
-<script>
-  function getCsrfToken() {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, 10) === "csrftoken=") {
-          cookieValue = decodeURIComponent(cookie.substring(10));
-          break;
-        }
-      }
-    }
-    return cookieValue || "{{ csrf_token }}";
-  }
-
-let catalog = [];
-  let selectedLabIds = [];
-
-  document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Fetch Catalog
-    try {
-      const res = await fetch("/api/v1/catalog/");
-      if (res.ok) {
-        catalog = await res.json();
-        populateCompDropdown();
-      }
-    } catch(e) {
-      console.error("Could not load catalog:", e);
-    }
-
-    // 2. Fetch Profile details (Referral Link & Promo)
-    try {
-      const profileRes = await fetch("/api/v1/patient/me/");
-      if (profileRes.ok) {
-        const p = await profileRes.json();
-        if (p.patient_type === "INDEPENDENT") {
-          document.getElementById("referral-box").style.display = "block";
-          document.getElementById("my-ref-link").value = p.referral_link;
-          document.getElementById("promo-balance").textContent = `$${p.promo_credits}`;
-        }
-      }
-    } catch(e) {}
-
-    // 3. Load Orders
-    loadPatientOrders();
-    loadPatientGlobalConnections();
-    // 4. Fixed Catalog Search
-    const searchInput = document.getElementById("patient-catalog-search");
-    const resultsBox = document.getElementById("patient-search-results");
-
-    searchInput.addEventListener("input", () => {
-      const q = searchInput.value.toLowerCase().trim();
-      if (!q) {
-        resultsBox.style.display = "none";
-        resultsBox.innerHTML = "";
-        return;
-      }
-
-      // Filter catalog tests safely
-      const filtered = catalog.filter(s => {
-        const isLab = !s.category_type || s.category_type === "LAB_TEST";
-        const nameMatch = s.name && s.name.toLowerCase().includes(q);
-        const codeMatch = s.code && s.code.toLowerCase().includes(q);
-        return isLab && (nameMatch || codeMatch);
-      });
-
-      resultsBox.innerHTML = "";
-
-      if (filtered.length === 0) {
-        resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No matching tests found. You can write custom test names in the box below.</div>";
-      } else {
-        filtered.forEach(item => {
-          const div = document.createElement("div");
-          div.style.padding = "8px 10px";
-          div.style.cursor = "pointer";
-          div.style.borderBottom = "1px solid #F1F5F9";
-          div.style.fontSize = "0.85rem";
-          div.innerHTML = `<strong>${item.name}</strong> ${item.code ? '(' + item.code + ')' : ''} - <span style="color: var(--secondary-teal); font-weight: bold;">$${item.price}</span>`;
-          
-          div.addEventListener("click", () => {
-            addPatientLab(item.id, item.name, item.price);
-          });
-          resultsBox.appendChild(div);
-        });
-      }
-      resultsBox.style.display = "block";
-    });
-
-    // Close dropdown on outside click
-    document.addEventListener("click", (e) => {
-      if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
-        resultsBox.style.display = "none";
-      }
-    });
-
-    // 5. Submit Lab Order Handler
-    const labForm = document.getElementById("patient-lab-form");
-    const submitLabBtn = document.getElementById("submit-lab-btn");
-
-    labForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const customVal = document.getElementById("lab-custom-notes").value.trim();
-
-      if (selectedLabIds.length === 0 && !customVal) {
-        alert("Please pick at least one test from the search bar or enter custom tests in the box.");
-        return;
-      }
-
-      submitLabBtn.disabled = true;
-      submitLabBtn.textContent = "Submitting Request...";
-
-      try {
-        const payload = {
-          services: selectedLabIds,
-          custom_test_names: customVal,
-          order_type: "LAB_TEST"
-        };
-
-        const resp = await fetch("/api/v1/orders/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCsrfToken()
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await resp.json();
-
-        if (resp.ok) {
-          showPatientToast("Request Submitted!", `Intake #${data.id.substring(0,8)} has been placed on your account.`);
-          selectedLabIds = [];
-          renderPatientLabs();
-          labForm.reset();
-          await loadPatientOrders();
-        } else {
-          alert("Server rejected submission (" + resp.status + "): " + (data.detail || JSON.stringify(data)));
-        }
-      } catch(err) {
-        console.error("Submission error details:", err);
-        alert("Request error: " + err.message);
-      } finally {
-        submitLabBtn.disabled = false;
-        submitLabBtn.textContent = "Submit Diagnostic Request";
-      }
-    });
-
-    // 6. Submit Companionship Handler
-    const compForm = document.getElementById("patient-comp-form");
-    const submitCompBtn = document.getElementById("submit-comp-btn");
-
-    compForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const pkg = document.getElementById("comp-service-select").value;
-      const details = document.getElementById("comp-custom-notes").value.trim();
-
-      submitCompBtn.disabled = true;
-      submitCompBtn.textContent = "Booking Companionship...";
-
-      try {
-        const payload = {
-          services: pkg ? [parseInt(pkg)] : [],
-          custom_test_names: details,
-          order_type: "COMPANIONSHIP"
-        };
-
-        const resp = await fetch("/api/v1/orders/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCsrfToken()
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await resp.json();
-
-        if (resp.ok) {
-          showPatientToast("Request Submitted!", `Companionship intake #${data.id.substring(0,8)} registered.`);
-          compForm.reset();
-          await loadPatientOrders();
-        } else {
-          alert("Server rejected booking (" + resp.status + "): " + (data.detail || JSON.stringify(data)));
-        }
-      } catch(err) {
-        console.error("Booking error details:", err);
-        alert("Booking error: " + err.message);
-      } finally {
-        submitCompBtn.disabled = false;
-        submitCompBtn.textContent = "Book Medical Companionship";
-      }
-    });
-  });
-
-  // 5-Second Toast Helper
-  function showPatientToast(title, message) {
-    const toast = document.getElementById("patient-toast-notification");
-    document.getElementById("toast-title").textContent = title;
-    document.getElementById("toast-message").textContent = message;
-    toast.style.display = "flex";
-
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 5000);
-  }
-
-  function populateCompDropdown() {
-    const select = document.getElementById("comp-service-select");
-    const items = catalog.filter(s => s.category_type === "COMPANIONSHIP");
-    items.forEach(i => {
-      select.innerHTML += `<option value="${i.id}">${i.name} ($${i.price})</option>`;
-    });
-  }
-
-  function addPatientLab(id, name, price) {
-    if (!selectedLabIds.includes(id)) {
-      selectedLabIds.push(id);
-      renderPatientLabs();
-    }
-    document.getElementById("patient-search-results").style.display = "none";
-    document.getElementById("patient-catalog-search").value = "";
-  }
-
-  function removePatientLab(id) {
-    selectedLabIds = selectedLabIds.filter(x => x !== id);
-    renderPatientLabs();
-  }
-
-  function renderPatientLabs() {
-    const box = document.getElementById("patient-selected-items");
-    box.innerHTML = "";
-    selectedLabIds.forEach(id => {
-      const item = catalog.find(x => x.id === id);
-      if (item) {
-        box.innerHTML += `
-          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
-            ${item.name} ($${item.price})
-            <b style="cursor: pointer; color: red;" onclick="removePatientLab(${item.id})">&times;</b>
-          </span>`;
-      }
-    });
-  }
-
-  async function loadPatientOrders() {
-    try {
-      const res = await fetch("/api/v1/orders/");
-      if (res.ok) {
-        const orders = await res.json();
-        const billTbody = document.querySelector("#billing-table tbody");
-        const resTbody = document.querySelector("#results-table tbody");
-
-        billTbody.innerHTML = "";
-        resTbody.innerHTML = "";
-
-        if (orders.length === 0) {
-          billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active orders or diagnostic requests found.</td></tr>';
-          resTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No reports archived yet.</td></tr>';
-          return;
-        }
-
-        orders.forEach(o => {
-          const catalogNames = (o.services_detail || []).map(s => s.name).join(", ");
-          const allItems = [catalogNames, o.custom_test_names].filter(Boolean).join(" | ");
-          const hasDoc = Boolean(o.attached_report_pdf);
-
-          // Billing Table Row
-          billTbody.innerHTML += `
-            <tr>
-              <td><code>#${o.id.substring(0,8)}</code></td>
-              <td style="font-size: 0.85rem; max-width: 250px;">${allItems || 'Clinical Service'}</td>
-              <td><strong>$${o.total_cost}</strong></td>
-              <td>
-                ${o.is_paid 
-                  ? `<span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">
-                       Completed, our team will get back to you
-                     </span>`
-                  : `<span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">
-                       Pending Payment
-                     </span>`}
-              </td>
-              <td>
-                ${!o.is_paid 
-                  ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 12px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
-                  : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
-              </td>
-            </tr>
-          `;
-
-          // Diagnostic Reports Row
-          resTbody.innerHTML += `
-            <tr>
-              <td><code>#${o.id.substring(0,8)}</code></td>
-              <td>
-                <span style="font-weight: 700; color: ${o.status === 'COMPLETED' ? '#166534' : '#D97706'}">
-                  ${o.status}
-                </span>
-              </td>
-              <td>
-                ${hasDoc 
-                  ? `<button onclick="performDownloadReport('${o.id}')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">Download PDF</button>`
-                  : `<span style="color: #64748B; font-size: 0.8rem;">${o.is_paid ? 'Sample in Laboratory Analysis' : 'Awaiting Payment Settlement'}</span>`}
-              </td>
-              <td style="font-size: 0.85rem;">${o.created_at ? o.created_at.substring(0,10) : 'N/A'}</td>
-            </tr>
-          `;
-        });
-      }
-    } catch(e) {
-      console.error("Error loading patient orders:", e);
-    }
-  }
-  async function loadPatientGlobalConnections() {
-      try {
-        const res = await fetch("/api/v1/patient/global-connections/");
-        if (!res.ok) return;
-        const items = await res.json();
-        const tbody = document.querySelector("#global-doctors-table tbody");
-        tbody.innerHTML = "";
-
-        if (items.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B; padding: 1.5rem;">No global doctors connected.</td></tr>';
-          return;
-        }
-
-        items.forEach(doc => {
-          let statusHtml = "";
-          if (doc.status === "CONNECTED") {
-            statusHtml = '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connected</span>';
-          } else {
-            statusHtml = '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connection pending waiting for communication</span>';
-          }
-
-          const flagImg = `<img src="https://flagcdn.com/20x15/${doc.country_iso}.png" width="18" height="13" style="vertical-align: middle; margin-right: 4px; border-radius: 2px;">`;
-
-          tbody.innerHTML += `
-            <tr>
-              <td><strong>${doc.doctor_name}</strong></td>
-              <td>${doc.specialty}</td>
-              <td style="font-size: 0.85rem;">${flagImg} ${doc.country} • <span style="color: #64748B;">${doc.hospital}</span></td>
-              <td style="font-size: 0.85rem;">${doc.created_at}</td>
-              <td>${statusHtml}</td>
-            </tr>
-          `;
-        });
-      } catch(e) {
-        console.error("Could not load global doctor connections:", e);
-      }
-    }
-</script>
-<script>
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue || "{{ csrf_token }}";
-  }
-
-  function showpatientttttToast(title, message) {
-    const toast = document.getElementById("patient-toast-notification");
-    if (!toast) return;
-    const titleEl = document.getElementById("toast-title");
-    const msgEl = document.getElementById("toast-message");
-    if (titleEl) titleEl.textContent = title;
-    if (msgEl) msgEl.textContent = message;
-    toast.style.display = "flex";
-    setTimeout(() => { toast.style.display = "none"; }, 5000);
-  }
-
-  let catalog = [];
-  let selectedservicesIds = [];
-
-  // 1. Load Confirmed Schedules
-  async function loadpatientSchedules() {
-    const tbody = document.querySelector("#patient-schedules-table tbody");
-    if (!tbody) return;
-
-    try {
-      const res = await fetch("/api/v1/schedules/");
-      if (!res.ok) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
-        return;
-      }
-
-      const schedules = await res.json();
-      tbody.innerHTML = "";
-
-      if (!Array.isArray(schedules) || schedules.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No confirmed services schedules yet. Pick an services and book above.</td></tr>';
-        return;
-      }
-
-      schedules.forEach(s => {
-        const start = s.start_time ? new Date(s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
-        const end = s.end_time ? new Date(s.end_time).toLocaleTimeString([], { timeStyle: 'short' }) : "N/A";
-        const actName = s.services_name || " services";
-        const caregiverName = s.caregiver_name || "Assigned caregiver";
-
-        tbody.innerHTML += `
-          <tr>
-            <td><strong>${actName}</strong></td>
-            <td><span style="color: var(--primary-deep); font-weight: 600;">🏊 ${caregiveriveriverName}</span></td>
-            <td style="font-size: 0.85rem;">${start}</td>
-            <td style="font-size: 0.85rem;">${end}</td>
-            <td>
-              <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
-                ${s.status}
-              </span>
-            </td>
-          </tr>
-        `;
-      });
-    } catch (err) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #EF4444;">Failed to load schedules: ${err.message}</td></tr>`;
-    }
-  }
-
-  // 2. Load Billing Orders
-  async function loadpatientOrders() {
-    const billTbody = document.querySelector("#billing-table tbody");
-    if (!billTbody) return;
-
-    try {
-      const res = await fetch("/api/v1/orders/");
-      if (!res.ok) return;
-
-      const orders = await res.json();
-      billTbody.innerHTML = "";
-
-      if (!Array.isArray(orders) || orders.length === 0) {
-        billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active bookings found.</td></tr>';
-        return;
-      }
-
-      orders.forEach(o => {
-        billTbody.innerHTML += `
-          <tr>
-            <td><code>#${o.id.substring(0, 8)}</code></td>
-            <td style="font-size: 0.85rem;">${o.services_name || " services"}</td>
-            <td><strong>Ksh${o.total_cost}</strong></td>
-            <td>
-              ${o.is_paid 
-                ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7;">Confirmed</span>`
-                : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2;">Pending Payment</span>`}
-            </td>
-            <td>
-              ${!o.is_paid 
-                ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
-                : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
-            </td>
-          </tr>
-        `;
-      });
-    } catch(e) {
-      console.error("Orders load failed:", e);
-    }
-  }
-
-  // 3. Load caregiver Evaluations
-  async function loadpatienttReports() {
-    const tbody = document.querySelector("#assessments-table tbody");
-    if (!tbody) return;
-
-    try {
-      const res = await fetch("/api/v1/patient/my-reports/");
-      if (!res.ok) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">Unable to retrieve reports.</td></tr>';
-        return;
-      }
-
-      const reports = await res.json();
-      tbody.innerHTML = "";
-
-      if (!Array.isArray(reports) || reports.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No caregiver reports filed yet.</td></tr>';
-        return;
-      }
-
-      reports.forEach(r => {
-        tbody.innerHTML += `
-          <tr>
-            <td style="font-size: 0.85rem;">${r.date || "Recent"}</td>
-            <td><strong>${r.caregiver_name || "Assigned caregiver"}</strong></td>
-            <td>
-              <span style="background: #E0F2FE; color: var(--primary-deep); padding: 3px 8px; border-radius: 4px; font-weight: 700;">
-                ${r.performance_score}/10
-              </span>
-            </td>
-            <td style="font-size: 0.85rem; color: #334155;">${r.caregiver_remarks || "No additional comments"}</td>
-          </tr>
-        `;
-      });
-    } catch(e) {
-      console.error("Report fetch error:", e);
-    }
-  }
-
-  function addpatientservices(id, name, price) {
-    if (!selectedservicesIds.includes(id)) {
-      selectedservicesIds.push(id);
-      renderpatientActivities();
-    }
-    const searchBox = document.getElementById("patient-search-results");
-    const searchInput = document.getElementById("patient-catalog-search");
-    if (searchBox) searchBox.style.display = "none";
-    if (searchInput) searchInput.value = "";
-  }
-
-  function removepatientservices(id) {
-    selectedservicesIds = selectedservicesIds.filter(x => x !== id);
-    renderpatientActivities();
-  }
-
-  function renderpatientActivities() {
-    const box = document.getElementById("patient-selected-items");
-    if (!box) return;
-    box.innerHTML = "";
-    selectedservicesIds.forEach(id => {
-      const item = catalog.find(x => x.id === id);
-      if (item) {
-        box.innerHTML += `
-          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
-            ${item.name} (Ksh${item.price})
-            <b style="cursor: pointer; color: red;" onclick="removepatientservices('${item.id}')">&times;</b>
-          </span>`;
-      }
-    });
-  }
-
-  // Single DOM Initialization
-  document.addEventListener("DOMContentLoaded", async () => {
-    // A. Minimum date initialization
-    const timeInput = document.getElementById("services-start-time");
-    if (timeInput) {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      const day = String(today.getDate()).padStart(2, "0");
-      timeInput.min = `${year}-${month}-${day}T06:00`;
-    }
-
-    // B. Initial data fetches
-    loadpatientSchedules();
-    loadpatientOrders();
-    loadpatientReports();
-
-    // C. Referral profile load
-    try {
-      const profileRes = await fetch("/api/v1/patient/me/");
-      if (profileRes.ok) {
-        const c = await profileRes.json();
-        const refBox = document.getElementById("referral-box");
-        const refLinkInput = document.getElementById("my-ref-link");
-        const promoBal = document.getElementById("promo-balance");
-        if (refBox) refBox.style.display = "block";
-        if (refLinkInput) refLinkInput.value = c.referral_link || "";
-        if (promoBal) promoBal.textContent = `Ksh${c.promo_credits || "0.00"}`;
-      }
-    } catch(e) {}
-
-    // D. Catalog load
-    try {
-      const catRes = await fetch("/api/v1/catalog/");
-      if (catRes.ok) catalog = await catRes.json();
-    } catch(e) {}
-
-    // E. Catalog search filter
-    const searchInput = document.getElementById("patient-catalog-search");
-    const resultsBox = document.getElementById("patient-search-results");
-    if (searchInput && resultsBox) {
-      searchInput.addEventListener("input", () => {
-        const q = searchInput.value.toLowerCase().trim();
-        if (!q) {
-          resultsBox.style.display = "none";
-          resultsBox.innerHTML = "";
-          return;
-        }
-
-        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
-        resultsBox.innerHTML = "";
-
-        if (filtered.length === 0) {
-          resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No activities found.</div>";
-        } else {
-          filtered.forEach(item => {
-            const div = document.createElement("div");
-            div.style.padding = "8px 10px";
-            div.style.cursor = "pointer";
-            div.style.borderBottom = "1px solid #F1F5F9";
-            div.style.fontSize = "0.85rem";
-            div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: bold;">Ksh${item.price}</span>`;
-            div.addEventListener("click", () => addpatientservices(item.id, item.name, item.price));
-            resultsBox.appendChild(div);
-          });
-        }
-        resultsBox.style.display = "block";
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
-          resultsBox.style.display = "none";
-        }
-      });
-    }
-
-    // F. SINGLE Form Submit Listener -> Posts directly to /api/v1/schedules/
-    const orderForm = document.getElementById("patient-order-form");
-    const submitBtn = document.getElementById("submit-services-btn");
-
-    if (orderForm) {
-      orderForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (selectedservicesIds.length === 0) {
-          alert("Please select at least one  services from the search bar.");
-          return;
-        }
-
-        const timeVal = document.getElementById("services-start-time").value;
-        if (!timeVal) {
-          alert("Please specify a session date and start time.");
-          return;
-        }
-
-        const chosenDate = new Date(timeVal);
-        const chosenHour = chosenDate.getHours();
-
-        if (chosenHour < 6 || chosenHour >= 18) {
-          alert("medroute training runs strictly between 06:00 AM and 06:00 PM. Please pick a daytime slot.");
-          return;
-        }
-
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Assigning Available caregiver...";
-        }
-
-        try {
-          const res = await fetch("/api/v1/schedules/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": getCookie("csrftoken")
-            },
-            body: JSON.stringify({
-              services_id: selectedservicesIds[0],
-              start_time: chosenDate.toISOString()
-            })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            showpatientToast("Session Booked!", `caregiver ${data.caregiver_name} assigned.`);
-            selectedservicesIds = [];
-            renderpatientActivities();
-            orderForm.reset();
-            loadpatientSchedules();
-            loadpatientOrders();
-          } else {
-            const err = await res.json();
-            alert(err.detail || "Booking failed. Please try an alternative slot.");
-          }
-        } catch (err) {
-          alert("Network failure communicating with scheduling service.");
-        } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit Booking & Schedule caregiver";
-          }
-        }
-      });
-    }
-  });
-</script>
-{% endblock %}
-<!-- Section 3: Connected Global Doctors -->
-<div class="card" style="margin-top: 2rem;">
+<!-- Section 4: Connected Global Doctors -->
+<div class="card">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
     <div>
       <h3 style="color: var(--primary-deep); margin: 0;">🌐 Connected Global Doctors & Specialists</h3>
@@ -851,3 +156,366 @@ let catalog = [];
     </tbody>
   </table>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function getCsrfToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, 10) === "csrftoken=") {
+          cookieValue = decodeURIComponent(cookie.substring(10));
+          break;
+        }
+      }
+    }
+    return cookieValue || "{{ csrf_token }}";
+  }
+
+  function showPatientToast(title, message) {
+    const toast = document.getElementById("patient-toast-notification");
+    if (!toast) return;
+    const titleEl = document.getElementById("toast-title");
+    const msgEl = document.getElementById("toast-message");
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = message;
+    toast.style.display = "flex";
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+
+  let catalog = [];
+  let selectedServicesIds = [];
+
+  // 1. Fetch & Render Confirmed Schedules
+  async function loadPatientSchedules() {
+    const tbody = document.querySelector("#patient-schedules-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/schedules/");
+      if (!res.ok) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
+        return;
+      }
+
+      const schedules = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(schedules) || schedules.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No confirmed schedules yet. Pick a service above to book.</td></tr>';
+        return;
+      }
+
+      schedules.forEach(s => {
+        const start = s.start_time ? new Date(s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
+        const actName = s.services_name || s.service_name || "Care Service";
+        const caregiverName = s.caregiver_name || "Assigned Caregiver";
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${actName}</strong></td>
+            <td><span style="color: var(--primary-deep); font-weight: 600;">🤝 ${caregiverName}</span></td>
+            <td style="font-size: 0.85rem;">${start}</td>
+            <td>
+              <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                ${s.status || 'CONFIRMED'}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Failed to load schedules: ${err.message}</td></tr>`;
+    }
+  }
+
+  // 2. Fetch & Render Patient Orders / Billing Table
+  async function loadPatientOrders() {
+    const billTbody = document.querySelector("#billing-table tbody");
+    const resTbody = document.querySelector("#results-table tbody");
+
+    try {
+      const res = await fetch("/api/v1/orders/");
+      if (!res.ok) return;
+      const orders = await res.json();
+
+      if (billTbody) billTbody.innerHTML = "";
+      if (resTbody) resTbody.innerHTML = "";
+
+      if (!Array.isArray(orders) || orders.length === 0) {
+        if (billTbody) billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active bookings found.</td></tr>';
+        if (resTbody) resTbody.innerHTML = '<tr><td colspan="2" style="text-align: center; color: #64748B;">No reports archived yet.</td></tr>';
+        return;
+      }
+
+      orders.forEach(o => {
+        const catalogNames = (o.services_detail || []).map(s => s.name).join(", ");
+        const allItems = [catalogNames, o.custom_test_names, o.services_name].filter(Boolean).join(" | ");
+
+        if (billTbody) {
+          billTbody.innerHTML += `
+            <tr>
+              <td><code>#${o.id.substring(0, 8)}</code></td>
+              <td style="font-size: 0.85rem; max-width: 250px;">${allItems || 'Clinical Service'}</td>
+              <td><strong>Ksh ${o.total_cost}</strong></td>
+              <td>
+                ${o.is_paid 
+                  ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Completed</span>`
+                  : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">Pending Payment</span>`}
+              </td>
+              <td>
+                ${!o.is_paid 
+                  ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
+                  : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
+              </td>
+            </tr>
+          `;
+        }
+
+        if (resTbody) {
+          resTbody.innerHTML += `
+            <tr>
+              <td><code>#${o.id.substring(0, 8)}</code></td>
+              <td style="font-size: 0.85rem;">${o.created_at ? o.created_at.substring(0, 10) : 'N/A'}</td>
+            </tr>
+          `;
+        }
+      });
+    } catch (e) {
+      console.error("Error loading patient orders:", e);
+    }
+  }
+
+  // 3. Fetch Global Connections
+  async function loadPatientGlobalConnections() {
+    const tbody = document.querySelector("#global-doctors-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/patient/global-connections/");
+      if (!res.ok) return;
+      const items = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(items) || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B; padding: 1.5rem;">No global doctors connected.</td></tr>';
+        return;
+      }
+
+      items.forEach(doc => {
+        const statusHtml = doc.status === "CONNECTED"
+          ? '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connected</span>'
+          : '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #92400E; background: #FEF3C7; border: 1px solid #FCD34D;">Pending Communication</span>';
+
+        const flagImg = doc.country_iso ? `<img src="https://flagcdn.com/20x15/${doc.country_iso.toLowerCase()}.png" width="18" height="13" style="vertical-align: middle; margin-right: 4px; border-radius: 2px;">` : '';
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${doc.doctor_name || 'N/A'}</strong></td>
+            <td>${doc.specialty || 'General Practitioner'}</td>
+            <td style="font-size: 0.85rem;">${flagImg} ${doc.country || ''} <span style="color: #64748B;">${doc.hospital || ''}</span></td>
+            <td style="font-size: 0.85rem;">${doc.created_at ? doc.created_at.substring(0, 10) : 'N/A'}</td>
+            <td>${statusHtml}</td>
+          </tr>
+        `;
+      });
+    } catch (e) {
+      console.error("Could not load global doctor connections:", e);
+    }
+  }
+
+  // Selection Badges
+  function addPatientService(id, name, price) {
+    if (!selectedServicesIds.includes(id)) {
+      selectedServicesIds.push(id);
+      renderSelectedServices();
+    }
+    const searchBox = document.getElementById("patient-search-results");
+    const searchInput = document.getElementById("patient-catalog-search");
+    if (searchBox) searchBox.style.display = "none";
+    if (searchInput) searchInput.value = "";
+  }
+
+  function removePatientService(id) {
+    selectedServicesIds = selectedServicesIds.filter(x => x !== id);
+    renderSelectedServices();
+  }
+
+  function renderSelectedServices() {
+    const box = document.getElementById("patient-selected-items");
+    if (!box) return;
+    box.innerHTML = "";
+    selectedServicesIds.forEach(id => {
+      const item = catalog.find(x => x.id === id);
+      if (item) {
+        box.innerHTML += `
+          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+            ${item.name} (Ksh ${item.price})
+            <b style="cursor: pointer; color: red;" onclick="removePatientService(${item.id})">&times;</b>
+          </span>`;
+      }
+    });
+  }
+
+  // Master Initialization
+  document.addEventListener("DOMContentLoaded", async () => {
+    // A. Minimum Date Restriction (06:00 AM limit)
+    const timeInput = document.getElementById("services-start-time");
+    if (timeInput) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      timeInput.min = `${year}-${month}-${day}T06:00`;
+    }
+
+    // B. Fetch Initial Data
+    loadPatientSchedules();
+    loadPatientOrders();
+    loadPatientGlobalConnections();
+
+    // C. Referral profile load
+    try {
+      const profileRes = await fetch("/api/v1/patient/me/");
+      if (profileRes.ok) {
+        const p = await profileRes.json();
+        const refBox = document.getElementById("referral-box");
+        const refLinkInput = document.getElementById("my-ref-link");
+        const promoBal = document.getElementById("promo-balance");
+
+        if (p.patient_type === "INDEPENDENT" && refBox) {
+          refBox.style.display = "block";
+          if (refLinkInput) refLinkInput.value = p.referral_link || "";
+          if (promoBal) promoBal.textContent = `$${p.promo_credits || "0.00"}`;
+        }
+      }
+    } catch (e) {
+      console.error("Profile load failed:", e);
+    }
+
+    // D. Catalog load
+    try {
+      const catRes = await fetch("/api/v1/catalog/");
+      if (catRes.ok) {
+        catalog = await catRes.json();
+      }
+    } catch (e) {
+      console.error("Catalog load error:", e);
+    }
+
+    // E. Catalog search filter listener
+    const searchInput = document.getElementById("patient-catalog-search");
+    const resultsBox = document.getElementById("patient-search-results");
+
+    if (searchInput && resultsBox) {
+      searchInput.addEventListener("input", () => {
+        const q = searchInput.value.toLowerCase().trim();
+        if (!q) {
+          resultsBox.style.display = "none";
+          resultsBox.innerHTML = "";
+          return;
+        }
+
+        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
+        resultsBox.innerHTML = "";
+
+        if (filtered.length === 0) {
+          resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No matching services found.</div>";
+        } else {
+          filtered.forEach(item => {
+            const div = document.createElement("div");
+            div.style.padding = "8px 10px";
+            div.style.cursor = "pointer";
+            div.style.borderBottom = "1px solid #F1F5F9";
+            div.style.fontSize = "0.85rem";
+            div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: bold;">Ksh ${item.price}</span>`;
+            div.addEventListener("click", () => addPatientService(item.id, item.name, item.price));
+            resultsBox.appendChild(div);
+          });
+        }
+        resultsBox.style.display = "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+          resultsBox.style.display = "none";
+        }
+      });
+    }
+
+    // F. Form Submit Listener -> Posts to /api/v1/schedules/
+    const orderForm = document.getElementById("patient-order-form");
+    const submitBtn = document.getElementById("submit-services-btn");
+
+    if (orderForm) {
+      orderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (selectedServicesIds.length === 0) {
+          alert("Please select at least one service from the search bar.");
+          return;
+        }
+
+        const timeVal = document.getElementById("services-start-time").value;
+        if (!timeVal) {
+          alert("Please specify a session date and start time.");
+          return;
+        }
+
+        const chosenDate = new Date(timeVal);
+        const chosenHour = chosenDate.getHours();
+
+        if (chosenHour < 6 || chosenHour >= 18) {
+          alert("Service hours are strictly between 06:00 AM and 06:00 PM. Please pick a daytime slot.");
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Assigning Available Caregiver...";
+        }
+
+        try {
+          const res = await fetch("/api/v1/schedules/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCsrfToken()
+            },
+            body: JSON.stringify({
+              services_id: selectedServicesIds[0],
+              start_time: chosenDate.toISOString()
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            showPatientToast("Session Booked!", `Caregiver ${data.caregiver_name || 'assigned'} scheduled.`);
+            selectedServicesIds = [];
+            renderSelectedServices();
+            orderForm.reset();
+            loadPatientSchedules();
+            loadPatientOrders();
+          } else {
+            const err = await res.json();
+            alert(err.detail || "Booking failed. Please try an alternative slot.");
+          }
+        } catch (err) {
+          alert("Network failure communicating with scheduling service.");
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit Booking & Schedule Caregiver";
+          }
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}
