@@ -562,7 +562,7 @@ class CareGiverPatientDetailAPIView(views.APIView):
         
 
 
-class LessonScheduleListCreateAPIView(generics.ListCreateAPIView):
+class CareScheduleAPIView(generics.ListCreateAPIView):
     serializer_class = CompanionshipSchedulerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -693,3 +693,7 @@ class LessonScheduleListCreateAPIView(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(schedule)
         return Response(serializer.data, status=status.HTTP_201_CREATED)   
+
+
+class AboutUsAPIView:
+    permission_classes=[permissions.AllowAny]

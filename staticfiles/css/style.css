@@ -44,11 +44,11 @@ body {
   padding: 0.65rem 1.25rem;
   border-radius: 6px;
   border: 1px solid transparent;
-  font-weight: 600;
+  font-weight: 300;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
 }
 
 .table-responsive {
