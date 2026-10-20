@@ -21,13 +21,15 @@
         <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href='/')" class="clinical-btn btn-primary">Sign Out</button>
       {% else %}
         <!--a href="/auth/?mode=login&role=doctor" class="clinical-btn btn-outline" style="margin-right: 0.5rem;">Doctor Portal</a>-->
-        <a href="/auth/?mode=register&role=patient" class="clinical-btn btn-primary">sign up</a>
+         
+        <a href="/auth/?mode=register&role=patient" class="clinical-btn btn-phone">sign up</a>
         <a href="/auth/?mode=login&role=patient" class="clinical-btn btn-primary">login</a>
+        
       {% endif %}
     </div>
   </nav>
-  <div class="clinical_nav">
-    <a href="/about-us/"  style="margin-right: 0.5rem;">About us</a>
+  <div class="auth-button">
+    <a href="/about-us/" class="clinical-btn btn-primary" style="margin-right: 0.5rem;">About us</a>
     <a href="/directory/doctors/" class="nav-link" style="color: var(--primary-deep); font-weight: 600; text-decoration: none;">
   Global Doctors
     </a>
