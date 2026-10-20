@@ -1,0 +1,635 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- 5-Second Toast Container -->
+<div id="doctor-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
+  <span style="font-size: 1.25rem;">✓</span>
+  <div>
+    <strong id="toast-title">Success</strong>
+    <p id="toast-message" style="font-size: 0.85rem; margin: 0; color: #047857;"></p>
+  </div>
+</div>
+
+<!-- Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <div>
+    <h1 style="color: var(--primary-deep); margin-bottom: 0.25rem;">Doctor Practice Console</h1>
+    <p style="color: #64748B;">Patient onboarding, clinical order dispatch, and diagnostic results tracking.</p>
+  </div>
+  <div style="background: var(--sterile-white); border: 1px solid var(--border-slate); padding: 1rem 1.5rem; border-radius: 8px; text-align: right;">
+    <div style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Accrued Referral Bonus</div>
+    <div id="ledger-balance" style="font-size: 1.75rem; font-weight: 800; color: var(--secondary-teal);">$0.00</div>
+  </div>
+</div>
+
+<!-- Section 1 & 2 Grid -->
+<div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem; margin-bottom: 2rem;">
+  
+  <!-- Add Patient Form -->
+  <div class="card">
+    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+      <h3 style="color: var(--primary-deep);">➕ Enroll New Patient</h3>
+      <p style="font-size: 0.8rem; color: #64748B;">All fields marked with an asterisk (*) are strictly required.</p>
+    </div>
+
+    <!-- Error Banner for Patient Enrollment -->
+    <div id="enroll-error-box" style="display: none; background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+    <form id="onboard-patient-form" novalidate>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600;">First Name *</label>
+          <input type="text" name="first_name" id="p-first-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600;">Last Name *</label>
+          <input type="text" name="last_name" id="p-last-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600;">Username *</label>
+          <input type="text" name="username" id="p-username" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600;">Email Address *</label>
+          <input type="email" name="email" id="p-email" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600;">Phone Number *</label>
+          <input type="text" name="phone_number" id="p-phone" required placeholder="+254..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600; color: #0F172A;">Date of Birth *</label>
+          <input type="date" name="date_of_birth" id="p-dob" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.75rem; font-weight: 600;">Emergency Contact Details</label>
+        <input type="text" name="emergency_contact" id="p-emergency" placeholder="Name & Phone Number" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+      </div>
+
+      <button type="submit" id="enroll-btn" class="clinical-btn btn-teal" style="width: 100%;">Create & Link Patient Profile</button>
+    </form>
+  </div>
+
+  <!-- Order Dispatcher Form -->
+  <div class="card" id="test-dispatch-card">
+    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+      <h3 style="color: var(--primary-deep);">🧪 Request Tests for Patient</h3>
+      <p style="font-size: 0.8rem; color: #64748B;">Dispatch catalog items or custom unlisted clinical requirements.</p>
+    </div>
+
+    <!-- Error Banner for Dispatch Form -->
+    <div id="order-error-box" style="display: none; background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+    <form id="doctor-order-form">
+      <div style="margin-bottom: 0.75rem;">
+        <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary-deep);">Target Patient *</label>
+        <select id="patient-select" name="patient_id" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-slate); border-radius: 4px; background: #F8FAFC;">
+          <option value="">-- Select Enrolled Patient --</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 0.5rem;">
+        <label style="font-size: 0.75rem; font-weight: 600;">Search Catalog Tests</label>
+        <input type="text" id="catalog-search" placeholder="Type to filter tests (e.g., Lipid, Metabolic)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        <div id="search-results" style="max-height: 110px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px;"></div>
+      </div>
+      
+      <div id="selected-catalog-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.75rem; font-weight: 600;">Custom / Unlisted Tests & Clinical Instructions</label>
+        <textarea name="custom_test_names" id="order-custom-tests" placeholder="Specify any unlisted tests or instructions for the lab..." rows="2" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"></textarea>
+      </div>
+
+      <button type="submit" id="dispatch-order-btn" class="clinical-btn btn-primary" style="width: 100%;">Dispatch Order to LabCare</button>
+    </form>
+  </div>
+</div>
+
+<!-- Section 3: Patient Monitoring Roster -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+    <div>
+      <h3 style="color: var(--primary-deep);">👥 Monitored Practice Patients</h3>
+      <p style="font-size: 0.85rem; color: #64748B;">Enrolled patients appear here immediately upon registration.</p>
+    </div>
+    <span id="patient-count-badge" style="background: #E0F2FE; color: var(--primary-deep); padding: 4px 10px; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">
+      0 Patients
+    </span>
+  </div>
+
+  <table class="data-table" id="patients-roster-table">
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Contact Info</th>
+        <th>Emergency Contact</th>
+        <th>Enrolled</th>
+        <th>Test Tallies</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="6">Loading patient roster...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Section 4: Dispatched Orders Tracker -->
+<div class="card">
+  <div style="margin-bottom: 1rem;">
+    <h3 style="color: var(--primary-deep);">🔬 Dispatched Orders & Results Queue</h3>
+    <p style="font-size: 0.85rem; color: #64748B;">Monitor lab fulfillment stages and download finalized PDF reports.</p>
+  </div>
+
+  <table class="data-table" id="orders-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Patient</th>
+        <th>Requested Tests</th>
+        <th>Status</th>
+        <th>Billed</th>
+        <th>Payment</th>
+        <th>Diagnostic Report</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="7">Loading order status...</td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- Section 5: International Connected Patients (Only rendered for verified global doctors) -->
+<div class="card" id="global-inquiries-card" style="display: none; margin-top: 2rem;">
+  <div style="margin-bottom: 0.75rem;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <h3 style="color: var(--primary-deep); margin: 0;">🌍 International Connected Patients</h3>
+      <span style="background: #E0F2FE; color: var(--primary-deep); font-weight: 700; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">Global Practice</span>
+    </div>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Patients outside or within your region who connected via the international directory. Our operations team facilitates initial contact before finalizing the connection.</p>
+  </div>
+
+  <table class="data-table" id="global-inquiries-table">
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Contact Coordinates</th>
+        <th>Clinical Concern / Inquiry</th>
+        <th>Date Connected</th>
+        <th>Network Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="5" style="text-align: center; color: #64748B;">Checking international connections...</td></tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  let catalog = [];
+  let selectedServiceIds = [];
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Load Catalog
+    try {
+      const catRes = await fetch("/api/v1/catalog/");
+      if (catRes.ok) catalog = await catRes.json();
+    } catch(e) {
+      console.error("Could not load catalog:", e);
+    }
+
+    // 2. Load Patients & Orders
+    loadPatientsRoster();
+    loadDoctorOrders();
+    loadDoctorGlobalInquiries();
+    // 3. Load Ledger
+    try {
+      const ledgerRes = await fetch("/api/v1/doctor/ledger/");
+      if (ledgerRes.ok) {
+        const ledger = await ledgerRes.json();
+        const sum = ledger.reduce((acc, entry) => acc + parseFloat(entry.bonus_amount), 0);
+        document.getElementById("ledger-balance").textContent = `$${sum.toFixed(2)}`;
+      }
+    } catch(e) {}
+
+    // Catalog search
+    const searchInput = document.getElementById("catalog-search");
+    const resultsBox = document.getElementById("search-results");
+    searchInput.addEventListener("input", () => {
+      const q = searchInput.value.toLowerCase().trim();
+      if (!q) { resultsBox.style.display = "none"; return; }
+      const filtered = catalog.filter(s => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));
+      resultsBox.innerHTML = "";
+      if (filtered.length === 0) {
+        resultsBox.innerHTML = "<div style='padding: 6px; font-size: 0.8rem; color: #64748B;'>Not in catalog. Write in the custom box below.</div>";
+      } else {
+        filtered.forEach(item => {
+          resultsBox.innerHTML += `
+            <div style="padding: 6px 10px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem;" 
+                 onclick="addCatalogItem(${item.id}, '${item.name}', ${item.price})">
+              <strong>${item.name}</strong> (${item.code}) - $${item.price}
+            </div>`;
+        });
+      }
+      resultsBox.style.display = "block";
+    });
+
+    // Enroll Patient
+    const enrollForm = document.getElementById("onboard-patient-form");
+    const enrollErrorBox = document.getElementById("enroll-error-box");
+    const enrollBtn = document.getElementById("enroll-btn");
+
+    enrollForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      enrollErrorBox.style.display = "none";
+      enrollErrorBox.innerHTML = "";
+
+      const firstName = document.getElementById("p-first-name").value.trim();
+      const lastName = document.getElementById("p-last-name").value.trim();
+      const username = document.getElementById("p-username").value.trim();
+      const email = document.getElementById("p-email").value.trim();
+      const phone = document.getElementById("p-phone").value.trim();
+      const dob = document.getElementById("p-dob").value.trim();
+      const emergency = document.getElementById("p-emergency").value.trim();
+
+      let errors = [];
+      if (!firstName) errors.push("First name is required.");
+      if (!lastName) errors.push("Last name is required.");
+      if (!username) errors.push("Username is required.");
+      if (!email) errors.push("Valid email address is required.");
+      if (!phone) errors.push("Phone number is required.");
+      if (!dob) errors.push("Date of birth is required. Please pick a valid date.");
+
+      if (errors.length > 0) {
+        enrollErrorBox.innerHTML = "<strong>Please correct the following:</strong><br>• " + errors.join("<br>• ");
+        enrollErrorBox.style.display = "block";
+        return;
+      }
+
+      enrollBtn.disabled = true;
+      enrollBtn.textContent = "Creating Account...";
+
+      try {
+        const payload = {
+          first_name: firstName,
+          last_name: lastName,
+          username: username,
+          email: email,
+          phone_number: phone,
+          date_of_birth: dob,
+          emergency_contact: emergency
+        };
+
+        const res = await fetch("/api/v1/doctor/onboard-patient/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          show5SecondNotification("Patient Enrolled Successfully!", `@${username} added to practice. Temporary Key: ${data.temporary_access_key}`);
+          enrollForm.reset();
+          await loadPatientsRoster();
+        } else {
+          let serverErrors = [];
+          for (const [key, msg] of Object.entries(data)) {
+            serverErrors.push(`${key.replace('_', ' ').toUpperCase()}: ${Array.isArray(msg) ? msg.join(', ') : msg}`);
+          }
+          enrollErrorBox.innerHTML = "<strong>Enrollment Error:</strong><br>• " + serverErrors.join("<br>• ");
+          enrollErrorBox.style.display = "block";
+        }
+      } catch (err) {
+        enrollErrorBox.textContent = "Network failure. Unable to submit patient details.";
+        enrollErrorBox.style.display = "block";
+      } finally {
+        enrollBtn.disabled = false;
+        enrollBtn.textContent = "Create & Link Patient Profile";
+      }
+    });
+
+    // Dispatch Order
+    const orderForm = document.getElementById("doctor-order-form");
+    const orderErrorBox = document.getElementById("order-error-box");
+    const dispatchBtn = document.getElementById("dispatch-order-btn");
+
+    orderForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      orderErrorBox.style.display = "none";
+      orderErrorBox.innerHTML = "";
+
+      const patientId = document.getElementById("patient-select").value;
+      const customNotes = document.getElementById("order-custom-tests").value.trim();
+
+      if (!patientId) {
+        orderErrorBox.textContent = "Please select a target patient from your roster.";
+        orderErrorBox.style.display = "block";
+        return;
+      }
+
+      if (selectedServiceIds.length === 0 && !customNotes) {
+        orderErrorBox.textContent = "Please pick at least one test from the search bar or enter custom tests in the box.";
+        orderErrorBox.style.display = "block";
+        return;
+      }
+
+      dispatchBtn.disabled = true;
+      dispatchBtn.textContent = "Dispatching Order...";
+
+      try {
+        const payload = {
+          patient_id: patientId,
+          services: selectedServiceIds,
+          custom_test_names: customNotes,
+          order_type: "LAB_TEST"
+        };
+
+        const res = await fetch("/api/v1/orders/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          show5SecondNotification("Order Dispatched Successfully!", `Intake #${data.id.substring(0,8)} created. Your patient can now review and settle.`);
+          selectedServiceIds = [];
+          renderSelectedItems();
+          orderForm.reset();
+          await loadPatientsRoster();
+          await loadDoctorOrders();
+        } else {
+          let errText = data.detail || (data.patient_id ? data.patient_id.join(" ") : JSON.stringify(data));
+          orderErrorBox.textContent = "Failed to dispatch order: " + errText;
+          orderErrorBox.style.display = "block";
+        }
+      } catch (err) {
+        orderErrorBox.textContent = "Network fault. Could not reach server to place order.";
+        orderErrorBox.style.display = "block";
+      } finally {
+        dispatchBtn.disabled = false;
+        dispatchBtn.textContent = "Dispatch Order to LabCare";
+      }
+    });
+  });
+
+  function show5SecondNotification(title, message) {
+    const toast = document.getElementById("doctor-toast-notification");
+    document.getElementById("toast-title").textContent = title;
+    document.getElementById("toast-message").textContent = message;
+    toast.style.display = "flex";
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+
+  async function loadPatientsRoster() {
+    try {
+      const res = await fetch("/api/v1/doctor/my-patients/");
+      if (res.ok) {
+        const patients = await res.json();
+        const select = document.getElementById("patient-select");
+        const tbody = document.querySelector("#patients-roster-table tbody");
+        const countBadge = document.getElementById("patient-count-badge");
+        
+        countBadge.textContent = `${patients.length} Patient${patients.length === 1 ? '' : 's'}`;
+        
+        const currentSelectedVal = select.value;
+        select.innerHTML = '<option value="">-- Select Enrolled Patient --</option>';
+        tbody.innerHTML = "";
+
+        if (patients.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748B;">No patients currently enrolled.</td></tr>';
+          return;
+        }
+
+        patients.forEach(p => {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent = `${p.full_name} (@${p.username})`;
+          if (p.id === currentSelectedVal) opt.selected = true;
+          select.appendChild(opt);
+
+          tbody.innerHTML += `
+            <tr>
+              <td>
+                <strong>${p.full_name}</strong><br>
+                <span style="font-size: 0.75rem; color: #64748B;">DOB: ${p.date_of_birth}</span>
+              </td>
+              <td style="font-size: 0.85rem;">
+                📞 ${p.phone}<br>
+                ✉️ ${p.email}
+              </td>
+              <td style="font-size: 0.85rem; color: #475569;">${p.emergency_contact}</td>
+              <td style="font-size: 0.8rem; color: #64748B;">${p.registered_on}</td>
+              <td>
+                <span style="font-size: 0.75rem; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">
+                  ${p.total_orders} Total (${p.pending_orders} Active)
+                </span>
+              </td>
+              <td>
+                <button type="button" onclick="targetOrderForPatient('${p.id}')" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.75rem;">
+                  Request Tests
+                </button>
+                <button type="button" onclick="unlinkPatient('${p.id}', '${p.full_name}')" class="clinical-btn" style="padding: 4px 8px; font-size: 0.75rem; background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; margin-left: 4px;">
+                  Unlink
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    } catch(e) {
+      console.error("Error loading roster:", e);
+    }
+  }
+
+  function targetOrderForPatient(id) {
+    const select = document.getElementById("patient-select");
+    select.value = id;
+    const card = document.getElementById("test-dispatch-card");
+    card.style.borderColor = "var(--secondary-teal)";
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => { card.style.borderColor = "var(--border-slate)"; }, 1500);
+  }
+
+  async function unlinkPatient(id, name) {
+    if (!confirm(`Are you sure you want to remove ${name}? Existing records and past bonuses remain saved.`)) return;
+    try {
+      const res = await fetch(`/api/v1/doctor/my-patients/${id}/`, {
+        method: "DELETE",
+        headers: { "X-CSRFToken": getCookie("csrftoken") }
+      });
+      if (res.ok) {
+        show5SecondNotification("Patient Unlinked", `${name} removed from your active list.`);
+        loadPatientsRoster();
+      }
+    } catch(e) {}
+  }
+
+  async function loadDoctorOrders() {
+    try {
+      const res = await fetch("/api/v1/orders/");
+      if (!res.ok) {
+        console.error("Order API returned status:", res.status);
+        return;
+      }
+
+      const orders = await res.json();
+      const tbody = document.querySelector("#orders-table tbody");
+      tbody.innerHTML = "";
+
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748B;">No diagnostic orders dispatched yet.</td></tr>';
+        return;
+      }
+
+      orders.forEach(o => {
+        const hasDoc = Boolean(o.attached_report_pdf);
+        const catalogNames = (o.services_detail || []).map(s => s.name).join(", ");
+        const allItems = [catalogNames, o.custom_test_names].filter(Boolean).join(" | ");
+
+        let paymentBadge = "";
+        if (o.is_paid) {
+          paymentBadge = '<span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">completed, our team will get back to you</span>';
+        } else {
+          paymentBadge = '<span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">PENDING PAYMENT</span>';
+        }
+
+        let actionCell = "";
+        if (!o.is_paid) {
+          actionCell += '<a href="/orders/' + o.id + '/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.75rem; text-decoration: none;">Make Payment</a>';
+        } else {
+          actionCell += '<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>';
+        }
+
+        if (hasDoc) {
+          actionCell += ' <button onclick="performDownloadReport(\'' + o.id + '\')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem; margin-left: 6px;">Download PDF</button>';
+        } else if (o.is_paid) {
+          actionCell += '<span style="color: #94A3B8; font-size: 0.75rem; margin-left: 6px;">Processing in Lab</span>';
+        }
+
+        const statusColor = (o.status === "COMPLETED") ? "#166534" : "#D97706";
+
+        tbody.innerHTML += `
+          <tr>
+            <td><code>#${o.id.substring(0, 8)}</code></td>
+            <td><strong>${o.patient_name || 'N/A'}</strong></td>
+            <td style="font-size: 0.85rem; max-width: 240px;">${allItems || 'Standard Clinical Request'}</td>
+            <td><span style="font-weight: 700; color: ${statusColor};">${o.status}</span></td>
+            <td><strong>$${o.total_cost}</strong></td>
+            <td>${paymentBadge}</td>
+            <td>${actionCell}</td>
+          </tr>
+        `;
+      });
+    } catch(e) {
+      console.error("Error loading doctor orders:", e);
+    }
+  }
+
+  function addCatalogItem(id, name, price) {
+    if (!selectedServiceIds.includes(id)) {
+      selectedServiceIds.push(id);
+      renderSelectedItems();
+    }
+    document.getElementById("search-results").style.display = "none";
+    document.getElementById("catalog-search").value = "";
+  }
+  function removeCatalogItem(id) {
+    selectedServiceIds = selectedServiceIds.filter(x => x !== id);
+    renderSelectedItems();
+  }
+  function renderSelectedItems() {
+    const box = document.getElementById("selected-catalog-items");
+    box.innerHTML = "";
+    selectedServiceIds.forEach(id => {
+      const item = catalog.find(x => x.id === id);
+      if (item) {
+        box.innerHTML += `
+          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+            ${item.name} ($${item.price})
+            <b style="cursor: pointer; color: red;" onclick="removeCatalogItem(${item.id})">&times;</b>
+          </span>`;
+      }
+    });
+  }
+  async function loadDoctorGlobalInquiries() {
+      try {
+        const res = await fetch("/api/v1/doctor/global-inquiries/");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const card = document.getElementById("global-inquiries-card");
+        if (!data.is_global) {
+          card.style.display = "none";
+          return;
+        }
+
+        // Show section for verified global doctors
+        card.style.display = "block";
+        const tbody = document.querySelector("#global-inquiries-table tbody");
+        tbody.innerHTML = "";
+
+        if (data.inquiries.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B; padding: 1.5rem;">No international patients currently waiting for connection.</td></tr>';
+          return;
+        }
+
+        data.inquiries.forEach(inq => {
+          let statusBadge = "";
+          if (inq.status === "CONNECTED") {
+            statusBadge = '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connected</span>';
+          } else {
+            statusBadge = '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connection pending waiting for communication</span>';
+          }
+
+          tbody.innerHTML += `
+            <tr>
+              <td><strong>${inq.patient_name}</strong></td>
+              <td style="font-size: 0.85rem;">📞 ${inq.patient_phone}<br>✉️ ${inq.patient_email}</td>
+              <td style="font-size: 0.85rem; max-width: 280px;">${inq.concern}</td>
+              <td style="font-size: 0.85rem; color: #64748B;">${inq.requested_on}</td>
+              <td>${statusBadge}</td>
+            </tr>
+          `;
+        });
+      } catch(e) {
+        console.error("Could not load global doctor inquiries:", e);
+      }
+    }
+</script>
+{% endblock %}

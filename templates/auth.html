@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 0 auto; background: #FFF; border: 1px solid var(--border-slate); border-radius: 8px; padding: 2rem;">
+  
+  <div style="display: flex; border-bottom: 1px solid var(--border-slate); margin-bottom: 1.5rem;">
+    <button id="tab-login" class="clinical-btn" style="flex: 1; border-radius: 0; border-bottom: 2px solid var(--primary-deep);" onclick="toggleAuthMode('login')">Sign In</button>
+    <button id="tab-register" class="clinical-btn" style="flex: 1; border-radius: 0;" onclick="toggleAuthMode('register')">Register Account</button>
+  </div>
+
+  <div id="form-feedback" style="display: none; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+  <!-- Sign In Form -->
+  <form id="login-form">
+    <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Account Handle / Username</label>
+      <input type="text" name="username" required style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Password</label>
+      <input type="password" name="password" required style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+    <input type="hidden" name="portal" value="public">
+    <button type="submit" class="clinical-btn btn-primary" style="width: 100%;">Verify & Sign In</button>
+  </form>
+
+  <!-- Dynamic Registration Form -->
+  <form id="registration-form" style="display: none;">
+    <div style="margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Identity Role</label>
+      <select name="role" id="reg-role" style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 4px;" onchange="handleRoleFieldToggles(this.value)">
+        <option value="PATIENT">Client / Patient</option>
+        <option value="DOCTOR">Licensed Doctor</option>
+        <option value="CAREGIVER">Care Giver</option>
+      </select>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+      <div>
+        <label style="display: block; font-weight: 600; font-size: 0.85rem;">First Name</label>
+        <input type="text" name="first_name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+      </div>
+      <div>
+        <label style="display: block; font-weight: 600; font-size: 0.85rem;">Last Name</label>
+        <input type="text" name="last_name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+      </div>
+    </div>
+
+    <div style="margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Username</label>
+      <input type="text" name="username" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+
+    <div style="margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Email Address</label>
+      <input type="email" name="email" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+
+    <div id="doctor-spec-fields" style="display: none; margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Medical License Number</label>
+      <input type="text" name="license_number" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+
+    <div id="patient-referral-fields" style="margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Referring Physician (Optional)</label>
+      <input type="text" name="pending_doctor_name" placeholder="Dr. Full Name" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px; margin-bottom: 0.25rem;">
+      <input type="email" name="pending_doctor_email" placeholder="doctor@office.com" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+
+    <div style="margin-bottom: 0.75rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Password</label>
+      <input type="password" name="password" id="auth-password" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+      
+      <ul class="rule-tracker">
+        <li id="rule-len" class="invalid">Minimum 8 characters</li>
+        <li id="rule-up" class="invalid">Uppercase character</li>
+        <li id="rule-low" class="invalid">Lowercase character</li>
+        <li id="rule-num" class="invalid">Numeric digit</li>
+        <li id="rule-spc" class="invalid">Special character (!@#$%^&*)</li>
+      </ul>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <label style="display: block; font-weight: 600; font-size: 0.85rem;">Confirm Password</label>
+      <input type="password" name="password_confirmation" id="auth-password-confirm" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+    </div>
+
+    <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">Create Account</button>
+  </form>
+role
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/auth.js"></script>
+<script>
+  function toggleAuthMode(mode) {
+    const loginForm = document.getElementById("login-form");
+    const regForm = document.getElementById("registration-form");
+    const tabLogin = document.getElementById("tab-login");
+    const tabReg = document.getElementById("tab-register");
+
+    if (mode === "login") {
+      loginForm.style.display = "block";
+      regForm.style.display = "none";
+      tabLogin.style.borderBottom = "2px solid var(--primary-deep)";
+      tabReg.style.borderBottom = "none";
+    } else {
+      loginForm.style.display = "none";
+      regForm.style.display = "block";
+      tabReg.style.borderBottom = "2px solid var(--primary-deep)";
+      tabLogin.style.borderBottom = "none";
+    }
+  }
+
+  function handleRoleFieldToggles(role) {
+    document.getElementById("doctor-spec-fields").style.display = (role === "DOCTOR") ? "block" : "none";
+    document.getElementById("patient-referral-fields").style.display = (role === "PATIENT") ? "block" : "none";
+    document.getElementById("patient-referral-fields").style.display = (role === "CAREGIVER") ? "block" : "none";
+  }
+
+  // Parse URL params for pre-selected role tabs
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("mode") === "register") toggleAuthMode("register");
+  if (params.get("role") === "doctor") {
+    document.getElementById("reg-role").value = "DOCTOR";
+    handleRoleFieldToggles("DOCTOR");
+  }
+  if (params.get("role") === "caregiver") {
+    document.getElementById("reg-role").value = "CAREGIVER";
+    handleRoleFieldToggles("CAREGIVER");
+  }
+
+  // Login handler
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = Object.fromEntries(new FormData(e.target).entries());
+    const res = await fetch("/api/v1/auth/login/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      window.location.href = "/dashboard/";
+    } else {
+      const err = await res.json();
+      const fb = document.getElementById("form-feedback");
+      fb.textContent = err.detail || "Authentication sequence failed.";
+      fb.style.backgroundColor = "#FEE2E2";
+      fb.style.color = "var(--alert-red)";
+      fb.style.display = "block";
+    }
+  });
+</script>
+{% endblock %}
