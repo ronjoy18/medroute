@@ -219,6 +219,7 @@ class CareGiverprofileSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=150, required=True)
     last_name = serializers.CharField(max_length=150, required=True)
     phone_number = serializers.CharField(max_length=20, required=True)
+    
     date_of_birth = serializers.DateField(
         required=True,
         error_messages={
@@ -247,18 +248,18 @@ class CareGiverprofileSerializer(serializers.Serializer):
 class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
     caregiver_name = serializers.SerializerMethodField()
     patient_name = serializers.SerializerMethodField()
-    service_name = serializers.CharField(source="activity.name", read_only=True)
+    service_name = serializers.CharField(source="services.name", read_only=True)
 
     class Meta:
         model = CompanionshipScheduler
         fields = [
             "id", "order", "patient", "patient_name", "caregiver",
-            "caregiver_name", "activity", "service_name",
+            "caregiver_name", "services", "service_name",
             "start_date", "end_date", "status",
         ]
 
     def get_caregiver_name(self, obj):
-        if obj.caregiver and obj.coach.user:
+        if obj.caregiver and obj.caregiver.user:
             return obj.caregiver.user.get_full_name() or obj.caregiver.user.username
         return "Unassigned"
 

@@ -16,7 +16,7 @@ from datetime import date, timedelta
 from datetime import timezone
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
 from labcare import settings
-from .models import GlobalDoctorInquiry
+from .models import GlobalDoctorInquiry, CareGiverProfile
 from core import models 
 
 
@@ -520,14 +520,14 @@ class CareGiverMyPatientsAPIView(views.APIView):
     permission_classes= [IsCareGiverOwner]
 
     def get(self, request):
-        caregiver = request.user.caregiver_profile
+        caregiver, _ = CareGiverProfile.objects.get_or_create(user=request.user)
         patients = (
             PatientProfile.objects.filter(
                 caregiver = caregiver,
-                is_archived_by_caregiver = False
+                archived_by_caregiver = False
             )
             .select_related("user")
-            .prefetch_ralated("orders")
+            .prefetch_related("orders")
             .order_by("-created_at")
         )
 
@@ -557,7 +557,7 @@ class CareGiverPatientDetailAPIView(views.APIView):
             PatientProfile, id = patient_id, caregiver= request.user.caregiver_profile
         )
         patient.is_archavived_by_caregiver = True
-        patient.save(update_fields=["is_archived_by_caregiver"])
+        patient.save(update_fields=["archived_by_caregiver"])
         return Response({"message": "Patient successfully removed from your active roster."})
         
 
@@ -566,39 +566,39 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
     serializer_class = CompanionshipSchedulerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    POOL_OPEN_HOUR = 6   # 06:00 AM
-    POOL_CLOSE_HOUR = 18  # 06:00 PM
+    medroute_OPEN_HOUR = 6   # 06:00 AM
+    medroute_CLOSE_HOUR = 18  # 06:00 PM
 
     def get_queryset(self):
         user = self.request.user
         if user.is_internal():
-            return CompanionshipScheduler.objects.all().select_related("coach__user", "client__user", "activity").order_by("-start_time")
-        if user.is_coach():
-            return CompanionshipScheduler.objects.filter(coach__user=user).select_related("client__user", "activity").order_by("-start_time")
-        if user.is_client():
-            return CompanionshipScheduler.objects.filter(client__user=user).select_related("coach__user", "activity").order_by("-start_time")
+            return CompanionshipScheduler.objects.all().select_related("caregiver__user", "patient__user", "services").order_by("-start_time")
+        if user.is_caregiver():
+            return CompanionshipScheduler.objects.filter(caregiver__user=user).select_related("patient__user", "services").order_by("-start_time")
+        if user.is_patient():
+            return CompanionshipScheduler.objects.filter(patient__user=user).select_related("caregiver__user", "services").order_by("-start_time")
         return CompanionshipScheduler.objects.none()
 
     def create(self, request, *args, **kwargs):
         user = request.user
-        if not user.is_client():
+        if not user.is_patient():
             return Response(
-                {"detail": "Only registered clients can schedule lessons."},
+                {"detail": "Only registered patients can schedule care services."},
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        client, _ = PatientProfile.objects.get_or_create(user=user)
+        patient, _ = PatientProfile.objects.get_or_create(user=user)
 
-        activity_id = request.data.get("activity_id")
+        services_id = request.data.get("services_id")
         start_time_raw = request.data.get("start_time")
 
-        if not activity_id or not start_time_raw:
+        if not services_id or not start_time_raw:
             return Response(
-                {"detail": "Both activity_id and start_time are required."},
+                {"detail": "Both services_id and start_time are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        activity = get_object_or_404((LabService.CategoryType.COMPANIONSHIP), id=activity_id, is_active=True)
+        services = get_object_or_404((LabService.CategoryType.COMPANIONSHIP), id=services_id, is_active=True)
         start_time = parse_datetime(start_time_raw)
         if not start_time:
             return Response(
@@ -615,77 +615,77 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        end_time = start_time + timedelta(minutes=activity.duration_minutes)
+        end_time = start_time + timedelta(minutes=services.duration_minutes)
 
         local_start = timezone.localtime(start_time)
         local_end = timezone.localtime(end_time)
 
-        if local_start.hour < self.POOL_OPEN_HOUR or (local_end.hour > self.POOL_CLOSE_HOUR or (local_end.hour == self.POOL_CLOSE_HOUR and local_end.minute > 0)):
+        if local_start.hour < self.medroute_OPEN_HOUR or (local_end.hour > self.medroute_CLOSE_HOUR or (local_end.hour == self.medroute_CLOSE_HOUR and local_end.minute > 0)):
             return Response(
                 {
-                    "detail": f"Pool operates from 06:00 AM to 06:00 PM. A {activity.duration_minutes}-minute lesson starting at {local_start.strftime('%I:%M %p')} ends after closing time."
+                    "detail": f"medroute operates from 06:00 AM to 06:00 PM. A session starting at {local_start.strftime('%I:%M %p')}ends after all errands are complete."
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         with transaction.atomic():
-            busy_coach_ids = CompanionshipScheduler.objects.filter(
+            busy_caregiver_ids = CompanionshipScheduler.objects.filter(
                 status=CompanionshipScheduler.Status.SCHEDULED,
                 start_time__lt=end_time,
                 end_time__gt=start_time
-            ).values_list("coach_id", flat=True)
+            ).values_list("caregiver_id", flat=True)
 
-            assigned_coach = None
+            assigned_caregiver = None
 
-            # 1. Preferred coach
-            if client.assigned_coach and client.assigned_coach.id not in busy_coach_ids and client.assigned_coach.user.is_active:
-                assigned_coach = client.assigned_coach
+            # 1. Preferred caregiver
+            if patient.assigned_caregiver and patient.assigned_caregiver.id not in busy_caregiver_ids and patient.assigned_caregiver.user.is_active:
+                assigned_caregiver = patient.assigned_caregiver
 
-            # 2. Any active verified coach
-            if not assigned_coach:
-                assigned_coach = (
+            # 2. Any active verified caregiver
+            if not assigned_caregiver:
+                assigned_caregiver = (
                     CareGiverProfile.objects
                     .filter(user__is_active=True, is_verified=True)
-                    .exclude(id__in=busy_coach_ids)
+                    .exclude(id__in=busy_caregiver_ids)
                     .first()
                 )
 
-            # 3. Fallback: Any active coach
-            if not assigned_coach:
-                assigned_coach = (
+            # 3. Fallback: Any active caregiver
+            if not assigned_caregiver:
+                assigned_caregiver = (
                     CareGiverProfile.objects
                     .filter(user__is_active=True)
-                    .exclude(id__in=busy_coach_ids)
+                    .exclude(id__in=busy_caregiver_ids)
                     .first()
                 )
 
-            if not assigned_coach:
+            if not assigned_caregiver:
                 return Response(
-                    {"detail": "All academy coaches are booked during this time window. Please pick another slot."},
+                    {"detail": "All academy caregiveres are booked during this time window. Please pick another slot."},
                     status=status.HTTP_409_CONFLICT
                 )
 
-            # Always link the client to this coach so they show up on the coach's roster
-            if client.assigned_coach != assigned_coach:
-                PatientProfile.objects.filter(id=client.id).update(assigned_coach=assigned_coach)
+            # Always link the patient to this caregiver so they show up on the caregiver's roster
+            if patient.assigned_caregiver != assigned_caregiver:
+                PatientProfile.objects.filter(id=patient.id).update(assigned_caregiver=assigned_caregiver)
 
             # Create Order
             order = Order.objects.create(
-                client=client,
-                coach=assigned_coach,
+                patient=patient,
+                caregiver=assigned_caregiver,
                 booking_start=start_time,
                 booking_end=end_time,
-                total_cost=activity.price,
+                total_cost=services.price,
                 status=Order.Status.PENDING
             )
-            order.activity.set([activity])
+            order.services.set([services])
 
             # Create Schedule
             schedule = CompanionshipScheduler.objects.create(
                 order=order,
-                client=client,
-                coach=assigned_coach,
-                activity=activity,
+                patient=patient,
+                caregiver=assigned_caregiver,
+                services=services,
                 start_time=start_time,
                 end_time=end_time,
                 status=CompanionshipScheduler.Status.SCHEDULED

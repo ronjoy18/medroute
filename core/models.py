@@ -71,10 +71,12 @@ class CareGiverProfile(models.Model):
     behavior= models.CharField(max_length=256, null=True, blank=True)
     remarks = models.CharField(max_length=256, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    archived_by_caregiver =models.BooleanField(default=False)
 
+    
 class PatientProfile(models.Model):
     class PatientType(models.TextChoices):
-        INDEPENDENT = "INDEPENDENT", _("Independent Client")
+        INDEPENDENT = "INDEPENDENT", _("Independent patient")
         DOCTOR_REFERRED = "DOCTOR_REFERRED", _("Doctor-Referred Patient")
         CAREGIVER_REFERRED = "CAREGIVER_REFERRED",_("Caregiver-Managed Patient ")
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -85,7 +87,8 @@ class PatientProfile(models.Model):
     primary_doctor = models.ForeignKey(
         DoctorProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="managed_patients"
     )
-    is_archaived_by_caregiver= models.BooleanField(default = False)
+    
+    archived_by_caregiver = models.BooleanField(default = False)
     caregiver = models.ForeignKey(
         CareGiverProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="served_patients"
     )
@@ -97,7 +100,7 @@ class PatientProfile(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     emergency_contact = models.CharField(max_length=128, blank=True)
     
-    # Referral & Promo Fields for Independent Clients
+    # Referral & Promo Fields for Independent patientts
     referral_code = models.CharField(max_length=32, unique=True, blank=True)
     referred_by = models.ForeignKey(
         "self", on_delete=models.SET_NULL, null=True, blank=True, related_name="referrals"

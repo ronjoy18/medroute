@@ -197,3 +197,8 @@ body {
 .btn-signup-clean:hover {
   background-color: #f1f5f9;
 }
+
+.star{
+  color: red;
+  font-weight: bold;
+}

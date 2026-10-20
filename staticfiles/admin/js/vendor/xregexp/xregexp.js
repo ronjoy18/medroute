@@ -453,7 +453,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 /**
  * XRegExp provides augmented, extensible regular expressions. You get additional regex syntax and
  * flags, beyond what browsers support natively. XRegExp is also a regex utility belt with tools to
- * make your client-side grepping simpler and more powerful, while freeing you from related
+ * make your patientt-side grepping simpler and more powerful, while freeing you from related
  * cross-browser inconsistencies.
  */
 // ==--------------------------==
@@ -3445,7 +3445,7 @@ module.exports = {
   CSSRuleList: 0,
   CSSStyleDeclaration: 0,
   CSSValueList: 0,
-  ClientRectList: 0,
+  patienttRectList: 0,
   DOMRectList: 0,
   DOMStringList: 0,
   DOMTokenList: 1,

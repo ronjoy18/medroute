@@ -25,46 +25,46 @@
 <!-- Section 1 & 2 Grid -->
 <!--div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem; margin-bottom: 2rem;"-->
   
-  <!--  Patient Form -->
+  <!--  Patient Form 
   <div class="card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
       <h3 style="color: var(--primary-deep);">➕ Enroll New Patient</h3>
-      <p style="font-size: 0.8rem; color: #64748B;">All fields marked with an asterisk (*) are strictly required.</p>
+      <p style="font-size: 0.8rem; color: #64748B;">All fields marked with an asterisk <span class="star" style="color: red; font-weight: 600;">*</span>are strictly required.</p>
     </div>
 
-    <!-- Error Banner for Patient Enrollment -->
+    # Error Banner for Patient Enrollment 
     <div id="enroll-error-box" style="display: none; background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
 
     <form id="onboard-patient-form" novalidate>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">First Name *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">First Name <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="text" name="first_name" id="p-first-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Last Name *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Last Name <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="text" name="last_name" id="p-last-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Username *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Username <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="text" name="username" id="p-username" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Email Address *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Email Address <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="email" name="email" id="p-email" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Phone Number *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Phone Number <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="text" name="phone_number" id="p-phone" required placeholder="+254..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600; color: #0F172A;">Date of Birth *</label>
+          <label style="font-size: 0.75rem; font-weight: 600; color: #0F172A;">Date of Birth <span class="star" style="color: red; font-weight: 600;">*</span></label>
           <input type="date" name="date_of_birth" id="p-dob" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
@@ -78,14 +78,14 @@
     </form>
   </div> 
 
-  <!-- Order Dispatcher Form -->
+  #Order Dispatcher Form 
   <div class="card" id="test-dispatch-card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-      <h3 style="color: var(--primary-deep);">🧪 Request Tests for Patient</h3>
+      <h3 style="color: var(--primary-deep);"request services for Patient</h3>
       <p style="font-size: 0.8rem; color: #64748B;">Dispatch catalog items or custom unlisted clinical requirements.</p>
-    </div-->
+    </div>
 
-    <!-- Error Banner for Dispatch Form -->
+    #Error Banner for Dispatch Form 
     <div id="order-error-box" style="display: none; background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
 
     <form id="caregiver-order-form">
@@ -98,7 +98,7 @@
 
       <div style="margin-bottom: 0.5rem;">
         <label style="font-size: 0.75rem; font-weight: 600;">Search Catalog Tests</label>
-        <input type="text" id="catalog-search" placeholder="Type to filter tests (e.g., Lipid, Metabolic)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        <input type="text" id="catalog-search" placeholder="Type in care giving services" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         <div id="search-results" style="max-height: 110px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px;"></div>
       </div>
       
@@ -167,7 +167,7 @@
     </tbody>
   </table>
 </div>
-<!-- Section 5: International Connected Patients (Only rendered for verified global doctors) -->
+<!-- Section 5: International Connected Patients (Only rendered for verified global caregivers) -->
 <!--div class="card" id="global-inquiries-card" style="display: none; margin-top: 2rem;">
   <div style="margin-bottom: 0.75rem;">
     <div style="display: flex; align-items: center; gap: 8px;">
@@ -224,7 +224,7 @@
     // 2. Load Patients & Orders
     loadPatientsRoster();
     loadCaregiver();
-    loadDoctorGlobalInquiries();
+    //loadcaregiverGlobalInquiries();
     // 3. Load Ledger
     try {
       const ledgerRes = await fetch("/api/v1/caregiver/");
@@ -303,7 +303,7 @@
           emergency_contact: emergency
         };
 
-        const res = await fetch("/api/v1/doctor/onboard-patient/", {
+        const res = await fetch("/api/v1/caregiver/my-patients/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -336,7 +336,7 @@
     });
 
     //Dispatch Order
-    const orderForm = document.getElementById("doctor-order-form");
+    const orderForm = document.getElementById("caregiver-order-form");
     const orderErrorBox = document.getElementById("order-error-box");
     const dispatchBtn = document.getElementById("dispatch-order-btn");
 
@@ -460,7 +460,7 @@
               </td>
               <td>
                 <button type="button" onclick="targetOrderForPatient('${p.id}')" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.75rem;">
-                  Request Tests
+                  request services
                 </button>
                 <button type="button" onclick="unlinkPatient('${p.id}', '${p.full_name}')" class="clinical-btn" style="padding: 4px 8px; font-size: 0.75rem; background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; margin-left: 4px;">
                   Unlink
@@ -555,7 +555,7 @@
         `;
       });
     } catch(e) {
-      console.error("Error loading doctor orders:", e);
+      console.error("Error loading caregiver orders:", e);
     }
   }
 
@@ -585,9 +585,9 @@
       }
     });
   }
-  //async function loadDoctorGlobalInquiries() {
+  //async function loadcaregiverGlobalInquiries() {
     //  try {
-      //  const res = await fetch("/api/v1/doctor/global-inquiries/");
+      //  const res = await fetch("/api/v1/caregiver/global-inquiries/");
         //if (!res.ok) return;
 //        const data = await res.json();
 //
@@ -597,7 +597,7 @@
       //    return;
         //}
 
-        // Show section for verified global doctors
+        // Show section for verified global caregivers
 //        card.style.display = "block";
   //      const tbody = document.querySelector("#global-inquiries-table tbody");
     //    tbody.innerHTML = "";
@@ -626,7 +626,7 @@
   //        `;
     //    });
       //} catch(e) {
-        //console.error("Could not load global doctor inquiries:", e);
+        //console.error("Could not load global caregiver inquiries:", e);
 //      }
   //  }
 </script>

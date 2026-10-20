@@ -32,7 +32,7 @@ class IsCareGiverOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if hasattr(obj, "caregiver_profile"):
-            return obj.doctor_profile.user == request.user
+            return obj.caregiver_profile.user == request.user
         if hasattr(obj,"caregiver")and obj.caregiver:
             return obj.caregiver.user == request.user
         return False

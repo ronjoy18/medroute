@@ -28,8 +28,8 @@
 </div>
 
 <!-- Service Booking Section -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-  <!-- 1. Lab Request -->
+<!--<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+  # 1. Lab Request #
   <div class="card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
       <h3 style="color: var(--primary-deep);">🧪 Request Laboratory Diagnostics</h3>
@@ -53,26 +53,47 @@
     </form>
   </div>
 
-  <!-- 2. Medical Companionship -->
+  # 2. Medical Companionship #
   <div class="card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
       <h3 style="color: var(--primary-deep);">🤝 Medical Companionship & Escort</h3>
       <p style="font-size: 0.8rem; color: #64748B;">Hospital escort, dialysis accompaniment, or clinic navigation.</p>
+    </div-->
+
+<!-- Booking Section -->
+<div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+  <div class="card">
+    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+      <h3 style="color: var(--primary-deep);">🏊 Book companionship services</h3>
+      <p style="font-size: 0.8rem; color: #64748B;">Pick an appointment date for your errand.</p>
     </div>
 
-    <form id="patient-comp-form">
-      <div style="margin-bottom: 0.5rem;">
-        <label style="font-size: 0.8rem; font-weight: 600;">Standard Package (Optional)</label>
-        <select id="comp-service-select" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
-          <option value="">-- Choose Companionship Package --</option>
-        </select>
-      </div>
-      <div style="margin-bottom: 1rem;">
-        <label style="font-size: 0.8rem; font-weight: 600;">Procedure Schedule & Assistance Details *</label>
-        <textarea name="custom_test_names" id="comp-custom-notes" placeholder="Describe the procedure, date, clinic location, and care required..." rows="2" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"></textarea>
+    <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div style="margin-bottom: 0.5rem; position: relative;">
+        <label style="font-size: 0.8rem; font-weight: 600;">Search Errand services</label>
+        <input type="text" id="patientt-catalog-search" placeholder="Type service name (e.g.)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
+        <div id="patientttt-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
       </div>
 
-      <button type="submit" id="submit-comp-btn" class="clinical-btn btn-teal" style="width: 100%;">Book Medical Companionship</button>
+      <div id="patienttttt-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
+
+      <div style="margin-bottom: 0.75rem;">
+        <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">
+          Preferred Session Date & Start Time *
+        </label>
+        <input 
+          type="datetime-local" 
+          id="service-start-time" 
+          step="1800" 
+          required 
+          style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"
+        >
+        <small style="color: #64748B; font-size: 0.75rem;">
+          Operating hours: <strong>06:00 AM – 06:00 PM</strong> book witin the working hours window
+        </small>
+      </div>
+
+      <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule caregiver</button>
     </form>
   </div>
 </div>
@@ -101,16 +122,16 @@
 <!-- Reports Archive Table -->
 <div class="card">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">📄 Diagnostic Reports Archive</h3>
-    <p style="font-size: 0.85rem; color: #64748B;">Download verified clinical PDF results once analysis is completed by the lab.</p>
+    <h3 style="color: var(--primary-deep);">📄 Days reports Archive</h3>
+    <!--p style="font-size: 0.85rem; color: #64748B;">Download verified clinical PDF results once analysis is completed by the lab.</p-->
   </div>
 
   <table class="data-table" id="results-table">
     <thead>
       <tr>
         <th>Intake Code</th>
-        <th>Laboratory Status</th>
-        <th>Diagnostic Report File</th>
+        <!--th>Laboratory Status</th-->
+        <!--th>Diagnostic Report File</th-->
         <th>Submission Date</th>
       </tr>
     </thead>
@@ -136,7 +157,7 @@
     return cookieValue || "{{ csrf_token }}";
   }
 
-  let catalog = [];
+let catalog = [];
   let selectedLabIds = [];
 
   document.addEventListener("DOMContentLoaded", async () => {
@@ -469,6 +490,338 @@
         console.error("Could not load global doctor connections:", e);
       }
     }
+</script>
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue || "{{ csrf_token }}";
+  }
+
+  function showpatientttttToast(title, message) {
+    const toast = document.getElementById("patient-toast-notification");
+    if (!toast) return;
+    const titleEl = document.getElementById("toast-title");
+    const msgEl = document.getElementById("toast-message");
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = message;
+    toast.style.display = "flex";
+    setTimeout(() => { toast.style.display = "none"; }, 5000);
+  }
+
+  let catalog = [];
+  let selectedservicesIds = [];
+
+  // 1. Load Confirmed Schedules
+  async function loadpatientSchedules() {
+    const tbody = document.querySelector("#patient-schedules-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/schedules/");
+      if (!res.ok) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
+        return;
+      }
+
+      const schedules = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(schedules) || schedules.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No confirmed services schedules yet. Pick an services and book above.</td></tr>';
+        return;
+      }
+
+      schedules.forEach(s => {
+        const start = s.start_time ? new Date(s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
+        const end = s.end_time ? new Date(s.end_time).toLocaleTimeString([], { timeStyle: 'short' }) : "N/A";
+        const actName = s.services_name || " services";
+        const caregiverName = s.caregiver_name || "Assigned caregiver";
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${actName}</strong></td>
+            <td><span style="color: var(--primary-deep); font-weight: 600;">🏊 ${caregiveriveriverName}</span></td>
+            <td style="font-size: 0.85rem;">${start}</td>
+            <td style="font-size: 0.85rem;">${end}</td>
+            <td>
+              <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                ${s.status}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #EF4444;">Failed to load schedules: ${err.message}</td></tr>`;
+    }
+  }
+
+  // 2. Load Billing Orders
+  async function loadpatientOrders() {
+    const billTbody = document.querySelector("#billing-table tbody");
+    if (!billTbody) return;
+
+    try {
+      const res = await fetch("/api/v1/orders/");
+      if (!res.ok) return;
+
+      const orders = await res.json();
+      billTbody.innerHTML = "";
+
+      if (!Array.isArray(orders) || orders.length === 0) {
+        billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active bookings found.</td></tr>';
+        return;
+      }
+
+      orders.forEach(o => {
+        billTbody.innerHTML += `
+          <tr>
+            <td><code>#${o.id.substring(0, 8)}</code></td>
+            <td style="font-size: 0.85rem;">${o.services_name || " services"}</td>
+            <td><strong>Ksh${o.total_cost}</strong></td>
+            <td>
+              ${o.is_paid 
+                ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7;">Confirmed</span>`
+                : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2;">Pending Payment</span>`}
+            </td>
+            <td>
+              ${!o.is_paid 
+                ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
+                : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
+            </td>
+          </tr>
+        `;
+      });
+    } catch(e) {
+      console.error("Orders load failed:", e);
+    }
+  }
+
+  // 3. Load caregiver Evaluations
+  async function loadpatienttReports() {
+    const tbody = document.querySelector("#assessments-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/patient/my-reports/");
+      if (!res.ok) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">Unable to retrieve reports.</td></tr>';
+        return;
+      }
+
+      const reports = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(reports) || reports.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No caregiver reports filed yet.</td></tr>';
+        return;
+      }
+
+      reports.forEach(r => {
+        tbody.innerHTML += `
+          <tr>
+            <td style="font-size: 0.85rem;">${r.date || "Recent"}</td>
+            <td><strong>${r.caregiver_name || "Assigned caregiver"}</strong></td>
+            <td>
+              <span style="background: #E0F2FE; color: var(--primary-deep); padding: 3px 8px; border-radius: 4px; font-weight: 700;">
+                ${r.performance_score}/10
+              </span>
+            </td>
+            <td style="font-size: 0.85rem; color: #334155;">${r.caregiver_remarks || "No additional comments"}</td>
+          </tr>
+        `;
+      });
+    } catch(e) {
+      console.error("Report fetch error:", e);
+    }
+  }
+
+  function addpatientservices(id, name, price) {
+    if (!selectedservicesIds.includes(id)) {
+      selectedservicesIds.push(id);
+      renderpatientActivities();
+    }
+    const searchBox = document.getElementById("patient-search-results");
+    const searchInput = document.getElementById("patient-catalog-search");
+    if (searchBox) searchBox.style.display = "none";
+    if (searchInput) searchInput.value = "";
+  }
+
+  function removepatientservices(id) {
+    selectedservicesIds = selectedservicesIds.filter(x => x !== id);
+    renderpatientActivities();
+  }
+
+  function renderpatientActivities() {
+    const box = document.getElementById("patient-selected-items");
+    if (!box) return;
+    box.innerHTML = "";
+    selectedservicesIds.forEach(id => {
+      const item = catalog.find(x => x.id === id);
+      if (item) {
+        box.innerHTML += `
+          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+            ${item.name} (Ksh${item.price})
+            <b style="cursor: pointer; color: red;" onclick="removepatientservices('${item.id}')">&times;</b>
+          </span>`;
+      }
+    });
+  }
+
+  // Single DOM Initialization
+  document.addEventListener("DOMContentLoaded", async () => {
+    // A. Minimum date initialization
+    const timeInput = document.getElementById("services-start-time");
+    if (timeInput) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      timeInput.min = `${year}-${month}-${day}T06:00`;
+    }
+
+    // B. Initial data fetches
+    loadpatientSchedules();
+    loadpatientOrders();
+    loadpatientReports();
+
+    // C. Referral profile load
+    try {
+      const profileRes = await fetch("/api/v1/patient/me/");
+      if (profileRes.ok) {
+        const c = await profileRes.json();
+        const refBox = document.getElementById("referral-box");
+        const refLinkInput = document.getElementById("my-ref-link");
+        const promoBal = document.getElementById("promo-balance");
+        if (refBox) refBox.style.display = "block";
+        if (refLinkInput) refLinkInput.value = c.referral_link || "";
+        if (promoBal) promoBal.textContent = `Ksh${c.promo_credits || "0.00"}`;
+      }
+    } catch(e) {}
+
+    // D. Catalog load
+    try {
+      const catRes = await fetch("/api/v1/catalog/");
+      if (catRes.ok) catalog = await catRes.json();
+    } catch(e) {}
+
+    // E. Catalog search filter
+    const searchInput = document.getElementById("patient-catalog-search");
+    const resultsBox = document.getElementById("patient-search-results");
+    if (searchInput && resultsBox) {
+      searchInput.addEventListener("input", () => {
+        const q = searchInput.value.toLowerCase().trim();
+        if (!q) {
+          resultsBox.style.display = "none";
+          resultsBox.innerHTML = "";
+          return;
+        }
+
+        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
+        resultsBox.innerHTML = "";
+
+        if (filtered.length === 0) {
+          resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No activities found.</div>";
+        } else {
+          filtered.forEach(item => {
+            const div = document.createElement("div");
+            div.style.padding = "8px 10px";
+            div.style.cursor = "pointer";
+            div.style.borderBottom = "1px solid #F1F5F9";
+            div.style.fontSize = "0.85rem";
+            div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: bold;">Ksh${item.price}</span>`;
+            div.addEventListener("click", () => addpatientservices(item.id, item.name, item.price));
+            resultsBox.appendChild(div);
+          });
+        }
+        resultsBox.style.display = "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+          resultsBox.style.display = "none";
+        }
+      });
+    }
+
+    // F. SINGLE Form Submit Listener -> Posts directly to /api/v1/schedules/
+    const orderForm = document.getElementById("patient-order-form");
+    const submitBtn = document.getElementById("submit-services-btn");
+
+    if (orderForm) {
+      orderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (selectedservicesIds.length === 0) {
+          alert("Please select at least one  services from the search bar.");
+          return;
+        }
+
+        const timeVal = document.getElementById("services-start-time").value;
+        if (!timeVal) {
+          alert("Please specify a session date and start time.");
+          return;
+        }
+
+        const chosenDate = new Date(timeVal);
+        const chosenHour = chosenDate.getHours();
+
+        if (chosenHour < 6 || chosenHour >= 18) {
+          alert("medroute training runs strictly between 06:00 AM and 06:00 PM. Please pick a daytime slot.");
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Assigning Available caregiver...";
+        }
+
+        try {
+          const res = await fetch("/api/v1/schedules/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({
+              services_id: selectedservicesIds[0],
+              start_time: chosenDate.toISOString()
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            showpatientToast("Session Booked!", `caregiver ${data.caregiver_name} assigned.`);
+            selectedservicesIds = [];
+            renderpatientActivities();
+            orderForm.reset();
+            loadpatientSchedules();
+            loadpatientOrders();
+          } else {
+            const err = await res.json();
+            alert(err.detail || "Booking failed. Please try an alternative slot.");
+          }
+        } catch (err) {
+          alert("Network failure communicating with scheduling service.");
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit Booking & Schedule caregiver";
+          }
+        }
+      });
+    }
+  });
 </script>
 {% endblock %}
 <!-- Section 3: Connected Global Doctors -->

@@ -459,7 +459,7 @@ jQuery.extend( {
 	},
 
 	// Support: Android <=4.0 only, PhantomJS 1 only
-	// push.apply(_, arraylike) throws on ancient WebKit
+	// push.apply(_, arraylike) throws on anpatient WebKit
 	merge: function( first, second ) {
 		var len = +second.length,
 			j = 0,
@@ -825,7 +825,7 @@ function find( selector, context, results, seed ) {
 
 		if ( documentIsHTML ) {
 
-			// If the selector is sufficiently simple, try using a "get*By*" DOM method
+			// If the selector is suffipatiently simple, try using a "get*By*" DOM method
 			// (excepting DocumentFragment context, where the methods don't exist)
 			if ( nodeType !== 11 && ( match = rquickExpr.exec( selector ) ) ) {
 
@@ -4753,7 +4753,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 			if ( toType( elem ) === "object" ) {
 
 				// Support: Android <=4.0 only, PhantomJS 1 only
-				// push.apply(_, arraylike) throws on ancient WebKit
+				// push.apply(_, arraylike) throws on anpatient WebKit
 				jQuery.merge( nodes, elem.nodeType ? [ elem ] : elem );
 
 			// Convert non-html into a text node
@@ -4776,7 +4776,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 				}
 
 				// Support: Android <=4.0 only, PhantomJS 1 only
-				// push.apply(_, arraylike) throws on ancient WebKit
+				// push.apply(_, arraylike) throws on anpatient WebKit
 				jQuery.merge( nodes, tmp.childNodes );
 
 				// Remember the top-level container
@@ -5522,8 +5522,8 @@ jQuery.each( {
 	keyCode: true,
 	button: true,
 	buttons: true,
-	clientX: true,
-	clientY: true,
+	patientX: true,
+	patienttY: true,
 	offsetX: true,
 	offsetY: true,
 	pointerId: true,
@@ -5912,7 +5912,7 @@ function domManip( collection, args, callback, ignored ) {
 					if ( hasScripts ) {
 
 						// Support: Android <=4.0 only, PhantomJS 1 only
-						// push.apply(_, arraylike) throws on ancient WebKit
+						// push.apply(_, arraylike) throws on anpatient WebKit
 						jQuery.merge( scripts, getAll( node, "script" ) );
 					}
 				}
@@ -6222,7 +6222,7 @@ jQuery.each( {
 			jQuery( insert[ i ] )[ original ]( elems );
 
 			// Support: Android <=4.0 only, PhantomJS 1 only
-			// .get() because push.apply(_, arraylike) throws on ancient WebKit
+			// .get() because push.apply(_, arraylike) throws on anpatient WebKit
 			push.apply( ret, elems.get() );
 		}
 
@@ -6692,7 +6692,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 		!parseFloat( val ) && jQuery.css( elem, "display", false, styles ) === "inline" ) &&
 
 		// Make sure the element is visible & connected
-		elem.getClientRects().length ) {
+		elem.getpatienttRects().length ) {
 
 		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
 
@@ -6906,11 +6906,11 @@ jQuery.each( [ "height", "width" ], function( _i, dimension ) {
 
 					// Support: Safari 8+
 					// Table columns in Safari have non-zero offsetWidth & zero
-					// getBoundingClientRect().width unless display is changed.
+					// getBoundingpatientRect().width unless display is changed.
 					// Support: IE <=11 only
-					// Running getBoundingClientRect on a disconnected node
+					// Running getBoundingpatientRect on a disconnected node
 					// in IE throws an error.
-					( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?
+					( !elem.getpatientRects().length || !elem.getBoundingpatientRect().width ) ?
 					swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, dimension, extra );
 					} ) :
@@ -6969,9 +6969,9 @@ jQuery.cssHooks.marginLeft = addGetHookIf( support.reliableMarginLeft,
 	function( elem, computed ) {
 		if ( computed ) {
 			return ( parseFloat( curCSS( elem, "marginLeft" ) ) ||
-				elem.getBoundingClientRect().left -
+				elem.getBoundingpatientRect().left -
 					swap( elem, { marginLeft: 0 }, function() {
-						return elem.getBoundingClientRect().left;
+						return elem.getBoundingpatientRect().left;
 					} )
 			) + "px";
 		}
@@ -9789,7 +9789,7 @@ jQuery.expr.pseudos.hidden = function( elem ) {
 	return !jQuery.expr.pseudos.visible( elem );
 };
 jQuery.expr.pseudos.visible = function( elem ) {
-	return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	return !!( elem.offsetWidth || elem.offsetHeight || elem.getpatientRects().length );
 };
 
 
@@ -10335,14 +10335,14 @@ jQuery.fn.extend( {
 
 		// Return zeros for disconnected and hidden (display: none) elements (gh-2310)
 		// Support: IE <=11 only
-		// Running getBoundingClientRect on a
+		// Running getBoundingpatientRect on a
 		// disconnected node in IE throws an error
-		if ( !elem.getClientRects().length ) {
+		if ( !elem.getpatientRects().length ) {
 			return { top: 0, left: 0 };
 		}
 
 		// Get document-relative position by adding viewport scroll to viewport-relative gBCR
-		rect = elem.getBoundingClientRect();
+		rect = elem.getBoundingpatientRect();
 		win = elem.ownerDocument.defaultView;
 		return {
 			top: rect.top + win.pageYOffset,
@@ -10364,8 +10364,8 @@ jQuery.fn.extend( {
 		// position:fixed elements are offset from the viewport, which itself always has zero offset
 		if ( jQuery.css( elem, "position" ) === "fixed" ) {
 
-			// Assume position:fixed implies availability of getBoundingClientRect
-			offset = elem.getBoundingClientRect();
+			// Assume position:fixed implies availability of getBoundingpatientRect
+			offset = elem.getBoundingpatientRect();
 
 		} else {
 			offset = this.offset();
@@ -10494,19 +10494,19 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 					// $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)
 					return funcName.indexOf( "outer" ) === 0 ?
 						elem[ "inner" + name ] :
-						elem.document.documentElement[ "client" + name ];
+						elem.document.documentElement[ "patient" + name ];
 				}
 
 				// Get document width or height
 				if ( elem.nodeType === 9 ) {
 					doc = elem.documentElement;
 
-					// Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height],
+					// Either scroll[Width/Height] or offset[Width/Height] or patient[Width/Height],
 					// whichever is greatest
 					return Math.max(
 						elem.body[ "scroll" + name ], doc[ "scroll" + name ],
 						elem.body[ "offset" + name ], doc[ "offset" + name ],
-						doc[ "client" + name ]
+						doc[ "patient" + name ]
 					);
 				}
 

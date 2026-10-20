@@ -14,7 +14,7 @@
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
   <div>
     <h1 style="color: var(--primary-deep); margin-bottom: 0.25rem;">Doctor Practice Console</h1>
-    <p style="color: #64748B;">Patient onboarding, clinical order dispatch, and diagnostic results tracking.</p>
+    <p style="color: #64748B;">Doctor workspace and patient followup.</p>
   </div>
   <div style="background: var(--sterile-white); border: 1px solid var(--border-slate); padding: 1rem 1.5rem; border-radius: 8px; text-align: right;">
     <div style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Accrued Referral Bonus</div>
@@ -29,7 +29,7 @@
   <div class="card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
       <h3 style="color: var(--primary-deep);">➕ Enroll New Patient</h3>
-      <p style="font-size: 0.8rem; color: #64748B;">All fields marked with an asterisk (*) are strictly required.</p>
+      <p style="font-size: 0.8rem; color: #64748B;">All fields marked with an asterisk <span class="star" style="color: red; font-weight: 600;">*</span> are strictly required.</p>
     </div>
 
     <!-- Error Banner for Patient Enrollment -->
@@ -38,33 +38,33 @@
     <form id="onboard-patient-form" novalidate>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">First Name *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">First Name <span class="star" style="color: red;">*</span> </label>
           <input type="text" name="first_name" id="p-first-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Last Name *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Last Name <span class="star" style="color: red;">*</span></label>
           <input type="text" name="last_name" id="p-last-name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Username *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Username <span class="star" style="color: red;">*</span></label>
           <input type="text" name="username" id="p-username" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Email Address *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Email Address <span class="star" style="color: red;">*</span></label>
           <input type="email" name="email" id="p-email" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600;">Phone Number *</label>
+          <label style="font-size: 0.75rem; font-weight: 600;">Phone Number <span class="star" style="color: red;">*</span></label>
           <input type="text" name="phone_number" id="p-phone" required placeholder="+254..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
         <div>
-          <label style="font-size: 0.75rem; font-weight: 600; color: #0F172A;">Date of Birth *</label>
+          <label style="font-size: 0.75rem; font-weight: 600; color: #0F172A;">Date of Birth <span class="star" style="color: red;">*</span></label>
           <input type="date" name="date_of_birth" id="p-dob" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         </div>
       </div>
@@ -81,7 +81,7 @@
   <!-- Order Dispatcher Form -->
   <div class="card" id="test-dispatch-card">
     <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-      <h3 style="color: var(--primary-deep);">🧪 Request Tests for Patient</h3>
+      <h3 style="color: var(--primary-deep);">🧪 Request services for Patient</h3>
       <p style="font-size: 0.8rem; color: #64748B;">Dispatch catalog items or custom unlisted clinical requirements.</p>
     </div>
 
@@ -98,18 +98,18 @@
 
       <div style="margin-bottom: 0.5rem;">
         <label style="font-size: 0.75rem; font-weight: 600;">Search Catalog Tests</label>
-        <input type="text" id="catalog-search" placeholder="Type to filter tests (e.g., Lipid, Metabolic)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+        <input type="text" id="catalog-search" placeholder="typein caregiving services" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
         <div id="search-results" style="max-height: 110px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px;"></div>
       </div>
       
       <div id="selected-catalog-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
 
       <div style="margin-bottom: 1rem;">
-        <label style="font-size: 0.75rem; font-weight: 600;">Custom / Unlisted Tests & Clinical Instructions</label>
+        <label style="font-size: 0.75rem; font-weight: 600;">insert custom caregiving activities</label>
         <textarea name="custom_test_names" id="order-custom-tests" placeholder="Specify any unlisted tests or instructions for the lab..." rows="2" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;"></textarea>
       </div>
 
-      <button type="submit" id="dispatch-order-btn" class="clinical-btn btn-primary" style="width: 100%;">Dispatch Order to LabCare</button>
+      <button type="submit" id="dispatch-order-btn" class="clinical-btn btn-primary" style="width: 100%;">Dispatch Order</button>
     </form>
   </div>
 </div>
@@ -462,7 +462,7 @@
               </td>
               <td>
                 <button type="button" onclick="targetOrderForPatient('${p.id}')" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.75rem;">
-                  Request Tests
+                  Request services
                 </button>
                 <button type="button" onclick="unlinkPatient('${p.id}', '${p.full_name}')" class="clinical-btn" style="padding: 4px 8px; font-size: 0.75rem; background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; margin-left: 4px;">
                   Unlink

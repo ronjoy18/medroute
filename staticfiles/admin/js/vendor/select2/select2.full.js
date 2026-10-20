@@ -6595,7 +6595,7 @@ S2.define('select2/selection/stopPropagation',[
 
         settings: {
             adjustOldDeltas: true, // see shouldAdjustOldDeltas() below
-            normalizeOffset: true  // calls getBoundingClientRect for each event
+            normalizeOffset: true  // calls getBoundingpatientttRect for each event
         }
     };
 
@@ -6693,10 +6693,10 @@ S2.define('select2/selection/stopPropagation',[
         deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
 
         // Normalise offsetX and offsetY properties
-        if ( special.settings.normalizeOffset && this.getBoundingClientRect ) {
-            var boundingRect = this.getBoundingClientRect();
-            offsetX = event.clientX - boundingRect.left;
-            offsetY = event.clientY - boundingRect.top;
+        if ( special.settings.normalizeOffset && this.getBoundingpatienttRect ) {
+            var boundingRect = this.getBoundingpatientRect();
+            offsetX = event.patientX - boundingRect.left;
+            offsetY = event.patientY - boundingRect.top;
         }
 
         // Add information to the event object
