@@ -161,8 +161,15 @@ body {
 }
 
 .auth-btn {
-  display: flex;       /* Aligns children side-by-side */
-  gap: 12px;           /* Puts space between the two buttons */
+   padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: flex;
+  gap: 12xp;
   align-items: center;
 }
 
