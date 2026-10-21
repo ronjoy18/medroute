@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}About Us | Medroute Errands{% endblock %}
 
 {% block content %}
 <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
@@ -10,7 +9,7 @@
     <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
       Medroute Errands provides rapid diagnostic testing coordination, home medical specimen pickups, and dedicated caregiver routing across the region.
     </p>
-    <a href="{% url 'index/page/' %}" class="clinical-btn btn-teal" style="width: 100%;">
+    <a href="{% url 'index-page' %}" class="clinical-btn btn-teal" style="width: 100%;">
       Back to Home Catalog
     </a>
   </div>
