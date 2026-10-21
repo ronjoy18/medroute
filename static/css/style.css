@@ -1,34 +1,83 @@
 :root {
-  /*--primary-deep: #0B4F6C;*/
-  --secondary-teal: #00A896;
-  --sterile-white: #FFFFFF;
-  --neutral-slate: #0F172A;
-  --neutral-soft: #F8FAFC;
-  --border-slate: #E2E8F0;
-  --alert-red: #EF4444;
-  --success-green: #10B981;
+  /* Core Clinical / Brand Palette */
   --primary-deep: #0f172a;
+  --secondary-teal: #00a896;
+  --sterile-white: #ffffff;
+  --neutral-slate: #0f172a;
+  --neutral-soft: #f8fafc;
+  --border-slate: #e2e8f0;
+  --alert-red: #ef4444;
+  --success-green: #10b981;
+
+  /* Glass Theme & Accent Tokens */
+  --page-bg: #0b1320;
+  --text-main: #f8fafc;
+  --text-muted: #e2e8f0;
+  --brand-blue: #0284c7;
+  --accent-mint: #5eead4;
+  --accent-mint-dim: rgba(94, 234, 212, 0.25);
+  --glass-card-bg: linear-gradient(
+    135deg,
+    rgba(14, 116, 144, 0.45) 0%,
+    rgba(15, 118, 110, 0.35) 50%,
+    rgba(6, 78, 59, 0.40) 100%
+  );
 }
 
-* {
+/* ==========================================================================
+   1. Universal Reset & Base Layout
+   ========================================================================== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: var(--neutral-soft);
   color: var(--neutral-slate);
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Main Navigation Bar */
+.main-content {
+  flex: 1;
+  padding: 2.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
 
+.star {
+  color: var(--alert-red);
+  font-weight: bold;
+}
 
-/* Left Section: Brand & Global Doctors */
+/* ==========================================================================
+   2. Main / Clinical Navigation Bars
+   ========================================================================== */
+.clinical-nav {
+  background: var(--sterile-white);
+  border-bottom: 1px solid var(--border-slate);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clinical-nav .brand {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-deep);
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
 .nav-left {
   display: flex;
   align-items: center;
@@ -36,16 +85,6 @@ body {
   flex-shrink: 0;
 }
 
-.clinical-nav .brand {
-  font-size: 0.5rem;
-  font-weight: 600;
-  color: var(--primary-deep);
-  text-decoration: none;
-  white-space: nowrap; /* Keeps Medroute Diagnostics on one single line */
-  line-height: 1.2;
-}
-
-/* Right Section: About Us + Auth Buttons */
 .nav-right {
   display: flex;
   align-items: center;
@@ -66,7 +105,72 @@ body {
   opacity: 0.8;
 }
 
-/* Base Button Style */
+.user-badge {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--neutral-slate);
+  white-space: nowrap;
+}
+
+/* Secondary Compact Navigation Bar */
+.navbar,
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 12px;
+}
+
+.nav-brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0b4d6c;
+  text-decoration: none;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.nav-actions,
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Dark Mode / Top Navigation Variant */
+.top-nav {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-btn.primary {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+/* ==========================================================================
+   3. Buttons & Action Links
+   ========================================================================== */
 .clinical-btn {
   padding: 0.65rem 1.25rem;
   border-radius: 6px;
@@ -84,7 +188,6 @@ body {
   white-space: nowrap;
 }
 
-/* Login: Primary Deep Blue */
 .btn-primary {
   background-color: var(--primary-deep);
   color: var(--sterile-white);
@@ -95,19 +198,19 @@ body {
   background-color: #083c53;
 }
 
-/* Sign In / Sign Up: White Background, Black Text, No Borders */
-.-signup-clean {
+.btn-signup-clean {
   background-color: #ffffff;
   color: #000000;
   border: none !important;
   box-shadow: none !important;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.-signup-clean:hover {
+.btn-signup-clean:hover {
   background-color: #f1f5f9;
 }
 
-/* Utility buttons */
 .btn-teal {
   background-color: var(--secondary-teal);
   color: var(--sterile-white);
@@ -118,7 +221,7 @@ body {
 }
 
 .btn-whatsapp {
-  background-color: #25D366;
+  background-color: #25d366;
   color: #ffffff;
 }
 
@@ -128,102 +231,8 @@ body {
   border: none;
 }
 
-.main-content {
-  flex: 1;
-  padding: 2.5rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-
-
-.nav-left, .-right {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-
-
-.-link {
-  color: var(--primary-deep);
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 0.95rem;
-  white-space: nowrap;
-}
-
-.-link:hover {
-  opacity: 0.8;
-}
-
-.user-badge {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--neutral-slate);
-  white-space: nowrap;
-}
-
-/* White background, black text, zero borders */
-.btn-signup-clean {
-  background-color: #ffffff;
-  color: #000000;
-  border: none;
-  box-shadow: none;
-}
-
-.btn-signup-clean:hover {
-  background-color: #f1f5f9;
-}
-
-.star{
-  color: red;
-  font-weight: bold;
-}
-
-
-
-.bar{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 12px;
-}
-
-.-brand{
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0b4d0b;
-}
-
-
-.nav-buttons {
-  display: flex;
-  gap: 12px;
-}
-.clinical-nav {
-  background: var(--sterile-white);
-  border-bottom: 1px solid var(--border-slate);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto; /* Adds horizontal scroll ONLY when table exceeds card width */
-  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS Safari */
-}
-
-
 .btn-outline {
-  border-color: var(--primary-deep);
+  border: 1px solid var(--primary-deep);
   color: var(--primary-deep);
   background: transparent;
 }
@@ -232,15 +241,34 @@ body {
   background: var(--neutral-soft);
 }
 
-.main-content {
-  flex: 1;
-  padding: 2.5rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
+.btn-signup {
+  padding: 6px 12px;
+  border: 1.5px solid #0b4d6c;
+  border-radius: 6px;
+  background: transparent;
+  color: #0b4d6c;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
 }
 
-/* Card Structures */
+.btn-login {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background-color: #0b4d6c;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. Cards, Grids & Data Tables
+   ========================================================================== */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -258,7 +286,37 @@ body {
   justify-content: space-between;
 }
 
-/* Password Engine Elements */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--sterile-white);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-slate);
+  margin-top: 1rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-slate);
+}
+
+.data-table th {
+  background: var(--neutral-soft);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   5. Authentication / Password Tracker
+   ========================================================================== */
 .rule-tracker {
   list-style: none;
   margin-top: 0.75rem;
@@ -269,7 +327,7 @@ body {
 
 .rule-tracker li {
   font-size: 0.825rem;
-  color: #64748B;
+  color: #64748b;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -289,86 +347,9 @@ body {
   content: "○";
 }
 
-/* Data Table Architecture */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--sterile-white);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-slate);
-  margin-top: 1rem;
-}
-
-.data-table th, .data-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border-slate);
-}
-
-.data-table th {
-  background: var(--neutral-soft);
-  font-weight: 700;
-}
-
-
-/* Navigation bar layout */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 12px;
-}
-
-/* Brand Title */
-.nav-brand {
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: #0b4d6c;
-  text-decoration: none;
-  line-height: 1.2;
-  white-space: nowrap; /* Prevents text from breaking into two awkward lines */
-}
-
-/* Right-side button group */
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Clean gap between Signup and Login */
-  flex-shrink: 0; /* Prevents buttons from squishing */
-}
-
-/* Signup Button */
-.btn-signup {
-  padding: 6px 12px;
-  border: 1.5px solid #0b4d6c;
-  border-radius: 6px;
-  background: transparent;
-  color: #0b4d6c;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/* Login Button */
-.btn-login {
-  padding: 6px 14px;
-  border-radius: 6px;
-  background-color: #0b4d6c;
-  color: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/* Container positioned fixed on screen */
+/* ==========================================================================
+   6. System Notification Toasts
+   ========================================================================== */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -376,19 +357,17 @@ body {
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Space between multiple stacked toasts */
-  pointer-events: none; /* Allows clicking behind empty space */
+  gap: 10px;
+  pointer-events: none;
 }
 
-/* Base Toast Card */
 .toast {
-  pointer-events: auto; /* Re-enables clicking on the toast itself */
+  pointer-events: auto;
   min-width: 250px;
   max-width: 350px;
   padding: 12px 16px;
   border-radius: 8px;
   color: #ffffff;
-  font-family: sans-serif;
   font-size: 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: flex;
@@ -399,63 +378,18 @@ body {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Visibility state */
 .toast.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Color variations based on message status */
-.toast-success { background-color: #0b4d6c; } /* Ocean/Proswim blue */
-.toast-error   { background-color: #d9383a; } /* Alert red */
-.toast-info    { background-color: #00c4d6; color: #032b30; } /* errand cyan */
+.toast-success { background-color: #0b4d6c; }
+.toast-error   { background-color: #d9383a; }
+.toast-info    { background-color: #00c4d6; color: #032b30; }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #0b1320; /* Dark general page backdrop */
-  color: #f8fafc;
-  min-height: 100dvh;
-}
-
-/* 1. Header (Excluded from Card Height) */
-.top-nav {
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1.25rem;
-  background: rgba(15, 23, 42, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.nav-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nav-btn {
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  background: transparent;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.nav-btn.primary {
-  background: #0284c7;
-  border-color: #0284c7;
-}
-
-/* 2. Container holding the card */
+/* ==========================================================================
+   7. Glass Card Component
+   ========================================================================== */
 .page-container {
   display: flex;
   justify-content: center;
@@ -463,39 +397,23 @@ body {
   padding: 1rem;
 }
 
-/* 3. The Translucent Blue-Green Glass Card */
 .glass-card {
   position: relative;
   width: 100%;
   max-width: 420px;
-  
-  /* Takes 3/4 (75%) of the mobile screen height */
-  height: 75dvh; 
-  
+  height: 75dvh;
   border-radius: 24px;
-  overflow: hidden; /* Keeps background image strictly inside the card border */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
-  /* Translucent Blue-Green / Cyan Glass Fill */
-  background: linear-gradient(
-    135deg, 
-    rgba(14, 116, 144, 0.45) 0%,   /* Cyan / Blue-Green */
-    rgba(15, 118, 110, 0.35) 50%,  /* Deep Teal */
-    rgba(6, 78, 59, 0.40) 100%     /* Emerald hint */
-  );
-  
-  /* Glass Frosted Blur */
+  background: var(--glass-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  
-  /* Subtle glass border and soft shadow */
-  border: 1px solid rgba(94, 234, 212, 0.25);
+  border: 1px solid var(--accent-mint-dim);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
 }
 
-/* 4. Isolated Background Image layer */
 .glass-card::before {
   content: "";
   position: absolute;
@@ -503,12 +421,11 @@ body {
   background-image: var(--card-bg-image);
   background-size: cover;
   background-position: center;
-  opacity: 0.22; /* Dimmed so text stays sharp and glass tint stands out */
+  opacity: 0.22;
   z-index: 0;
   pointer-events: none;
 }
 
-/* 5. Scrollable Content Area */
 .card-content {
   position: relative;
   z-index: 1;
@@ -526,7 +443,7 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   background: rgba(45, 212, 191, 0.2);
-  color: #5eead4;
+  color: var(--accent-mint);
   margin-bottom: 0.75rem;
 }
 
@@ -540,11 +457,10 @@ body {
 .card-content p {
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #e2e8f0;
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
-/* 6. Floating Advance Arrow */
 .advance-arrow {
   position: relative;
   z-index: 2;
@@ -555,13 +471,13 @@ body {
   border-radius: 50%;
   border: 1px solid rgba(94, 234, 212, 0.4);
   background: rgba(15, 23, 42, 0.6);
-  color: #5eead4;
+  color: var(--accent-mint);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .advance-arrow svg {

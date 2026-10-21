@@ -35,7 +35,7 @@ urlpatterns = [
     path("api/v1/caregiver/my-patients/", views.CareGiverMyPatientsAPIView.as_view(), name="api-caregiver-my-patients"),
     path("api/v1/caregiver/my-patients/<uuid:patient_id>/", views.CareGiverPatientDetailAPIView.as_view(), name="api-caregiverpatient-patient-detail"),
     path("api/v1/schedules/", views.CareScheduleAPIView.as_view(), name="api-schedules"), 
-    path("about-us/", views.about_view, name = "-about-us"),#.AboutUsAPIView.as_view(), ),
+    path("about-us/", views.about_view, name = "about-us"),#.AboutUsAPIView.as_view(), ),
     path("connect-care-giver/", views.connectcare_view,name="api-home-care") 
 ]
 
