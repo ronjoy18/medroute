@@ -70,7 +70,7 @@ body {
 }
 
 .clinical-nav .brand {
-  font-size: 1rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--primary-deep);
   text-decoration: none;
