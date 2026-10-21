@@ -174,11 +174,14 @@ class Order(models.Model):
     ordering_doctor = models.ForeignKey(
         DoctorProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="dispatched_orders"
     )
+    caregiver = models.ForeignKey(CareGiverProfile, on_delete=models.PROTECT,null=True, blank=True, related_name='assigned_caregiver')
     services = models.ManyToManyField(LabService, blank=True, related_name="orders")
     custom_test_names = models.TextField(
         blank=True, 
         help_text=_("Freeform list of unlisted tests or bespoke companionship procedures requested.")
     )
+    booking_start= models.DateTimeField(auto_now_add=True)
+    booking_end=models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=32, choices=Status.choices, default=Status.PENDING)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))
     is_paid = models.BooleanField(default=False)
