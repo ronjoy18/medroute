@@ -1,83 +1,59 @@
 {% extends "base.html" %}
 
+{% block title %}About Us | Medroute Errands{% endblock %}
+
 {% block content %}
-<div>
-    <h1>What is Medroute errands?</hs>
-    <p>
-
+<div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+  
+  <div class="card">
+    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">What is Medroute Errands?</h2>
+    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
+      Medroute Errands provides rapid diagnostic testing coordination, home medical specimen pickups, and dedicated caregiver routing across the region.
     </p>
-    <div>
-      </button type="submit" class="clinical-btn btn-teal" style="width: 100%;">  
-        <a href="{% url '/'%}">home</a>
-      </button>  
-    </div>  
-</div>
-<div>
-    <h1>Why Medroute errands?</hs>
-    <p>
+    <a href="{% url 'index-page' %}" class="clinical-btn btn-teal" style="width: 100%;">
+      Back to Home Catalog
+    </a>
+  </div>
 
+  <div class="card">
+    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Why Medroute Errands?</h2>
+    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
+      We bridge patients, licensed caregivers, and international medical specialists through unified scheduling and guaranteed turnaround times.
     </p>
-    <div>
-        <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-          <a href="{% url 'about-us' %}">about us</a>
-        </button>
-    </div>
-</div>
-<div>
-    <h1>Global doctors</hs>
-    <p>
+    <a href="{% url 'about-us' %}" class="clinical-btn btn-teal" style="width: 100%;">
+      Explore Our Mission
+    </a>
+  </div>
 
+  <div class="card">
+    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Global Doctors</h2>
+    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
+      Expand your reach or seek consultations from internationally verified medical specialists.
     </p>
-    <div>
-        <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-            <a href="/auth/?mode=register&role=doctor">Register as a global doctor</a>
-        </button>
-    </div>
-</div>
-<div>
-    <h1>Caregivers</hs>
-    <p>
+    <a href="{% url 'auth-page' %}?mode=register&role=doctor" class="clinical-btn btn-teal" style="width: 100%;">
+      Register as a Global Doctor
+    </a>
+  </div>
 
+  <div class="card">
+    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Caregivers</h2>
+    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
+      Schedule home companion care or request verified bedside clinical assistance.
     </p>
-    <div>
-      <h2>Errands caregivers</h2>
-    </div>
-    <p>
+    <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal" style="width: 100%;">
+      Request a Care Giver
+    </a>
+  </div>
 
+  <div class="card">
+    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Patient Intake</h2>
+    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
+      Sign in to check pending test reports, orders, and caregiver appointment schedules.
     </p>
-    <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-        <a href="api/v1/patient/me/">schedule errands</a>
-    </button>
-    <div>
-        <h3>Home caregivers</h3>
-    </div>
-    <p>
+    <a href="{% url 'auth-page' %}?mode=login&role=patient" class="clinical-btn btn-teal" style="width: 100%;">
+      Patient Sign In
+    </a>
+  </div>
 
-    </p> 
-    <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-        <a href="/connect-care-giver/">request a care giver</a>
-    </button>
-</div>
-<div>
-    <h1>Patients</hs>
-    <p>
-
-    </p>
-    <div>
-        <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-            <a href="/auth/login/">sign in</a>
-        </button>
-    </div>
-</div>
-<div>
-    <h1>Schedules and services</hs>
-    <p>
-
-    </p>
-    <div>
-        <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-            <a href="dashboard/">visit dashboard</a>
-        </button>
-    </div>
 </div>
 {% endblock %}

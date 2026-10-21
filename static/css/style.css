@@ -1,13 +1,15 @@
+/* ==========================================================================
+   1. Design Tokens & Color Variables
+   ========================================================================== */
 :root {
-  --primary-deep1: #0B4F6C;
-  --secondary-teal: #00A896;
-  --sterile-white: #FFFFFF;
-  --neutral-slate: #0F172A;
-  --neutral-soft: #F8FAFC;
-  --border-slate: #E2E8F0;
-  --alert-red: #EF4444;
-  --success-green: #10B981;
   --primary-deep: #0f172a;
+  --secondary-teal: #00a896;
+  --sterile-white: #ffffff;
+  --neutral-slate: #0f172a;
+  --neutral-soft: #f8fafc;
+  --border-slate: #e2e8f0;
+  --alert-red: #ef4444;
+  --success-green: #10b981;
   --page-bg: #0b1320;
   --text-main: #f8fafc;
   --text-muted: #e2e8f0;
@@ -22,55 +24,122 @@
   );
 }
 
-* {
+/* ==========================================================================
+   2. Reset & Viewport Constraints (Prevents Android Width Stretching)
+   ========================================================================== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: var(--neutral-soft);
   color: var(--neutral-slate);
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Main Navigation Bar */
-
-
-/* Left Section: Brand & Global Doctors */
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-shrink: 0;
+/* Dark background ONLY on the welcome/advert home page */
+body.home-page {
+  background-color: var(--page-bg);
+  color: var(--text-main);
 }
 
+.main-content {
+  flex: 1;
+  padding: 1.25rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+.star {
+  color: var(--alert-red);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. Distinct White Navigation Bar (Clean & Aligned)
+   ========================================================================== */
+.top-nav {
+  width: 100%;
+  height: 64px;
+  background-color: var(--sterile-white);
+  border-bottom: 2px solid var(--border-slate);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 100;
+}
+
+/* Clickable Brand Logo: No purple link, no underline */
 .brand {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--primary-deep);
   text-decoration: none;
-  white-space: nowrap; /* Keeps Medroute Diagnostics on one single line */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
   line-height: 1.2;
 }
 
-/* Right Section: About Us + Auth Buttons */
-.nav-right {
+.brand:hover,
+.brand:visited,
+.brand:active {
+  text-decoration: none;
+  color: var(--primary-deep);
+}
+
+.brand-teal {
+  color: var(--secondary-teal);
+}
+
+/* Right-aligned Navigation Controls */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* Secondary Sub-navigation Row (About us & Global Doctors) */
+.sub-nav-bar {
+  background-color: #f1f5f9;
+  border-bottom: 1px solid var(--border-slate);
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-shrink: 0;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .nav-link {
   color: var(--primary-deep);
   font-weight: 600;
   text-decoration: none;
-  font-size: 0.95rem;
-  transition: opacity 0.2s ease;
+  font-size: 0.875rem;
   white-space: nowrap;
 }
 
@@ -78,14 +147,16 @@ body {
   opacity: 0.8;
 }
 
-/* Base Button Style */
+/* ==========================================================================
+   4. Preserved Button Styles
+   ========================================================================== */
 .clinical-btn {
-  padding: 0.65rem 1.25rem;
+  padding: 0.55rem 1rem;
   border-radius: 6px;
   border: none;
   outline: none;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
@@ -96,7 +167,10 @@ body {
   white-space: nowrap;
 }
 
-/* Login: Primary Deep Blue */
+.clinical-btn:hover {
+  text-decoration: none;
+}
+
 .btn-primary {
   background-color: var(--primary-deep);
   color: var(--sterile-white);
@@ -105,21 +179,9 @@ body {
 
 .btn-primary:hover {
   background-color: #083c53;
+  color: var(--sterile-white);
 }
 
-/* Sign In / Sign Up: White Background, Black Text, No Borders */
-.-signup-clean {
-  background-color: #ffffff;
-  color: #000000;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.-signup-clean:hover {
-  background-color: #f1f5f9;
-}
-
-/* Utility buttons */
 .btn-teal {
   background-color: var(--secondary-teal);
   color: var(--sterile-white);
@@ -127,115 +189,11 @@ body {
 
 .btn-teal:hover {
   background-color: #028a7b;
+  color: var(--sterile-white);
 }
-
-.btn-whatsapp {
-  background-color: #25D366;
-  color: #ffffff;
-}
-
-.btn-phone {
-  background-color: #ffffff;
-  color: #000000;
-  border: none;
-}
-
-.main-content {
-  flex: 1;
-  padding: 2.5rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-
-
-.nav-left, .-right {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-
-
-.-link {
-  color: var(--primary-deep);
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 0.95rem;
-  white-space: nowrap;
-}
-
-.-link:hover {
-  opacity: 0.8;
-}
-
-.user-badge {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--neutral-slate);
-  white-space: nowrap;
-}
-
-/* White background, black text, zero borders */
-.btn-signup-clean {
-  background-color: #ffffff;
-  color: #000000;
-  border: none;
-  box-shadow: none;
-}
-
-.btn-signup-clean:hover {
-  background-color: #f1f5f9;
-}
-
-.star{
-  color: red;
-  font-weight: bold;
-}
-
-
-
-.bar{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 12px;
-}
-
-.-brand{
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0b4d0b;
-}
-
-
-.nav-buttons {
-  display: flex;
-  gap: 12px;
-}
-.clinical-nav {
-  background: var(--sterile-white);
-  border-bottom: 1px solid var(--border-slate);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto; /* Adds horizontal scroll ONLY when table exceeds card width */
-  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS Safari */
-}
-
 
 .btn-outline {
-  border-color: var(--primary-deep);
+  border: 1px solid var(--primary-deep);
   color: var(--primary-deep);
   background: transparent;
 }
@@ -244,19 +202,28 @@ body {
   background: var(--neutral-soft);
 }
 
-.main-content {
-  flex: 1;
-  padding: 2.5rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
+.btn-phone {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid var(--border-slate);
 }
 
-/* Card Structures */
+.nav-btn.primary {
+  background-color: var(--brand-blue);
+  color: var(--sterile-white);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   5. Card Layouts & Grid Structures
+   ========================================================================== */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
   margin-top: 1.5rem;
 }
 
@@ -264,250 +231,73 @@ body {
   background: var(--sterile-white);
   border: 1px solid var(--border-slate);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-/* Password Engine Elements */
-.rule-tracker {
-  list-style: none;
-  margin-top: 0.75rem;
-  padding: 0.5rem;
-  background: var(--neutral-soft);
-  border-radius: 6px;
+/* ==========================================================================
+   6. Responsive Tables (Smooth Horizontal Scrolling on Phones)
+   ========================================================================== */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+  border: 1px solid var(--border-slate);
+  border-radius: 8px;
+  background: var(--sterile-white);
 }
 
-.rule-tracker li {
-  font-size: 0.825rem;
-  color: #64748B;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.rule-tracker li.valid {
-  color: var(--success-green);
-  font-weight: 600;
-}
-
-.rule-tracker li.valid::before {
-  content: "✔";
-}
-
-.rule-tracker li.invalid::before {
-  content: "○";
-}
-
-/* Data Table Architecture */
 .data-table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
-  background: var(--sterile-white);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-slate);
-  margin-top: 1rem;
 }
 
-.data-table th, .data-table td {
-  padding: 1rem;
+.data-table th,
+.data-table td {
+  padding: 0.85rem 1rem;
   text-align: left;
   border-bottom: 1px solid var(--border-slate);
+  font-size: 0.875rem;
 }
 
 .data-table th {
   background: var(--neutral-soft);
   font-weight: 700;
+  color: var(--primary-deep);
 }
 
-
-/* Navigation bar layout */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 12px;
-}
-
-/* Brand Title */
-.nav-brand {
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: #0b4d6c;
-  text-decoration: none;
-  line-height: 1.2;
-  white-space: nowrap; /* Prevents text from breaking into two awkward lines */
-}
-
-/* Right-side button group */
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Clean gap between Signup and Login */
-  flex-shrink: 0; /* Prevents buttons from squishing */
-}
-
-/* Signup Button */
-.btn-signup {
-  padding: 6px 12px;
-  border: 1.5px solid #0b4d6c;
-  border-radius: 6px;
-  background: transparent;
-  color: #0b4d6c;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/* Login Button */
-.btn-login {
-  padding: 6px 14px;
-  border-radius: 6px;
-  background-color: #0b4d6c;
-  color: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/* Container positioned fixed on screen */
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Space between multiple stacked toasts */
-  pointer-events: none; /* Allows clicking behind empty space */
-}
-
-/* Base Toast Card */
-.toast {
-  pointer-events: auto; /* Re-enables clicking on the toast itself */
-  min-width: 250px;
-  max-width: 350px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  color: #ffffff;
-  font-family: sans-serif;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* Visibility state */
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Color variations based on message status */
-.toast-success { background-color: #0b4d6c; } /* Ocean/Proswim blue */
-.toast-error   { background-color: #d9383a; } /* Alert red */
-.toast-info    { background-color: #00c4d6; color: #032b30; } /* errand cyan */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #0b1320; /* Dark general page backdrop */
-  color: #f8fafc;
-  min-height: 100dvh;
-}
-
-/* 1. Header (Excluded from Card Height) */
-.top-nav {
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1.25rem;
-  background: rgba(226, 228, 233, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.nav-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nav-btn {
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  background: transparent;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.nav-btn.primary {
-  background: #0284c7;
-  border-color: #0284c7;
-}
-
-/* 2. Container holding the card */
+/* ==========================================================================
+   7. Glass Card Component (For Welcome Ad Page)
+   ========================================================================== */
 .page-container {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  flex: 1;
 }
 
-/* 3. The Translucent Blue-Green Glass Card */
 .glass-card {
   position: relative;
   width: 100%;
   max-width: 420px;
-  
-  /* Takes 3/4 (75%) of the mobile screen height */
-  height: 75dvh; 
-  
+  height: 75dvh;
   border-radius: 24px;
-  overflow: hidden; /* Keeps background image strictly inside the card border */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
-  /* Translucent Blue-Green / Cyan Glass Fill */
-  background: linear-gradient(
-    135deg, 
-    rgba(14, 116, 144, 0.45) 0%,   /* Cyan / Blue-Green */
-    rgba(15, 118, 110, 0.35) 50%,  /* Deep Teal */
-    rgba(6, 78, 59, 0.40) 100%     /* Emerald hint */
-  );
-  
-  /* Glass Frosted Blur */
+  background: var(--glass-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  
-  /* Subtle glass border and soft shadow */
-  border: 1px solid rgba(94, 234, 212, 0.25);
+  border: 1px solid var(--accent-mint-dim);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
 }
 
-/* 4. Isolated Background Image layer */
 .glass-card::before {
   content: "";
   position: absolute;
@@ -515,12 +305,11 @@ body {
   background-image: var(--card-bg-image);
   background-size: cover;
   background-position: center;
-  opacity: 0.22; /* Dimmed so text stays sharp and glass tint stands out */
+  opacity: 0.22;
   z-index: 0;
   pointer-events: none;
 }
 
-/* 5. Scrollable Content Area */
 .card-content {
   position: relative;
   z-index: 1;
@@ -538,7 +327,7 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   background: rgba(45, 212, 191, 0.2);
-  color: #5eead4;
+  color: var(--accent-mint);
   margin-bottom: 0.75rem;
 }
 
@@ -552,11 +341,10 @@ body {
 .card-content p {
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #e2e8f0;
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
-/* 6. Floating Advance Arrow */
 .advance-arrow {
   position: relative;
   z-index: 2;
@@ -567,13 +355,13 @@ body {
   border-radius: 50%;
   border: 1px solid rgba(94, 234, 212, 0.4);
   background: rgba(15, 23, 42, 0.6);
-  color: #5eead4;
+  color: var(--accent-mint);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .advance-arrow svg {
@@ -590,3 +378,31 @@ body {
 .advance-arrow:hover svg {
   transform: translateX(3px);
 }
+
+/* ==========================================================================
+   8. Password Rule Tracker & Toasts
+   ========================================================================== */
+.rule-tracker {
+  list-style: none;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: var(--neutral-soft);
+  border-radius: 6px;
+}
+
+.rule-tracker li {
+  font-size: 0.825rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.rule-tracker li.valid {
+  color: var(--success-green);
+  font-weight: 600;
+}
+
+.rule-tracker li.valid::before { content: "✔"; }
+.rule-tracker li.invalid::before { content: "○"; }

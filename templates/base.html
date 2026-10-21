@@ -7,38 +7,45 @@
   <link rel="stylesheet" href="/static/css/style.css">
   {% block extra_head %}{% endblock %}
 </head>
-<!-- CORRECT -->
 <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
 
-  <nav class="top-nav">
-    <a href="{% url 'index-page' %}" class="brand">Medroute <span style="color: var(--secondary-teal);">Errands</span></a>
-    <div class="nav-action">
+  <!-- Main Top Bar: Clean White, Distinct, Unbroken -->
+  <header class="top-nav">
+    <a href="{% url 'index-page' %}" class="brand">
+      <span>Medroute</span>
+      <span class="brand-teal">Errands</span>
+    </a>
+
+    <!-- Right-aligned action buttons -->
+    <div class="nav-actions">
       {% if request.user.is_authenticated %}
-        <span style="margin-right: 1rem; font-weight: 600;">
-          {{request.user.username }} 
+        <span style="font-weight: 600; font-size: 0.85rem; color: var(--primary-deep); margin-right: 0.25rem;">
+          {{ request.user.username }}
         </span>
-        <a href="/dashboard/" class="clinical-btn btn-outline" style="margin-right: 0.5rem;">Clear</a>
-        <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href='/')" class="clinical-btn btn-primary">Sign Out</button>
+        <a href="{% url 'dashboard-dispatcher' %}" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;">Dashboard</a>
+        <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href= 'index-page')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
+          Sign Out
+        </button>
       {% else %}
-        <!--a href="/auth/?mode=login&role=doctor" class="clinical-btn btn-outline" style="margin-right: 0.5rem;">Doctor Portal</a>-->
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;"></div>
-          <!--a href="/auth/?mode=register&role=patient" class="clinical-btn btn-phone">sign up</a--->
-          <a href="/auth/?mode=login&role=patient" class=" clinical-btn btn-primary">login</a>
-        </div>
+        <a href="{% url 'auth-page' %}?mode=login&role=patient" class="clinical-btn btn-primary">
+          Login
+        </a>
       {% endif %}
     </div>
+  </header>
+
+  <!-- Sub Navigation Links Bar -->
+  <nav class="sub-nav-bar">
+    <a href="{% url 'about-us' %}" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem;">About us</a>
+    <a href="{% url 'global-doctor-directory' %}" class="nav-link">Global Doctors</a>
   </nav>
-  <div class="auth-button">
-    <a href="{% url 'about-us' %}" class="clinical-btn btn-primary" style="margin-right: 0.5rem;">About us</a>
-    <a href="/directory/doctors/" class="nav-link" style="color: var(--primary-deep); font-weight: 600; text-decoration: none;">
-  Global Doctors
-    </a>
-  </div>
+
+  <!-- Main Content Container -->
   <main class="main-content">
     {% block content %}{% endblock %}
   </main>
 
-  <footer style="padding: 2rem; text-align: center; border-top: 1px solid var(--border-slate); background: #FFF; font-size: 0.85rem; color: #64748B;">
+  <footer style="padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
     &copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under clinical scope protocols.
   </footer>
 

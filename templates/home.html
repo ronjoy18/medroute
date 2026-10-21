@@ -3,37 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Medroute Clinical Systems{% endblock %}</title>
+  <title>Welcome | Medroute Errands</title>
   <link rel="stylesheet" href="/static/css/style.css">
-  {% block extra_head %}{% endblock %}
 </head>
-<!-- CORRECT -->
-<body>
-<header class="top-nav">
-  <div>
-    <a href="{% url 'index-page' %}" class="brand" style="color: inherit;">Medroute <span style="color: var(--secondary-teal);">Errands</span></a>
-  </div>
-  <div class="nav-actions">
-    <a href="{% url 'index-page' %}" class=" nav-btn primary">Get started</a>
-  </div>
-</header>
-<main class="page-container">
-  <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1JNBVHGYPN11EWD0SnQcp33F28ocfem9a-DsEUXIkg&s=10');">
-    <!-- Inner scrollable text/media content -->
-    <div class="card-content">
-      <span class="badge">Session 01</span>
-      <h2>ad 1</h2>
-      <p>context.</p>
-      <p>context.</p>
-    </div>
+<body class="home-page">
 
-    <!-- Interactive advance arrow -->
-    <button class="advance-arrow" aria-label="Next card" onclick="nextCard()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-      </svg>
-    </button>
-  </section>
-</main>
+  <!-- White Top Nav with 'Get started' acting as the main CTA -->
+  <header class="top-nav">
+    <a href="{% url 'home-page' %}" class="brand">
+      <span>Medroute</span>
+      <span class="brand-teal">Errands</span>
+    </a>
+    <div class="nav-actions">
+      <a href="{% url 'index-page' %}" class="nav-btn primary">Get started</a>
+    </div>
+  </header>
+
+  <!-- Glass Advert Card -->
+  <main class="page-container">
+    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1JNBVHGYPN11EWD0SnQcp33F28ocfem9a-DsEUXIkg&s=10');">
+      <div class="card-content">
+        <span class="badge">Session 01</span>
+        <h2>Modern Clinical Diagnostics</h2>
+        <p>Direct diagnostics, medical specimen logistics, and verified caregiver support delivered right to your home.</p>
+        <p>Advance forward to explore our full clinical catalog and connect with specialists.</p>
+      </div>
+
+      <!-- Arrow advances user directly to the index catalog -->
+      <button class="advance-arrow" aria-label="Enter site" onclick="window.location.href='index-page'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </section>
+  </main>
+
 </body>
+</html>
