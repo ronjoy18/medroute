@@ -72,7 +72,7 @@ class CareGiverProfile(models.Model):
     remarks = models.CharField(max_length=256, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     archived_by_caregiver =models.BooleanField(default=False)
-    is_active = models.BooleanField(db_collation=True)
+    is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
     
 class PatientProfile(models.Model):
