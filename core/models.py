@@ -172,7 +172,7 @@ class Order(models.Model):
     order_type = models.CharField(max_length=32, choices=OrderType.choices, default=OrderType.LAB_TEST)
     patient = models.ForeignKey(PatientProfile, on_delete=models.PROTECT, related_name="orders")
     ordering_doctor = models.ForeignKey(
-        DoctorProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="dispatched_orders"
+        DoctorProfile, on_delete=models.SET_NULL, related_name="dispatched_orders", null=True
     )
     caregiver = models.ForeignKey(CareGiverProfile, on_delete=models.PROTECT,null=True, blank=True, related_name='assigned_caregiver')
     services = models.ManyToManyField(LabService, blank=True, related_name="orders")
@@ -248,13 +248,13 @@ class CompanionshipScheduler(models.Model):
         SCHEDULED="SCHEDULED",_('schedued')
         FREE="FREE",_('free')
 
-    services=models.OneToOneField(LabService,on_delete=models.PROTECT,related_name = 'ab_services')
+    services=models.ForeignKey(LabService,on_delete=models.PROTECT,related_name = 'lab_services', null=True)
     patient = models.ForeignKey(PatientProfile,on_delete=models.CASCADE,related_name ='patient_in_care', )
     caregiver=models.ForeignKey(CareGiverProfile,on_delete=models.PROTECT,related_name ='patient_manager')
-    orders= models.ForeignKey(Order,on_delete=models.CASCADE,related_name ='offred_requests' )
+    order= models.ForeignKey(Order,on_delete=models.CASCADE,related_name ='offred_requests' )
     status = models.CharField(max_length=256, choices =Status.choices, default=Status.SCHEDULED)
-    start_date=models.DateField()
-    end_date=models.DateField()
+    start_date=models.DateTimeField()
+    end_date=models.DateTimeField()
     class Meta:
         indexes=[
             models.Index(fields=["caregiver", "start_date", "end_date"])

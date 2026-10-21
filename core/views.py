@@ -32,6 +32,8 @@ def auth_view(request):
 
 def internal_login_view(request):
     return render(request, "internal_login.html")
+def about_view(request):
+    return render(request, 'aboutus.html')
 
 def dashboard_dispatcher(request):
     if not request.user.is_authenticated:
