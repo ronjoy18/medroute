@@ -23,7 +23,7 @@
       <input type="text" id="my-ref-link" readonly style="font-size: 0.75rem; padding: 4px; width: 100%; background: #FFF; border: 1px solid #86EFAC; border-radius: 4px;">
       <button onclick="navigator.clipboard.writeText(document.getElementById('my-ref-link').value); alert('Referral link copied!');" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Copy</button>
     </div>
-    <div style="font-size: 0.75rem; color: #15803D;">Share with friends to earn <strong>$10.00 promo credit</strong> on your next service! Credit Balance: <strong id="promo-balance">$0.00</strong></div>
+    <div style="font-size: 0.75rem; color: #15803D;">Share with friends to earn <strong>10.00% promo credit</strong> on your next service! Credit Balance: <strong id="promo-balance">Ksh0.00</strong></div>
   </div>
 </div>
 
@@ -58,6 +58,9 @@
         <small style="color: #64748B; font-size: 0.75rem;">
           Operating hours: <strong>06:00 AM – 06:00 PM</strong> book within the working hours window
         </small>
+        <p>
+          Need your own personalized schedule, <a href="http://wa.me/+254112198534" color ="green">contuct us </a>
+        </p>
       </div>
 
       <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule Caregiver</button>
@@ -75,7 +78,7 @@
   <table class="data-table" id="patient-schedules-table">
     <thead>
       <tr>
-        <th>Activity</th>
+        <th>Service</th>
         <th>Assigned Caregiver</th>
         <th>Start Time</th>
         <th>Status</th>
@@ -98,7 +101,7 @@
     <thead>
       <tr>
         <th>Booking Code</th>
-        <th>Requested Activities / Lessons</th>
+        <th>Requested services / services</th>
         <th>Total Amount</th>
         <th>Status</th>
         <th>Payment Action</th>
@@ -213,7 +216,7 @@
       }
 
       schedules.forEach(s => {
-        const start = s.start_time ? new Date(s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
+        const start = s.start_date ? new Date(s.start_date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
         const actName = s.services_name || s.service_name || "Care Service";
         const caregiverName = s.caregiver_name || "Assigned Caregiver";
 
@@ -392,7 +395,7 @@
         if (p.patient_type === "INDEPENDENT" && refBox) {
           refBox.style.display = "block";
           if (refLinkInput) refLinkInput.value = p.referral_link || "";
-          if (promoBal) promoBal.textContent = `$${p.promo_credits || "0.00"}`;
+          if (promoBal) promoBal.textContent = `Ksh${p.promo_credits || "0.00"}`;
         }
       }
     } catch (e) {
@@ -490,7 +493,7 @@
             },
             body: JSON.stringify({
               services_id: selectedServicesIds[0],
-              start_time: chosenDate.toISOString()
+              start_date: chosenDate.toISOString()
             })
           });
 

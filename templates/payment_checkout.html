@@ -22,7 +22,7 @@
       {% for s in order.services.all %}
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem;">
           <span>{{ s.name }}</span>
-          <strong>${{ s.price }}</strong>
+          <strong>Ksh{{ s.price }}</strong>
         </div>
       {% empty %}
         <div style="font-size: 0.95rem; color: #475569;">Bespoke / Custom Clinical Request</div>
@@ -37,7 +37,7 @@
 
       <div style="border-top: 1px solid var(--border-slate); margin-top: 0.75rem; padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: baseline;">
         <span style="font-weight: 700; color: var(--primary-deep);">Total Payable</span>
-        <span style="font-size: 1.5rem; font-weight: 800; color: var(--secondary-teal);">${{ order.total_cost }}</span>
+        <span style="font-size: 1.5rem; font-weight: 800; color: var(--secondary-teal);">Ksh{{ order.total_cost }}</span>
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
   </div>
 
   <button id="confirm-pay-btn" onclick="executePayment('{{ order.id }}')" class="clinical-btn btn-teal" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
-    Confirm & Settle Payment (${{ order.total_cost }})
+    Confirm & Settle Payment (Ksh{{ order.total_cost }})
   </button>
 
   <p style="text-align: center; font-size: 0.8rem; color: #94A3B8; margin-top: 1rem;">

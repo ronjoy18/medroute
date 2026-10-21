@@ -72,7 +72,8 @@ class CareGiverProfile(models.Model):
     remarks = models.CharField(max_length=256, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     archived_by_caregiver =models.BooleanField(default=False)
-
+    is_active = models.BooleanField(db_collation=True)
+    is_verified = models.BooleanField(default=False)
     
 class PatientProfile(models.Model):
     class PatientType(models.TextChoices):
@@ -148,7 +149,7 @@ class LabService(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.name} ({self.code}) - ${self.price}"
+        return f"{self.name} ({self.code}) - Ksh{self.price}"
 
 
 def report_upload_directory_path(instance, filename):
@@ -211,7 +212,7 @@ class ReferralLedger(models.Model):
         ordering = ["-accrued_timestamp"]
 
     def __str__(self):
-        return f"LedgerEntry: Dr. {self.doctor.license_number} | +${self.bonus_amount} (Order: {self.order_id})"
+        return f"LedgerEntry: Dr. {self.doctor.license_number} | +Ksh{self.bonus_amount} (Order: {self.order_id})"
 
 
 class GlobalDoctorInquiry(models.Model):
@@ -249,7 +250,7 @@ class CompanionshipScheduler(models.Model):
     caregiver=models.ForeignKey(CareGiverProfile,on_delete=models.PROTECT,related_name ='patient_manager')
     orders= models.ForeignKey(Order,on_delete=models.CASCADE,related_name ='offred_requests' )
     status = models.CharField(max_length=256, choices =Status.choices, default=Status.SCHEDULED)
-    start_date =models.DateField()
+    start_date=models.DateField()
     end_date=models.DateField()
     class Meta:
         indexes=[

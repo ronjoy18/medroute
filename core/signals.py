@@ -17,7 +17,7 @@ def calculate_order_total_on_service_change(sender, instance, action, **kwargs):
 def process_order_lifecycle_events(sender, instance, created, **kwargs):
     # 1. Immediate Patient Intake Email
     if created:
-        services_list = "\n".join([f" - {s.name} (${s.price})" for s in instance.services.all()])
+        services_list = "\n".join([f" - {s.name} (Ksh{s.price})" for s in instance.services.all()])
         custom_notes = f"\nCustom Instructions / Requirements:\n{instance.custom_test_names}" if instance.custom_test_names else ""
         
         email_body = (
@@ -27,7 +27,7 @@ def process_order_lifecycle_events(sender, instance, created, **kwargs):
             f"Order Tracking Code: {instance.id}\n"
             f"Category: {instance.get_order_type_display()}\n"
             f"Current Status: {instance.get_status_display()}\n"
-            f"Total Billed: ${instance.total_cost}\n"
+            f"Total Billed: ksh{instance.total_cost}\n"
             f"{services_list}{custom_notes}\n\n"
             f"You can review your bill and complete payment directly from your patient workspace:\n"
             f"{getattr(settings, 'BASE_URL', 'http://127.0.0.1:8000')}/dashboard/\n\n"
@@ -64,7 +64,7 @@ def process_order_lifecycle_events(sender, instance, created, **kwargs):
                 doc.total_accrued_bonus += bonus
                 doc.save(update_fields=["total_accrued_bonus"])
 
-        # B. Independent Patient Referral Promo Reward ($10 credit per paying referral)
+        # B. Independent Patient Referral Promo Reward (10 credit per paying referral)
         patient = instance.patient
         if patient.referred_by and patient.patient_type == PatientProfile.PatientType.INDEPENDENT:
             # Grant 10.00 promo credit once per referred patient's first completed payment
@@ -74,7 +74,7 @@ def process_order_lifecycle_events(sender, instance, created, **kwargs):
                 referrer.save(update_fields=["promo_credits"])
                 send_mail(
                     subject="[LabCare Promo] Referral Reward Credited!",
-                    message=f"Your referral {patient.user.first_name} completed their first booking! $10.00 has been credited to your next service.",
+                    message=f"Your referral {patient.user.first_name} completed their first booking! 10.00% has been credited to your next service.",
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[referrer.user.email],
                     fail_silently=True

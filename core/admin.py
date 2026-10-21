@@ -11,6 +11,7 @@ from .models import (
     Order,
     ReferralLedger,
     GlobalDoctorInquiry,
+    CareGiverProfile
 )
 
 
@@ -72,7 +73,7 @@ class DoctorProfileAdmin(admin.ModelAdmin):
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
     list_display = ["user", "patient_type", "primary_doctor", "promo_credits", "created_at"]
-    list_filter = ["patient_type", "is_archived_by_doctor"]
+    list_filter = ["patient_type", "is_archived_by_doctor", "archived_by_caregiver"]
     search_fields = ["user__username", "user__first_name", "user__last_name", "user__email", "referral_code"]
 
 
@@ -115,3 +116,36 @@ class GlobalDoctorInquiryAdmin(admin.ModelAdmin):
     def mark_as_connected(self, request, queryset):
         count = queryset.update(status="CONNECTED")
         self.message_user(request, f"{count} global connection(s) marked as Connected.")
+
+@admin.register(CareGiverProfile)
+class CareGiverProfileAdmin(admin.ModelAdmin):
+    list_display = ["user","created_at"]
+    list_filter=["is_verified", "is_active"]
+    search_fields = ["use__username"]
+
+    actions = ["verify_caregiver_and_notify"]
+    
+    def user_name(self, obj):
+        return obj.user.get_full_name() or obj.user.username
+    user_name.short_description = "caregiver Name"
+    
+    @admin.action(description="Verify selected caregivers and send confirmation email")
+    def verify_caregivers_and_notify(self, request, queryset):
+            for cg in queryset:
+                cg.is_verified = True
+                
+                send_mail(
+                    subject="[LabCare Global] Your Medical Practice Profile Has Been Verified!",
+                    message=(
+                        f"Dear Dr. {cg.user.last_name},\n\n"
+                        f"Our administrative review team has verified your credentials and license.\n"
+                        f"Your profile is now live on our Global Specialist Directory.\n\n"
+                        f"LabCare Global Review Board"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[cg.user.email],
+                    fail_silently=True,
+                )
+            self.message_user(request, f"{queryset.count()} caregivers verified and notified.")
+    
+    

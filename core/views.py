@@ -1,4 +1,5 @@
 import os
+from django.utils import timezone
 from django.http import FileResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, render, redirect
@@ -13,7 +14,6 @@ from .serializers import (
     DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer
 )
 from datetime import date, timedelta
-from datetime import timezone
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
 from labcare import settings
 from .models import GlobalDoctorInquiry, CareGiverProfile
@@ -562,21 +562,37 @@ class CareGiverPatientDetailAPIView(views.APIView):
         
 
 
+def round_to_nearest_five_minutes(dt):
+    """
+    Rounds a datetime object to the nearest 5-minute boundary
+    and resets seconds and microseconds to 0.
+    """
+    discard = timedelta(
+        minutes=dt.minute % 5,
+        seconds=dt.second,
+        microseconds=dt.microsecond
+    )
+    dt -= discard
+    if discard >= timedelta(minutes=2.5):
+        dt += timedelta(minutes=5)
+    return dt
+
+
 class CareScheduleAPIView(generics.ListCreateAPIView):
     serializer_class = CompanionshipSchedulerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    medroute_OPEN_HOUR = 6   # 06:00 AM
+    medroute_OPEN_HOUR = 6    # 06:00 AM
     medroute_CLOSE_HOUR = 18  # 06:00 PM
 
     def get_queryset(self):
         user = self.request.user
         if user.is_internal():
-            return CompanionshipScheduler.objects.all().select_related("caregiver__user", "patient__user", "services").order_by("-start_time")
+            return CompanionshipScheduler.objects.all().select_related("caregiver__user", "patient__user", "services").order_by("-start_date")
         if user.is_caregiver():
-            return CompanionshipScheduler.objects.filter(caregiver__user=user).select_related("patient__user", "services").order_by("-start_time")
+            return CompanionshipScheduler.objects.filter(caregiver__user=user).select_related("patient__user", "services").order_by("-start_date")
         if user.is_patient():
-            return CompanionshipScheduler.objects.filter(patient__user=user).select_related("caregiver__user", "services").order_by("-start_time")
+            return CompanionshipScheduler.objects.filter(patient__user=user).select_related("caregiver__user", "services").order_by("-start_date")
         return CompanionshipScheduler.objects.none()
 
     def create(self, request, *args, **kwargs):
@@ -589,61 +605,84 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
 
         patient, _ = PatientProfile.objects.get_or_create(user=user)
 
+        # Support both 'services_id' and 'start_date' / 'start_time' keys
         services_id = request.data.get("services_id")
-        start_time_raw = request.data.get("start_time")
+        start_date_raw = request.data.get("start_date") or request.data.get("start_time")
 
-        if not services_id or not start_time_raw:
+        if not services_id or not start_date_raw:
             return Response(
-                {"detail": "Both services_id and start_time are required."},
+                {"detail": "Both services_id and start_date are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        services = get_object_or_404((LabService.CategoryType.COMPANIONSHIP), id=services_id, is_active=True)
-        start_time = parse_datetime(start_time_raw)
-        if not start_time:
+        services = get_object_or_404(LabService, id=services_id, is_active=True)
+        start_date = parse_datetime(start_date_raw)
+        
+        if not start_date:
             return Response(
-                {"detail": "Invalid start_time format. Please provide a valid timestamp."},
+                {"detail": "Invalid start_date format. Please provide a valid timestamp."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        if timezone.is_naive(start_time):
-            start_time = timezone.make_aware(start_time, timezone.get_current_timezone())
+        # Ensure datetime is timezone-aware
+        if timezone.is_naive(start_date):
+            start_date = timezone.make_aware(start_date, timezone.get_current_timezone())
 
-        if start_time < timezone.now():
+        # Convert to configured local time
+        local_start = timezone.localtime(start_date)
+
+        # Round to the nearest 5 minutes (e.g., 09:23 -> 09:25)
+        local_start = round_to_nearest_five_minutes(local_start)
+
+        # Prevent past bookings
+        if local_start < timezone.now():
             return Response(
                 {"detail": "Session bookings cannot be scheduled in the past."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        end_time = start_time + timedelta(minutes=services.duration_minutes)
+        # Set session duration (60 minutes default instead of 720 minutes / 12 hours)
+        session_duration = getattr(services, "duration_minutes", 60)
+        local_end = local_start + timedelta(minutes=session_duration)
 
-        local_start = timezone.localtime(start_time)
-        local_end = timezone.localtime(end_time)
+        # Check operating hours window (06:00 AM - 06:00 PM)
+        is_before_open = local_start.hour < self.medroute_OPEN_HOUR
+        is_after_close = (local_end.hour > self.medroute_CLOSE_HOUR) or (
+            local_end.hour == self.medroute_CLOSE_HOUR and local_end.minute > 0
+        )
 
-        if local_start.hour < self.medroute_OPEN_HOUR or (local_end.hour > self.medroute_CLOSE_HOUR or (local_end.hour == self.medroute_CLOSE_HOUR and local_end.minute > 0)):
+        if is_before_open or is_after_close:
             return Response(
                 {
-                    "detail": f"medroute operates from 06:00 AM to 06:00 PM. A session starting at {local_start.strftime('%I:%M %p')}ends after all errands are complete."
+                    "detail": (
+                        f"Medroute operates strictly from 06:00 AM to 06:00 PM. "
+                        f"A session running {local_start.strftime('%I:%M %p')} - {local_end.strftime('%I:%M %p')} "
+                        f"falls outside operating hours."
+                    )
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Save normalized time back
+        start_date = local_start
+        end_date = local_end
+
         with transaction.atomic():
             busy_caregiver_ids = CompanionshipScheduler.objects.filter(
                 status=CompanionshipScheduler.Status.SCHEDULED,
-                start_time__lt=end_time,
-                end_time__gt=start_time
+                start_date__lt=end_date,
+                end_date__gt=start_date
             ).values_list("caregiver_id", flat=True)
 
-            assigned_caregiver = None
+            caregiver = None
 
             # 1. Preferred caregiver
-            if patient.assigned_caregiver and patient.assigned_caregiver.id not in busy_caregiver_ids and patient.assigned_caregiver.user.is_active:
-                assigned_caregiver = patient.assigned_caregiver
+            if patient.caregiver and patient.caregiver.id not in busy_caregiver_ids and patient.caregiver.user.is_active:
+                caregiver = patient.caregiver
 
             # 2. Any active verified caregiver
-            if not assigned_caregiver:
-                assigned_caregiver = (
+            if not caregiver:
+                caregiver = (
                     CareGiverProfile.objects
                     .filter(user__is_active=True, is_verified=True)
                     .exclude(id__in=busy_caregiver_ids)
@@ -651,49 +690,45 @@ class CareScheduleAPIView(generics.ListCreateAPIView):
                 )
 
             # 3. Fallback: Any active caregiver
-            if not assigned_caregiver:
-                assigned_caregiver = (
+            if not caregiver:
+                caregiver = (
                     CareGiverProfile.objects
                     .filter(user__is_active=True)
                     .exclude(id__in=busy_caregiver_ids)
                     .first()
                 )
 
-            if not assigned_caregiver:
+            if not caregiver:
                 return Response(
-                    {"detail": "All academy caregiveres are booked during this time window. Please pick another slot."},
+                    {"detail": "All academy caregivers are booked during this time window. Please pick another slot."},
                     status=status.HTTP_409_CONFLICT
                 )
 
-            # Always link the patient to this caregiver so they show up on the caregiver's roster
-            if patient.assigned_caregiver != assigned_caregiver:
-                PatientProfile.objects.filter(id=patient.id).update(assigned_caregiver=assigned_caregiver)
+            if patient.caregiver != caregiver:
+                PatientProfile.objects.filter(id=patient.id).update(caregiver=caregiver)
 
-            # Create Order
             order = Order.objects.create(
                 patient=patient,
-                caregiver=assigned_caregiver,
-                booking_start=start_time,
-                booking_end=end_time,
+                caregiver=caregiver,
+                booking_start=start_date,
+                booking_end=end_date,
                 total_cost=services.price,
                 status=Order.Status.PENDING
             )
             order.services.set([services])
 
-            # Create Schedule
             schedule = CompanionshipScheduler.objects.create(
                 order=order,
                 patient=patient,
-                caregiver=assigned_caregiver,
+                caregiver=caregiver,
                 services=services,
-                start_time=start_time,
-                end_time=end_time,
+                start_date=start_date,
+                end_date=end_date,
                 status=CompanionshipScheduler.Status.SCHEDULED
             )
 
         serializer = self.get_serializer(schedule)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)   
-
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class AboutUsAPIView(views.APIView):
     permission_classes=[permissions.AllowAny]
@@ -718,4 +753,10 @@ class AboutUsAPIView(views.APIView):
             'services': active_services,
             'error_message': error_message,
         }
-        return render(request, 'contactus.html', context)
+        return render(request, 'aboutus.html', context)
+
+class ConnectcaregiverAPIView(views.APIView) :
+    permission_classes=[permissions.IsAuthenticated]
+    def get(self, request):
+        user= User.request.user
+        return render(request,user,"contactus.html" )
