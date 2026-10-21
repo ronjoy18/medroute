@@ -1,5 +1,5 @@
 :root {
-  --primary-deep: #0B4F6C;
+  /*--primary-deep: #0B4F6C;*/
   --secondary-teal: #00A896;
   --sterile-white: #FFFFFF;
   --neutral-slate: #0F172A;
@@ -7,7 +7,7 @@
   --border-slate: #E2E8F0;
   --alert-red: #EF4444;
   --success-green: #10B981;
-  --primary-deep2: #0f172a;
+  --primary-deep: #0f172a;
 }
 
 * {
@@ -37,8 +37,8 @@ body {
 }
 
 .clinical-nav .brand {
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-size: 0.5rem;
+  font-weight: 600;
   color: var(--primary-deep);
   text-decoration: none;
   white-space: nowrap; /* Keeps Medroute Diagnostics on one single line */
