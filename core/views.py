@@ -26,10 +26,12 @@ from core import models
 def index_view(request):
     services = LabService.objects.filter(is_active=True).select_related("category")
     return render(request, "index.html", {"services": services})
-
+def home_view(request):
+        return render(request, 'home.html')
 def auth_view(request):
     return render(request, "auth.html")
-
+def connectcare_view(request):
+    return render (request, 'contactus.html')
 def internal_login_view(request):
     return render(request, "internal_login.html")
 def about_view(request):

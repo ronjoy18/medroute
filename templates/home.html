@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Medroute Clinical Systems{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<!-- CORRECT -->
+<body>
+<header class="top-nav">
+  <div class="logo">
+    <a href="{% url 'index-page' %}" class="logo">Medroute <span style="color: var(--secondary-teal);">Errands</span></a>
+  </div>
+  <div class="nav-actions">
+    <a href="{% url 'index-page' %}" class=" nav-btn primary">Get started</a>
+  </div>
+</header>
+<main class="page-container">
+  <section class="glass-card" style="--card-bg-image: url('https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=800&q=80');">
+    <!-- Inner scrollable text/media content -->
+    <div class="card-content">
+      <span class="badge">Session 01</span>
+      <h2>ad 1</h2>
+      <p>context.</p>
+      <p>context.</p>
+    </div>
+
+    <!-- Interactive advance arrow -->
+    <button class="advance-arrow" aria-label="Next card" onclick="nextCard()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </section>
+</main>
+</body>

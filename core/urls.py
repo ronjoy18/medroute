@@ -4,7 +4,8 @@ from . import views
 
 urlpatterns = [
     # Static Entry/Landing UI routes
-    path("", views.index_view, name="index-page"),
+    path("", views.home_view, name="home-page"),
+    path("index/page/", views.index_view, name="index-page"),
     path("auth/", views.auth_view, name="auth-page"),
     path("portal/internal-auth/", views.internal_login_view, name="internal-auth-page"),
     path("dashboard/", views.dashboard_dispatcher, name="dashboard-dispatcher"),
@@ -35,6 +36,6 @@ urlpatterns = [
     path("api/v1/caregiver/my-patients/<uuid:patient_id>/", views.CareGiverPatientDetailAPIView.as_view(), name="api-caregiverpatient-patient-detail"),
     path("api/v1/schedules/", views.CareScheduleAPIView.as_view(), name="api-schedules"), 
     path("about-us/", views.about_view, name = "-about-us"),#.AboutUsAPIView.as_view(), ),
-    path("api/v1/connect-care-giver/", views.ConnectcaregiverAPIView.as_view(),name="api-home-care") 
+    path("connect-care-giver/", views.connectcare_view,name="api-home-care") 
 ]
 

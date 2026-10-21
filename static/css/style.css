@@ -7,6 +7,7 @@
   --border-slate: #E2E8F0;
   --alert-red: #EF4444;
   --success-green: #10B981;
+  --primary-deep2: #0f172a;
 }
 
 * {
@@ -25,15 +26,7 @@ body {
 }
 
 /* Main Navigation Bar */
-.clinical-nav {
-  background: var(--sterile-white);
-  border-bottom: 1px solid var(--border-slate);
-  padding: 0.85rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
+
 
 /* Left Section: Brand & Global Doctors */
 .nav-left {
@@ -103,14 +96,14 @@ body {
 }
 
 /* Sign In / Sign Up: White Background, Black Text, No Borders */
-.btn-signup-clean {
+.-signup-clean {
   background-color: #ffffff;
   color: #000000;
   border: none !important;
   box-shadow: none !important;
 }
 
-.btn-signup-clean:hover {
+.-signup-clean:hover {
   background-color: #f1f5f9;
 }
 
@@ -143,31 +136,17 @@ body {
   width: 100%;
 }
 
-.clinical-nav {
-  background: var(--sterile-white);
-  border-bottom: 1px solid var(--border-slate);
-  padding: 0.85rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
 
-.nav-left, .nav-right {
+
+.nav-left, .-right {
   display: flex;
   align-items: center;
   gap: 1.25rem;
 }
 
-.clinical-nav .brand {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--primary-deep);
-  text-decoration: none;
-  white-space: nowrap;
-}
 
-.nav-link {
+
+.-link {
   color: var(--primary-deep);
   font-weight: 600;
   text-decoration: none;
@@ -175,7 +154,7 @@ body {
   white-space: nowrap;
 }
 
-.nav-link:hover {
+.-link:hover {
   opacity: 0.8;
 }
 
@@ -205,7 +184,7 @@ body {
 
 
 
-.navbar{
+.bar{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -215,7 +194,7 @@ body {
   gap: 12px;
 }
 
-.nav-brand{
+.-brand{
   font-size: 1.15rem;
   font-weight: 700;
   color: #0b4d0b;
@@ -235,47 +214,13 @@ body {
   align-items: center;
 }
 
-.clinical-nav .brand {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--primary-deep);
-  text-decoration: none;
-}
 
 .table-responsive {
   width: 100%;
   overflow-x: auto; /* Adds horizontal scroll ONLY when table exceeds card width */
   -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS Safari */
 }
-.clinical-btn {
-  padding: 0.65rem 1.25rem;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
-}
 
-
-.btn-primary {
-  background-color: var(--primary-deep);
-  color: var(--sterile-white);
-}
-
-.btn-primary:hover {
-  background-color: #083c53;
-}
-
-.btn-teal {
-  background-color: var(--secondary-teal);
-  color: var(--sterile-white);
-}
-
-.btn-teal:hover {
-  background-color: #028a7b;
-}
 
 .btn-outline {
   border-color: var(--primary-deep);
@@ -464,3 +409,172 @@ body {
 .toast-success { background-color: #0b4d6c; } /* Ocean/Proswim blue */
 .toast-error   { background-color: #d9383a; } /* Alert red */
 .toast-info    { background-color: #00c4d6; color: #032b30; } /* errand cyan */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #0b1320; /* Dark general page backdrop */
+  color: #f8fafc;
+  min-height: 100dvh;
+}
+
+/* 1. Header (Excluded from Card Height) */
+.top-nav {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-btn.primary {
+  background: #0284c7;
+  border-color: #0284c7;
+}
+
+/* 2. Container holding the card */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* 3. The Translucent Blue-Green Glass Card */
+.glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  
+  /* Takes 3/4 (75%) of the mobile screen height */
+  height: 75dvh; 
+  
+  border-radius: 24px;
+  overflow: hidden; /* Keeps background image strictly inside the card border */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  /* Translucent Blue-Green / Cyan Glass Fill */
+  background: linear-gradient(
+    135deg, 
+    rgba(14, 116, 144, 0.45) 0%,   /* Cyan / Blue-Green */
+    rgba(15, 118, 110, 0.35) 50%,  /* Deep Teal */
+    rgba(6, 78, 59, 0.40) 100%     /* Emerald hint */
+  );
+  
+  /* Glass Frosted Blur */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  /* Subtle glass border and soft shadow */
+  border: 1px solid rgba(94, 234, 212, 0.25);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+/* 4. Isolated Background Image layer */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--card-bg-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22; /* Dimmed so text stays sharp and glass tint stands out */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 5. Scrollable Content Area */
+.card-content {
+  position: relative;
+  z-index: 1;
+  padding: 1.75rem 1.5rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(45, 212, 191, 0.2);
+  color: #5eead4;
+  margin-bottom: 0.75rem;
+}
+
+.card-content h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.card-content p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+/* 6. Floating Advance Arrow */
+.advance-arrow {
+  position: relative;
+  z-index: 2;
+  align-self: flex-end;
+  margin: 0 1.5rem 1.5rem 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(94, 234, 212, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: #5eead4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.advance-arrow svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.advance-arrow:active {
+  transform: scale(0.92);
+  background: rgba(20, 184, 166, 0.3);
+}
+
+.advance-arrow:hover svg {
+  transform: translateX(3px);
+}
