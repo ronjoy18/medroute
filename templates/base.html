@@ -10,7 +10,7 @@
 <!-- CORRECT -->
 <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
 
-  <nav class="clinical-nav">
+  <nav class="top-nav">
     <a href="{% url 'index-page' %}" class="brand">Medroute <span style="color: var(--secondary-teal);">Errands</span></a>
     <div class="nav-action">
       {% if request.user.is_authenticated %}
