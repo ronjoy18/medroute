@@ -272,7 +272,7 @@ class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
 
 class CareConnectSerializers(serializers.ModelSerializer):
     service_name = serializers.CharField(source="services.name", read_only=True)
-    patient_phone =serializers.IntegerField(required=True )
+    patient_phone =serializers.CharField(required=True )
     patient_email =serializers.EmailField(required= True)
 
     class Meta:
