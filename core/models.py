@@ -270,3 +270,12 @@ class CareConnect(models.Model):
 
     def __str__(self):
         return f"{self.patient_name} {self.patient_email} {self.patient_phone}"
+
+class DBCare(models.Model):
+    patient= models.ForeignKey(PatientProfile, on_delete=models.SET_NULL, null=True, related_name="db_patient")
+    services= models.ForeignKey(LabService, on_delete=models.SET_NULL, null=True, related_name="db_services" )
+    patient_name=models.CharField(max_length=256, blank= False, null=False)
+    service_name = models.CharField(max_length=256, blank= False, null=False)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, limit_choices_to={"type": Order.OrderType.COMPANIONSHIP}, related_name="db_order")
+    def __str__(self):
+        return f"{self.patient_name} {self.service_name}"

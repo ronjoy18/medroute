@@ -10,6 +10,8 @@ from .models import (
     ReferralLedger,
     CareGiverProfile,
     CompanionshipScheduler,
+    CareConnect,
+    DBCare
 )
 
 
@@ -273,6 +275,12 @@ class CareConnectSerializers(serializers.ModelSerializer):
     patient_phone =serializers.IntegerField(required=True )
     patient_email =serializers.EmailField(required= True)
 
+    class Meta:
+        model = CareConnect
+        fields=[
+            "patient_phone", "patient_email", "patient_name", "order", "patient", "service"
+        ]
+
     def get_name(self, obj):
         if obj.patient and obj.patient.user:
             return obj.patient.user.get_full_name() or obj.patient.user.username
@@ -287,4 +295,20 @@ class CareConnectSerializers(serializers.ModelSerializer):
             if obj.patient and obj.patient.user:
                 return obj.patient.user.patient_email() 
             return "N/A"  
+
+class DBCareSerializers(serializers.ModelSerializer):
+    patient_name = serializers.SerializerMethodField()
+    service_name = serializers.CharField(source="services.name", read_only=True)
+
+    class Meta:
+        model = DBCare
+        fields = [
+            "patient_name", "service_name", "patient", "services","order"
+
+        ]
+    def get_name(self, obj):
+            if obj.patient and obj.patient.user:
+                return obj.patient.user.get_full_name() or obj.patient.user.username
+            return "N/A"  
+
     

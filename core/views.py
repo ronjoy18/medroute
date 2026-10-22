@@ -8,10 +8,11 @@ from rest_framework.response import Response
 from django.db import transaction, DatabaseError
 from django.utils.dateparse import parse_datetime
 import uuid
-from .models import User, CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
+from .models import User, DBCare,CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
 from .serializers import (
     UserRegistrationSerializer, LabServiceSerializer, OrderSerializer, 
-    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer, CareConnectSerializers
+    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer, CareConnectSerializers,
+    DBCareSerializers
 )
 from datetime import date, timedelta
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
@@ -784,3 +785,68 @@ class ConnectcaregiverAPIView(views.APIView) :
                 created_order.calculate_cost()
     
             return render(request , 'info-page')
+
+class DBCareAPIView(views.APIView):
+    serializer_class = DBCareSerializers
+    permission_classes = [permissions.IsAuthenticated]
+
+   
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_internal():
+            return DBCare.objects.all().select_related("caregiver__user", "patient__user", "services").order_by("-start_date")
+        if user.is_patient():
+            return DBCare.objects.filter(patient__user=user).select_related("caregiver__user", "services").order_by("-start_date")
+        return DBCare.objects.none()
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_patient():
+            return render(request, "auth.html")
+
+        patient, _ = PatientProfile.objects.get_or_create(user=user)
+
+        # Support both 'services_id' and 'start_date' / 'start_time' keys
+        services_id = request.data.get("services_id")
+        
+
+        if not services_id :
+            return Response(
+                {"detail": "services_id required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        services = get_object_or_404(LabService, id=services_id, is_active=True)
+
+        # Round to the nearest 5 minutes (e.g., 09:23 -> 09:25)
+        # Check operating hours window (06:00 AM - 06:00 PM)
+
+
+    
+
+        caregiver = None
+
+            # 1. Preferred caregiver
+        
+
+            # 2. Any active verified caregiver
+        
+
+            # 3. Fallback: Any active caregiver
+
+
+        order = Order.objects.create(
+                patient=patient,
+                status=Order.Status.PENDING
+            )
+        order.services.set([services])
+
+        schedule = DBCare.objects.create(
+                order=order,
+                patient=patient,
+                caregiver=caregiver,
+                services=services,
+            )
+
+        serializer = self.get_serializer(schedule)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)    
