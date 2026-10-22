@@ -11,7 +11,8 @@ from .models import (
     Order,
     ReferralLedger,
     GlobalDoctorInquiry,
-    CareGiverProfile
+    CareGiverProfile,
+    CareRequest
 )
 
 
@@ -73,7 +74,7 @@ class DoctorProfileAdmin(admin.ModelAdmin):
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
     list_display = ["user", "patient_type", "primary_doctor", "promo_credits", "created_at"]
-    list_filter = ["patient_type", "is_archived_by_doctor", "archived_by_caregiver"]
+    list_filter = ["patient_type", "is_archived_by_doctor", "archived_by_caregiver", "caregiver"]
     search_fields = ["user__username", "user__first_name", "user__last_name", "user__email", "referral_code"]
 
 
@@ -147,5 +148,12 @@ class CareGiverProfileAdmin(admin.ModelAdmin):
                     fail_silently=True,
                 )
             self.message_user(request, f"{queryset.count()} caregivers verified and notified.")
-    
+
+@admin.register(CareRequest)
+class CareRequestAdmin(admin.ModelAdmin):  
+    list_display = ["patient_full_name", "patient_phone", "patient_email", "status", "created_at","patient"]
+    list_filter = ["status"]
+    search_fields = ["patient_full_name", "patient_phone", "patient_email"]
+
+
     
