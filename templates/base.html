@@ -22,7 +22,7 @@
         <span style="font-weight: 600; font-size: 0.85rem; color: var(--primary-deep); margin-right: 0.25rem;">
         </span>
         <a href="{% url 'home-page' %}" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;">🏠</a>
-        <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href= 'index/page/')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
+        <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href= '/index/page/')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
           Sign Out
         </button>
       {% else %}
