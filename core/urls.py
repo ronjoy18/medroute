@@ -37,6 +37,7 @@ urlpatterns = [
     path("api/v1/schedules/", views.CareScheduleAPIView.as_view(), name="api-schedules"), 
     path("about-us/", views.AboutUsAPIView.as_view(), name = "about-us" ),
     path("connect-care-giver/", views.connectcare_view,name="api-home-care"), 
-    path("info/", views.info_view, name="info-page")
+    path("info/", views.info_view, name="info-page"),
+    path("db-care/", views.DBCareAPIView.as_view(), name="db-care")
 ]
 

@@ -43,19 +43,24 @@
     return cookieValue || "{{ csrf_token }}";
   }
 
-  function showPatientToast(title, message) {
-    const toast = document.getElementById("patient-toast-notification");
-    if (!toast) return;
-    const titleEl = document.getElementById("toast-title");
-    const msgEl = document.getElementById("toast-message");
-    if (titleEl) titleEl.textContent = title;
-    if (msgEl) msgEl.textContent = message;
-    toast.style.display = "flex";
-
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 5000);
+  function showPatientToast(title, message, redirectUrl = "/info/") {
+  const toast = document.getElementById("patient-toast-notification");
+  if (!toast) {
+    window.location.href = redirectUrl;
+    return;
   }
+
+  const titleEl = document.getElementById("toast-title");
+  const msgEl = document.getElementById("toast-message");
+  if (titleEl) titleEl.textContent = title;
+  if (msgEl) msgEl.textContent = message;
+  toast.style.display = "flex";
+
+  // Redirect after a 1.5-second preview
+  setTimeout(() => {
+    window.location.href = redirectUrl;
+  }, 1500);
+}
 
   let catalog = [];
   let selectedServicesIds = [];
@@ -66,7 +71,7 @@
     if (!tbody) return;
 
     try {
-      const res = await fetch("/api/v1/schedules/");
+      const res = await fetch("db-care/");
       if (!res.ok) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
         return;
