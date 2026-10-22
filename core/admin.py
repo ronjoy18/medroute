@@ -151,7 +151,7 @@ class CareGiverProfileAdmin(admin.ModelAdmin):
 
 @admin.register(CareRequest)
 class CareRequestAdmin(admin.ModelAdmin):  
-    list_display = ["patient_full_name", "patient_phone", "patient_email", "status", "created_at","patient"]
+    list_display = [ "patient_phone", "patient_email", "status", "created_at","patient"]
     list_filter = ["status"]
     search_fields = ["patient_full_name", "patient_phone", "patient_email"]
 
