@@ -1,3 +1,4 @@
+from django.db.models import Q
 import os
 from django.utils import timezone
 from django.http import FileResponse, Http404
@@ -379,11 +380,11 @@ class GlobalDoctorDirectoryAPIView(views.APIView):
 
         if query:
             qs = qs.filter(
-                models.Q(user__first_name__icontains=query) |
-                models.Q(user__last_name__icontains=query) |
-                models.Q(specialty__icontains=query) |
-                models.Q(hospital_affiliation__icontains=query) |
-                models.Q(bio__icontains=query)
+                Q(user__first_name__icontains=query) |
+                Q(user__last_name__icontains=query) |
+                Q(specialty__icontains=query) |
+                Q(hospital_affiliation__icontains=query) |
+                Q(bio__icontains=query)
             )
 
         if specialty:
