@@ -1,8 +1,389 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    <p>nothing to see yet</p>
-    <a href="{% url 'index-page' %}">back</a>
+<div class="card">
+    <h1>
+        Caregiver services
+    </h1>
+    <p>Connect to caregiver to manage your patient at home or anywhere you like</p>
 </div>
+<div id="patient-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
+  <span style="font-size: 1.25rem;">✓</span>
+  <div>
+    <strong id="toast-title">Request Submitted</strong>
+    <p id="toast-message" style="font-size: 0.85rem; margin: 0; color: #047857;"></p>
+  </div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+  <div class="card">
+    <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div style="margin-bottom: 0.5rem; position: relative;">
+        <label style="font-size: 0.8rem; font-weight: 600;">Search a service</label>
+        <input type="text" id="patient-catalog-search" placeholder="Type service name (e.g.)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
+        <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
+      </div>
+      <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit to connect</button>
+    </form>
+  </div> 
+</div>    
+
+<script>
+  function getCsrfToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, 10) === "csrftoken=") {
+          cookieValue = decodeURIComponent(cookie.substring(10));
+          break;
+        }
+      }
+    }
+    return cookieValue || "{{ csrf_token }}";
+  }
+
+  function showPatientToast(title, message) {
+    const toast = document.getElementById("patient-toast-notification");
+    if (!toast) return;
+    const titleEl = document.getElementById("toast-title");
+    const msgEl = document.getElementById("toast-message");
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = message;
+    toast.style.display = "flex";
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+
+  let catalog = [];
+  let selectedServicesIds = [];
+
+  // 1. Fetch & Render Confirmed Schedules
+  async function loadPatientSchedules() {
+    const tbody = document.querySelector("#patient-schedules-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/schedules/");
+      if (!res.ok) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
+        return;
+      }
+
+      const schedules = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(schedules) || schedules.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No confirmed schedules yet. Pick a service above to book.</td></tr>';
+        return;
+      }
+
+      schedules.forEach(s => {
+        const start = s.start_date ? new Date(s.start_date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
+        const actName = s.services_name || s.service_name || "Care Service";
+        const caregiverName = s.caregiver_name || "Assigned Caregiver";
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${actName}</strong></td>
+            <td><span style="color: var(--primary-deep); font-weight: 600;">🤝 ${caregiverName}</span></td>
+            <td style="font-size: 0.85rem;">${start}</td>
+            <td>
+              <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                ${s.status || 'CONFIRMED'}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Failed to load schedules: ${err.message}</td></tr>`;
+    }
+  }
+
+  // 2. Fetch & Render Patient Orders / Billing Table
+  async function loadPatientOrders() {
+    const billTbody = document.querySelector("#billing-table tbody");
+    const resTbody = document.querySelector("#results-table tbody");
+
+    try {
+      const res = await fetch("/api/v1/orders/");
+      if (!res.ok) return;
+      const orders = await res.json();
+
+      if (billTbody) billTbody.innerHTML = "";
+      if (resTbody) resTbody.innerHTML = "";
+
+      if (!Array.isArray(orders) || orders.length === 0) {
+        if (billTbody) billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active bookings found.</td></tr>';
+        if (resTbody) resTbody.innerHTML = '<tr><td colspan="2" style="text-align: center; color: #64748B;">No reports archived yet.</td></tr>';
+        return;
+      }
+
+      orders.forEach(o => {
+        const catalogNames = (o.services_detail || []).map(s => s.name).join(", ");
+        const allItems = [catalogNames, o.custom_test_names, o.services_name].filter(Boolean).join(" | ");
+
+        if (billTbody) {
+          billTbody.innerHTML += `
+            <tr>
+              <td><code>#${o.id.substring(0, 8)}</code></td>
+              <td style="font-size: 0.85rem; max-width: 250px;">${allItems || 'Clinical Service'}</td>
+              <td><strong>Ksh ${o.total_cost}</strong></td>
+              <td>
+                ${o.is_paid 
+                  ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Completed</span>`
+                  : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">Pending </span>`}
+              </td>
+              <td>
+                ${!o.is_paid 
+                  ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
+                  : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
+              </td>
+            </tr>
+          `;
+        }
+
+        if (resTbody) {
+          resTbody.innerHTML += `
+            <tr>
+              <td><code>#${o.id.substring(0, 8)}</code></td>
+              <td style="font-size: 0.85rem;">${o.created_at ? o.created_at.substring(0, 10) : 'N/A'}</td>
+            </tr>
+          `;
+        }
+      });
+    } catch (e) {
+      console.error("Error loading patient orders:", e);
+    }
+  }
+
+  // 3. Fetch Global Connections
+  async function loadPatientGlobalConnections() {
+    const tbody = document.querySelector("#global-doctors-table tbody");
+    if (!tbody) return;
+
+    try {
+      const res = await fetch("/api/v1/patient/global-connections/");
+      if (!res.ok) return;
+      const items = await res.json();
+      tbody.innerHTML = "";
+
+      if (!Array.isArray(items) || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B; padding: 1.5rem;">No global doctors connected.</td></tr>';
+        return;
+      }
+
+      items.forEach(doc => {
+        const statusHtml = doc.status === "CONNECTED"
+          ? '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connected</span>'
+          : '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #92400E; background: #FEF3C7; border: 1px solid #FCD34D;">Pending Communication</span>';
+
+        const flagImg = doc.country_iso ? `<img src="https://flagcdn.com/20x15/${doc.country_iso.toLowerCase()}.png" width="18" height="13" style="vertical-align: middle; margin-right: 4px; border-radius: 2px;">` : '';
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${doc.doctor_name || 'N/A'}</strong></td>
+            <td>${doc.specialty || 'General Practitioner'}</td>
+            <td style="font-size: 0.85rem;">${flagImg} ${doc.country || ''} <span style="color: #64748B;">${doc.hospital || ''}</span></td>
+            <td style="font-size: 0.85rem;">${doc.created_at ? doc.created_at.substring(0, 10) : 'N/A'}</td>
+            <td>${statusHtml}</td>
+          </tr>
+        `;
+      });
+    } catch (e) {
+      console.error("Could not load global doctor connections:", e);
+    }
+  }
+
+  // Selection Badges
+  function addPatientService(id, name, price) {
+    if (!selectedServicesIds.includes(id)) {
+      selectedServicesIds.push(id);
+      renderSelectedServices();
+    }
+    const searchBox = document.getElementById("patient-search-results");
+    const searchInput = document.getElementById("patient-catalog-search");
+    if (searchBox) searchBox.style.display = "none";
+    if (searchInput) searchInput.value = "";
+  }
+
+  function removePatientService(id) {
+    selectedServicesIds = selectedServicesIds.filter(x => x !== id);
+    renderSelectedServices();
+  }
+
+  function renderSelectedServices() {
+    const box = document.getElementById("patient-selected-items");
+    if (!box) return;
+    box.innerHTML = "";
+    selectedServicesIds.forEach(id => {
+      const item = catalog.find(x => x.id === id);
+      if (item) {
+        box.innerHTML += `
+          <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+            ${item.name} (Ksh ${item.price})
+            <b style="cursor: pointer; color: red;" onclick="removePatientService(${item.id})">&times;</b>
+          </span>`;
+      }
+    });
+  }
+
+  // Master Initialization
+  document.addEventListener("DOMContentLoaded", async () => {
+    // A. Minimum Date Restriction (06:00 AM limit)
+    const timeInput = document.getElementById("services-start-time");
+    if (timeInput) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      timeInput.min = `${year}-${month}-${day}T06:00`;
+    }
+
+    // B. Fetch Initial Data
+    loadPatientSchedules();
+    loadPatientOrders();
+    loadPatientGlobalConnections();
+
+    // C. Referral profile load
+    try {
+      const profileRes = await fetch("/api/v1/patient/me/");
+      if (profileRes.ok) {
+        const p = await profileRes.json();
+        const refBox = document.getElementById("referral-box");
+        const refLinkInput = document.getElementById("my-ref-link");
+        const promoBal = document.getElementById("promo-balance");
+
+        if (p.patient_type === "INDEPENDENT" && refBox) {
+          refBox.style.display = "block";
+          if (refLinkInput) refLinkInput.value = p.referral_link || "";
+          if (promoBal) promoBal.textContent = `Ksh${p.promo_credits || "0.00"}`;
+        }
+      }
+    } catch (e) {
+      console.error("Profile load failed:", e);
+    }
+
+    // D. Catalog load
+    try {
+      const catRes = await fetch("/api/v1/catalog/");
+      if (catRes.ok) {
+        catalog = await catRes.json();
+      }
+    } catch (e) {
+      console.error("Catalog load error:", e);
+    }
+
+    // E. Catalog search filter listener
+    const searchInput = document.getElementById("patient-catalog-search");
+    const resultsBox = document.getElementById("patient-search-results");
+
+    if (searchInput && resultsBox) {
+      searchInput.addEventListener("input", () => {
+        const q = searchInput.value.toLowerCase().trim();
+        if (!q) {
+          resultsBox.style.display = "none";
+          resultsBox.innerHTML = "";
+          return;
+        }
+
+        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
+        resultsBox.innerHTML = "";
+
+        if (filtered.length === 0) {
+          resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No matching services found.</div>";
+        } else {
+          filtered.forEach(item => {
+            const div = document.createElement("div");
+            div.style.padding = "8px 10px";
+            div.style.cursor = "pointer";
+            div.style.borderBottom = "1px solid #F1F5F9";
+            div.style.fontSize = "0.85rem";
+            div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: bold;">Ksh ${item.price}</span>`;
+            div.addEventListener("click", () => addPatientService(item.id, item.name, item.price));
+            resultsBox.appendChild(div);
+          });
+        }
+        resultsBox.style.display = "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+          resultsBox.style.display = "none";
+        }
+      });
+    }
+
+    // F. Form Submit Listener -> Posts to /api/v1/schedules/
+    const orderForm = document.getElementById("patient-order-form");
+    const submitBtn = document.getElementById("submit-services-btn");
+
+    if (orderForm) {
+      orderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (selectedServicesIds.length === 0) {
+          alert("Please select at least one service from the search bar.");
+          return;
+        }
+
+        const timeVal = document.getElementById("services-start-time").value;
+        if (!timeVal) {
+          alert("Please specify a session date and start time.");
+          return;
+        }
+
+        const chosenDate = new Date(timeVal);
+        const chosenHour = chosenDate.getHours();
+
+        if (chosenHour < 6 || chosenHour >= 18) {
+          alert("Service hours are strictly between 06:00 AM and 06:00 PM. Please pick a daytime slot.");
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Assigning Available Caregiver...";
+        }
+
+        try {
+          const res = await fetch("/api/v1/schedules/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCsrfToken()
+            },
+            body: JSON.stringify({
+              services_id: selectedServicesIds[0],
+              start_date: chosenDate.toISOString()
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            showPatientToast("Session Booked!", `Caregiver ${data.caregiver_name || 'assigned'} scheduled.`);
+            selectedServicesIds = [];
+            renderSelectedServices();
+            orderForm.reset();
+            loadPatientSchedules();
+            loadPatientOrders();
+          } else {
+            const err = await res.json();
+            alert(err.detail || "Booking failed. Please try an alternative slot.");
+          }
+        } catch (err) {
+          alert("Network failure communicating with scheduling service.");
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit Booking & Schedule Caregiver";
+          }
+        }
+      });
+    }
+  });
+</script>
 {% endblock %}

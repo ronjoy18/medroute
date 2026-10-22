@@ -114,7 +114,7 @@ class PatientProfile(models.Model):
     # Soft archive for doctor management
     is_archived_by_doctor = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    phone = models.IntegerField( name=False, blank=False)
     def save(self, *args, **kwargs):
         if not self.referral_code:
             self.referral_code = f"PAT-{uuid.uuid4().hex[:8].upper()}"
@@ -260,4 +260,13 @@ class CompanionshipScheduler(models.Model):
             models.Index(fields=["caregiver", "start_date", "end_date"])
         ]
 
+class CareConnect(models.Model):
+    services=models.ForeignKey(LabService,on_delete=models.PROTECT,related_name = 'home_care', null=True,)
+    patient = models.ForeignKey(PatientProfile,on_delete=models.CASCADE,related_name ='home_patient', )    
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, limit_choices_to={"type": Order.OrderType.COMPANIONSHIP}, related_name="caring")
+    patient_email = models.EmailField(max_length=256, null=False, blank=False)
+    patient_phone = models.IntegerField( blank=False, null=False)
+    patient_name = models.CharField(max_length=256,)
 
+    def __str__(self):
+        return f"{self.patient_name} {self.patient_email} {self.patient_phone}"

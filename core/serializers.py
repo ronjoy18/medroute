@@ -268,5 +268,23 @@ class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
             return obj.patient.user.get_full_name() or obj.patient.user.username
         return "N/A"        
 
+class CareConnectSerializers(serializers.ModelSerializer):
+    service_name = serializers.CharField(source="services.name", read_only=True)
+    patient_phone =serializers.IntegerField(required=True )
+    patient_email =serializers.EmailField(required= True)
 
+    def get_name(self, obj):
+        if obj.patient and obj.patient.user:
+            return obj.patient.user.get_full_name() or obj.patient.user.username
+        return "N/A"  
+
+    def get_phone(self, obj):
+            if obj.patient and obj.patient.user:
+                return obj.patient.user.patient_phone or obj.patient.user.patient_email
+            return "N/A"  
+
+    def get_email(self, obj):
+            if obj.patient and obj.patient.user:
+                return obj.patient.user.patient_email() 
+            return "N/A"  
     

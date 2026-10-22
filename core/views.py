@@ -11,7 +11,7 @@ import uuid
 from .models import User, CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
 from .serializers import (
     UserRegistrationSerializer, LabServiceSerializer, OrderSerializer, 
-    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer
+    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer, CareConnectSerializers
 )
 from datetime import date, timedelta
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
@@ -36,6 +36,8 @@ def internal_login_view(request):
     return render(request, "internal_login.html")
 def about_view(request):
     return render(request, 'aboutus.html')
+def info_view(request):
+    return render(request, 'info.html')
 
 def dashboard_dispatcher(request):
     if not request.user.is_authenticated:
@@ -761,6 +763,24 @@ class AboutUsAPIView(views.APIView):
 
 class ConnectcaregiverAPIView(views.APIView) :
     permission_classes=[permissions.IsAuthenticated]
-    def get(self, request):
-        user= User.request.user
-        return render(request,user,"contactus.html" )
+
+    def post(self, request):
+            serializer = CareConnectSerializers(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+    
+            if not User.is_authenticated:
+                return render(request, "auth-page")
+    
+            patient_profile = request.User.patient_profile
+            created_order = None
+            service_ids = data.get("initial_service_ids", [])
+            if service_ids:
+                services = LabService.objects.filter(id__in=service_ids, is_active=True)
+                created_order = Order.objects.create(
+                    patient=patient_profile,
+                )
+                created_order.services.set(services)
+                created_order.calculate_cost()
+    
+            return render(request , 'info-page')

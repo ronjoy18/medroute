@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome | Medroute Errands</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="home-page">
+
+  <!-- White Top Nav with 'Get started' acting as the main CTA -->
+  <header class="top-nav">
+    <a href="{% url 'index-page' %}" class="brand">
+      <span>Medroute</span>
+      <span class="brand-teal">Errands</span>
+    </a>
+    <div class="nav-actions">
+      <a href="{% url 'index-page' %}" class="nav-btn primary">Get started</a>
+    </div>
+  </header>
+
+  <!-- Glass Advert Card -->
+  <main class="page-container">
+    <section class="glass-card" style="--card-bg-image: url('');">
+      <div class="card-content">
+        <span class="badge">INFO</span>
+        <h2>Caregiver info</h2>
+        <p>Thank you for requesting a caregiver.</p>
+        <p>our team will get back to you through the provided contact info.</p>
+        <p>Check our care giver service at our <a href="{%url 'index-page'%}">catalog</a> page</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>    
