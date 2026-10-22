@@ -23,10 +23,30 @@
   <main class="page-container">
     <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1JNBVHGYPN11EWD0SnQcp33F28ocfem9a-DsEUXIkg&s=10');">
       <div class="card-content">
-        <span class="badge">Session 01</span>
+        <span class="badge">MEDROUTE ERRANDS</span>
         <h2>Modern Caregiving</h2>
-        <p>Direct diagnostics, medical specimen logistics, and verified caregiver support delivered right to your home.</p>
-        <p>Advance forward to explore our full clinical catalog and connect with specialists.</p>
+        <p>Are you struggling with a patient at home ?.</p>
+        <p>You need a care giver.</p>
+        <p>Check our care giver service at our <a href="{%url 'index-page'%}">catalog</a> page</p>
+      </div>
+
+      <!-- Arrow advances user directly to the index catalog -->
+      <button class="advance-arrow" aria-label="Enter site" onclick="window.location.href='index/page/'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </section>    
+  </main>
+  <main class="page-container">
+    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAhwlH1He43_5kYRUca_KT1VL8Jrrk8FpYWKdoo7eCfg&s');">
+      <div class="card-content">
+        <span class="badge">MEDROUTE ERRANDS</span>
+        <h2>Modern clinical Errands</h2>
+        <p>Dont stress yourself with hectic medical routines.</p>
+        <p>Our caregivers accompany you, so that you can have a smooth time undertaking your routine medica services, with proper explanation and details.</p>
+        <p>Visit your <a href="{% url 'dasboard-dispatcher'%}">dashboard</a> to book for a medical errand </p>
       </div>
 
       <!-- Arrow advances user directly to the index catalog -->
@@ -38,6 +58,43 @@
       </button>
     </section>
   </main>
+  <main class="page-container">
+    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAhwlH1He43_5kYRUca_KT1VL8Jrrk8FpYWKdoo7eCfg&s');">
+      <div class="card-content">
+        <span class="badge">MEDROUTE ERRANDS</span>
+        <h2>Connect to a Doctor</h2>
+        <p>Visiting a specialist is now a tap away, connect to specialist at the convinience of your comfort.</p>
+        <p>Through our global doctors, you can find a sspecialist of your need.</p>
+        <p>Tap into convinience 👉🏽 <a href="{% url 'doctor-directory-alias'%}">Global Doctors</a></p>
+      </div>
 
+      <!-- Arrow advances user directly to the index catalog -->
+      <button class="advance-arrow" aria-label="Enter site" onclick="window.location.href='index/page/'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </section>
+  </main>
+  <main class="page-container">
+    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAhwlH1He43_5kYRUca_KT1VL8Jrrk8FpYWKdoo7eCfg&s');">
+      <div class="card-content">
+        <span class="badge">MEDROUTE ERRANDS</span>
+        <h2>Your bonus and commisions</h2>
+        <p>We broke the medical monotony.</p>
+        <p>For your social and rebate needs, we have a nice refferal ledger where you can reffer friends and famiy and earn commissions/bonuses.</p>
+        <p>Visit your  <a href="{% url 'dashboard-dispatcher'%}">Dashboard</a> and get to business</p>
+      </div>
+
+      <!-- Arrow advances user directly to the index catalog -->
+      <button class="advance-arrow" aria-label="Enter site" onclick="window.location.href='index/page/'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </section>
+  </main>
 </body>
 </html>
