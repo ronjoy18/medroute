@@ -260,22 +260,40 @@ class CompanionshipScheduler(models.Model):
             models.Index(fields=["caregiver", "start_date", "end_date"])
         ]
 
-class CareConnect(models.Model):
-    services=models.ForeignKey(LabService,on_delete=models.PROTECT,related_name = 'home_care', null=True,)
-    patient = models.ForeignKey(PatientProfile,on_delete=models.CASCADE,related_name ='home_patient', )    
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, limit_choices_to={"type": Order.OrderType.COMPANIONSHIP}, related_name="caring")
-    patient_email = models.EmailField(max_length=256, null=False, blank=False)
-    patient_phone = models.CharField( blank=False, null=False)
-    patient_name = models.CharField(max_length=256,)
+class CareRequest(models.Model):
+    class RequestStatus(models.TextChoices):
+        PENDING = "PENDING", "Pending Follow-up"
+        CONTACTED = "CONTACTED", "Client Contacted"
+        COMPLETED = "COMPLETED", "Converted to Order"
+        CANCELLED = "CANCELLED", "Cancelled"
+
+    patient = models.ForeignKey(
+        PatientProfile,
+        on_delete=models.CASCADE,
+        related_name="care_requests"
+    )
+    service = models.ForeignKey(
+        LabService,
+        on_delete=models.PROTECT,
+        related_name="care_requests"
+    )
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="care_requests"
+    )
+    patient_name = models.CharField(max_length=256)
+    patient_phone = models.CharField(max_length=32, blank=True, null=True)
+    patient_email = models.EmailField(max_length=256, blank=True, null=True)
+    notes = models.TextField(blank=True, default="")
+    status = models.CharField(
+        max_length=20,
+        choices=RequestStatus.choices,
+        default=RequestStatus.PENDING
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.patient_name} {self.patient_email} {self.patient_phone}"
-
-class DBCare(models.Model):
-    patient= models.ForeignKey(PatientProfile, on_delete=models.SET_NULL, null=True, related_name="db_patient")
-    services= models.ForeignKey(LabService, on_delete=models.SET_NULL, null=True, related_name="db_services" )
-    patient_name=models.CharField(max_length=256, blank= False, null=False)
-    service_name = models.CharField(max_length=256, blank= False, null=False)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, limit_choices_to={"type": Order.OrderType.COMPANIONSHIP}, related_name="db_order")
-    def __str__(self):
-        return f"{self.patient_name} {self.service_name}"
+        return f"{self.patient_name} - {self.service.name} ({self.status})"

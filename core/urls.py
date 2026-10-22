@@ -38,6 +38,7 @@ urlpatterns = [
     path("about-us/", views.about_view, name = "about-us" ),
     path("connect-care-giver/", views.connectcare_view,name="api-home-care"), 
     path("info/", views.info_view, name="info-page"),
-    path("db-care/", views.DBCareAPIView.as_view(), name="db-care")
+    path("api/v1/care-connect/", views.ConnectCaregiverAPIView.as_view(), name="care-connect-api"),
+    path("caregiver/thank-you/", views.info_view, name="caregiver-info-page"),
 ]
 

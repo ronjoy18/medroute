@@ -1,6 +1,7 @@
 import os
 from django.utils import timezone
 from django.http import FileResponse, Http404
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import generics, status, views, permissions
@@ -8,11 +9,11 @@ from rest_framework.response import Response
 from django.db import transaction, DatabaseError
 from django.utils.dateparse import parse_datetime
 import uuid
-from .models import User, DBCare,CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
+from .models import User, CareRequest,CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
 from .serializers import (
     UserRegistrationSerializer, LabServiceSerializer, OrderSerializer, 
-    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer, CareConnectSerializers,
-    DBCareSerializers
+    DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer,
+    CareRequestSerializer
 )
 from datetime import date, timedelta
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
@@ -762,91 +763,51 @@ class AboutUsAPIView(views.APIView):
         }
         return render(request, 'aboutus.html', context)
 
-class ConnectcaregiverAPIView(views.APIView) :
-    permission_classes=[permissions.IsAuthenticated]
-
-    def post(self, request):
-            serializer = CareConnectSerializers(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            data = serializer.validated_data
-    
-            if not User.is_authenticated:
-                return render(request, "auth-page")
-    
-            patient_profile = request.User.patient_profile
-            created_order = None
-            service_ids = data.get("initial_service_ids", [])
-            if service_ids:
-                services = LabService.objects.filter(id__in=service_ids, is_active=True)
-                created_order = Order.objects.create(
-                    patient=patient_profile,
-                )
-                created_order.services.set(services)
-                created_order.calculate_cost()
-    
-            return render(request , 'info-page')
-
-class DBCareAPIView(views.APIView):
-    serializer_class = DBCareSerializers
+class ConnectCaregiverAPIView(views.APIView):
+    # This automatically returns HTTP 401 if request.user is not logged in
     permission_classes = [permissions.IsAuthenticated]
 
-   
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_internal():
-            return DBCare.objects.all().select_related("caregiver__user", "patient__user", "services").order_by("-start_date")
-        if user.is_patient():
-            return DBCare.objects.filter(patient__user=user).select_related("caregiver__user", "services").order_by("-start_date")
-        return DBCare.objects.none()
+    def handle_exception(self, exc, ):
+        # Optional: return the redirect URL explicitly if unauthenticated
+        response = super().handle_exception(exc)
+        if response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]:
+            response.data = {
+                "detail": "Authentication credentials were not provided or session expired.",
+                "redirect_url": reverse("auth-page")
+            }
+        return response
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request):
         user = request.user
-        if not user.is_patient():
-            return render(request, "auth.html")
-
         patient, _ = PatientProfile.objects.get_or_create(user=user)
 
-        # Support both 'services_id' and 'start_date' / 'start_time' keys
-        services_id = request.data.get("services_id")
-        
-
-        if not services_id :
+        service_id = request.data.get("service_id")
+        if not service_id:
             return Response(
-                {"detail": "services_id required."},
+                {"detail": "Please select a service before submitting."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        services = get_object_or_404(LabService, id=services_id, is_active=True)
+        service = get_object_or_404(LabService, id=service_id, is_active=True)
 
-        # Round to the nearest 5 minutes (e.g., 09:23 -> 09:25)
-        # Check operating hours window (06:00 AM - 06:00 PM)
+        full_name = user.get_full_name() or user.username
+        phone = getattr(user, "phone", "") or getattr(user, "patient_phone", "")
+        email = user.email or ""
 
+        care_request = CareRequest.objects.create(
+            patient=patient,
+            service=service,
+            patient_name=full_name,
+            patient_phone=phone,
+            patient_email=email,
+            status=CareRequest.RequestStatus.PENDING
+        )
 
-    
-
-        caregiver = None
-
-            # 1. Preferred caregiver
-        
-
-            # 2. Any active verified caregiver
-        
-
-            # 3. Fallback: Any active caregiver
-
-
-        order = Order.objects.create(
-                patient=patient,
-                status=Order.Status.PENDING
-            )
-        order.services.set([services])
-
-        schedule = DBCare.objects.create(
-                order=order,
-                patient=patient,
-                caregiver=caregiver,
-                services=services,
-            )
-
-        serializer = self.get_serializer(schedule)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)    
+        return Response(
+            {
+                "id": care_request.id,
+                "message": "Care request registered successfully.",
+                "redirect_url": "/caregiver/thank-you/"
+            },
+            status=status.HTTP_201_CREATED
+        )

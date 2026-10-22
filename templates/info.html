@@ -1,35 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome | Medroute Errands</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body class="home-page">
+{% extends "base.html" %}
 
-  <!-- White Top Nav with 'Get started' acting as the main CTA -->
-  <header class="top-nav">
-    <a href="{% url 'index-page' %}" class="brand">
-      <span>Medroute</span>
-      <span class="brand-teal">Errands</span>
-    </a>
-    <div class="nav-actions">
-      <a href="{% url 'index-page' %}" class="nav-btn primary">Get started</a>
+{% block content %}
+<main style="max-width: 680px; margin: 3rem auto; padding: 0 1rem;">
+  <section class="card" style="text-align: center; padding: 3rem 2rem; border-top: 4px solid var(--secondary-teal);">
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+    <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em;">Inquiry Received</span>
+    
+    <h2 style="color: var(--primary-deep); margin: 1rem 0 0.5rem 0;">Request Received</h2>
+    <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
+      Thank you for requesting a caregiver.
+    </p>
+    <p style="color: #64748B; font-size: 0.9rem; line-height: 1.5; margin-bottom: 2rem;">
+      Our coordination team will review your account details and contact you directly via phone or email to schedule your errand.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 1rem;">
+      <a href="{% url 'index-page' %}" class="clinical-btn btn-primary" style="padding: 0.65rem 1.5rem;">Explore Catalog</a>
+      <a href="/dashboard/" class="clinical-btn btn-outline" style="padding: 0.65rem 1.5rem;">Go to Dashboard</a>
     </div>
-  </header>
-
-  <!-- Glass Advert Card -->
-  <main class="page-container">
-    <section class="glass-card" style="--card-bg-image: url('');">
-      <div class="card-content">
-        <span class="badge">INFO</span>
-        <h2>Caregiver info</h2>
-        <p>Thank you for requesting a caregiver.</p>
-        <p>our team will get back to you through the provided contact info.</p>
-        <p>Check our care giver service at our <a href="{%url 'index-page'%}">catalog</a> page</p>
-      </div>
-    </section>
-  </main>
-</body>
-</html>    
+  </section>
+</main>
+{% endblock %}

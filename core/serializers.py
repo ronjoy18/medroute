@@ -10,8 +10,9 @@ from .models import (
     ReferralLedger,
     CareGiverProfile,
     CompanionshipScheduler,
-    CareConnect,
-    DBCare
+
+    
+    CareRequest
 )
 
 
@@ -270,45 +271,21 @@ class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
             return obj.patient.user.get_full_name() or obj.patient.user.username
         return "N/A"        
 
-class CareConnectSerializers(serializers.ModelSerializer):
-    service_name = serializers.CharField(source="services.name", read_only=True)
-    patient_phone =serializers.CharField(required=True )
-    patient_email =serializers.EmailField(required= True)
+class CareRequestSerializer(serializers.ModelSerializer):
+    service_name = serializers.CharField(source="service.name", read_only=True)
+    price = serializers.DecimalField(source="service.price", max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:
-        model = CareConnect
-        fields=[
-            "patient_phone", "patient_email", "patient_name", "order", "patient", "service"
-        ]
-
-    def get_name(self, obj):
-        if obj.patient and obj.patient.user:
-            return obj.patient.user.get_full_name() or obj.patient.user.username
-        return "N/A"  
-
-    def get_phone(self, obj):
-            if obj.patient and obj.patient.user:
-                return obj.patient.user.patient_phone or obj.patient.user.patient_email
-            return "N/A"  
-
-    def get_email(self, obj):
-            if obj.patient and obj.patient.user:
-                return obj.patient.user.patient_email() 
-            return "N/A"  
-
-class DBCareSerializers(serializers.ModelSerializer):
-    patient_name = serializers.SerializerMethodField()
-    service_name = serializers.CharField(source="services.name", read_only=True)
-
-    class Meta:
-        model = DBCare
+        model = CareRequest
         fields = [
-            "patient_name", "service_name", "patient", "services","order"
-
+            "id",
+            "service",
+            "service_name",
+            "price",
+            "patient_name",
+            "patient_phone",
+            "patient_email",
+            "status",
+            "created_at",
         ]
-    def get_name(self, obj):
-            if obj.patient and obj.patient.user:
-                return obj.patient.user.get_full_name() or obj.patient.user.username
-            return "N/A"  
-
-    
+        read_only_fields = ["patient_name", "patient_phone", "patient_email", "status"]
