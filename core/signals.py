@@ -30,7 +30,7 @@ def process_order_lifecycle_events(sender, instance, created, **kwargs):
             f"Total Billed: ksh{instance.total_cost}\n"
             f"{services_list}{custom_notes}\n\n"
             f"You can review your bill and complete payment directly from your patient workspace:\n"
-            f"{getattr(settings, 'BASE_URL', 'http://127.0.0.1:8000')}/dashboard/\n\n"
+            f"{getattr(settings, 'BASE_URL', 'https://medroute-xp7i.onrender.com/')}/dashboard/\n\n"
             f"LabCare Diagnostics Operations Team"
         )
 
