@@ -233,7 +233,6 @@ class GlobalDoctorInquiry(models.Model):
     doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name="patient_inquiries")
     patient = models.ForeignKey(PatientProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="global_inquiries")
     patient_full_name = models.CharField(max_length=150)
-    patient_phone = models.CharField(max_length=32)
     patient_email = models.EmailField()
     clinical_concern = models.TextField(blank=True)
     status = models.CharField(
@@ -291,7 +290,7 @@ class CareRequest(models.Model):
         related_name="care_requests"
     )
     patient_name = models.CharField(max_length=256)
-    patient_phone = models.CharField(max_length=32, blank=True, null=True)
+    patient_phone = models.CharField(max_length=32,)
     patient_email = models.EmailField(max_length=256, blank=True, null=True)
     notes = models.TextField(blank=True, default="")
     status = models.CharField(
