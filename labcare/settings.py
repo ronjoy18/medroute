@@ -14,7 +14,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
 ]
 BASE_URL = "http://localhost:8000"
-REF_URL = 'https://medroute-xp7i.onrender.com/'
+REF_URL = 'https://medroute-xp7i.onrender.com'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
