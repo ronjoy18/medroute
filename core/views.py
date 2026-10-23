@@ -320,7 +320,7 @@ class PatientProfileDetailAPIView(views.APIView):
         p = request.user.patient_profile
         return Response({
             "referral_code": p.referral_code,
-            "referral_link": f"{getattr(settings, 'BASE_URL', 'http://127.0.0.1:8000')}/auth/?ref={p.referral_code}",
+            "referral_link": f"{getattr(settings, 'BASE_URL', 'https://medroute-xp7i.onrender.com/')}/auth/?ref={p.referral_code}",
             "promo_credits": str(p.promo_credits),
             "patient_type": p.patient_type
         })
