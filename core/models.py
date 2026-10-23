@@ -116,7 +116,7 @@ class PatientProfile(models.Model):
     # Soft archive for doctor management
     is_archived_by_doctor = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    phone = models.CharField( null=False, blank=False)
+    phone = PhoneNumberField(unique=False, region= "KE", help_text="country code and phone number")
     def save(self, *args, **kwargs):
         if not self.referral_code:
             self.referral_code = f"PAT-{uuid.uuid4().hex[:8].upper()}"
@@ -233,6 +233,7 @@ class GlobalDoctorInquiry(models.Model):
     doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name="patient_inquiries")
     patient = models.ForeignKey(PatientProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="global_inquiries")
     patient_full_name = models.CharField(max_length=150)
+    patient_phone = PhoneNumberField(unique=False, region= "KE", help_text="country code and phone number")
     patient_email = models.EmailField()
     clinical_concern = models.TextField(blank=True)
     status = models.CharField(
@@ -290,7 +291,7 @@ class CareRequest(models.Model):
         related_name="care_requests"
     )
     patient_name = models.CharField(max_length=256)
-    patient_phone = models.CharField(max_length=32,)
+    patient_phone = PhoneNumberField(unique=False, region= "KE", help_text="country code and phone number")
     patient_email = models.EmailField(max_length=256, blank=True, null=True)
     notes = models.TextField(blank=True, default="")
     status = models.CharField(
