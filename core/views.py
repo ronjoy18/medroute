@@ -792,7 +792,7 @@ class ConnectCaregiverAPIView(views.APIView):
         service = get_object_or_404(LabService, id=service_id, is_active=True)
 
         full_name = user.get_full_name() or user.username
-        phone = getattr(user, "phone", "") or getattr(user, "patient_phone", "")
+        phone = user.phone_number #getattr(user, "phone", "") or getattr(user, "patient_phone", "")
         email = user.email or ""
 
         care_request = CareRequest.objects.create(
