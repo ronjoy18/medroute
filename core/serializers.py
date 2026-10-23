@@ -14,7 +14,7 @@ from .models import (
     
     CareRequest
 )
-
+from phonenumber_field.serializerfields import PhoneNumberField 
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,6 +33,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     pending_caregiver_name = serializers.CharField(write_only = True, required= False, allow_blank = True)
     pending_doctor_email = serializers.CharField(write_only = True, required= False, allow_blank = True)
     caregiver_id =serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    phone_number = PhoneNumberField(region= "KE", required= True)
     
     class Meta:
         model = User

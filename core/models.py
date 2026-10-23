@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import date
 from django.db.models import SET_NULL
+from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     class Role(models.TextChoices):
@@ -17,7 +18,7 @@ class User(AbstractUser):
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.PATIENT)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    phone_number = PhoneNumberField(unique=True, region= "KE", help_text="country code and phone number")
     is_verified = models.BooleanField(default=False)
 
     def is_doctor(self):
@@ -75,6 +76,7 @@ class CareGiverProfile(models.Model):
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
     
+    
 class PatientProfile(models.Model):
     class PatientType(models.TextChoices):
         INDEPENDENT = "INDEPENDENT", _("Independent patient")
@@ -119,6 +121,10 @@ class PatientProfile(models.Model):
         if not self.referral_code:
             self.referral_code = f"PAT-{uuid.uuid4().hex[:8].upper()}"
         super().save(*args, **kwargs)
+
+    @property
+    def phone_number(self):
+        return self.user.phone_number    
 
     def __str__(self):
         return f"{self.user.get_full_name() or self.user.username} ({self.patient_type})"
