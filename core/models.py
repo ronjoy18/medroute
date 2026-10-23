@@ -18,7 +18,7 @@ class User(AbstractUser):
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.PATIENT)
-    phone_number = PhoneNumberField(unique=True, region= "KE", help_text="country code and phone number")
+    phone_number = PhoneNumberField(unique=False, region= "KE", help_text="country code and phone number")
     is_verified = models.BooleanField(default=False)
 
     def is_doctor(self):
