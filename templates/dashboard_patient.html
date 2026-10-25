@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- 5-Second Toast Container -->
+<!-- Toast Notification -->
 <div id="patient-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
   <span style="font-size: 1.25rem;">✓</span>
   <div>
@@ -10,70 +10,52 @@
   </div>
 </div>
 
-<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
   <div>
-    <h1 style="color: var(--primary-deep);"><span style="font-weight:bold; color: crimson;">{{ request.user.username }}</span>'s Care Workspace</h1>
-    <p style="color: #64748B;">Patients dashboard .</p>
+    <h1 style="color: var(--primary-deep); margin-bottom: 0.25rem;">{{ request.user.username }}'s Workspace</h1>
+    <p style="color: #64748B;">Manage bookings, caregiver schedules, bills, and doctor inquiries.</p>
   </div>
-</div>  
-<div class="card" margin-bottom: 2rem;>
-  <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal" class="card" margin-bottom: 2rem;>Connect to caregiver</a>
+  <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal">Connect to Caregiver</a>
 </div>
-  <!-- Referral & Promo Balance Box (for Independent Patients) -->
-<div class="card" id="referral-box" style="display: none; background: #F0FDF4; border: 1px solid #BBF7D0; padding: 1rem 1.25rem; border-radius: 8px; max-width: 380px; margin-bottom: 2rem;">
+
+<!-- Referral & Promo Balance Box -->
+<div class="card" id="referral-box" style="display: none; background: #F0FDF4; border: 1px solid #BBF7D0; padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 2rem;">
   <div style="font-size: 0.8rem; font-weight: 700; color: #166534;">YOUR PATIENT REFERRAL LINK</div>
-    <div style="display: flex; gap: 4px; margin: 4px 0;">
-      <input type="text" id="my-ref-link" readonly style="font-size: 0.75rem; padding: 4px; width: 100%; background: #FFF; border: 1px solid #86EFAC; border-radius: 4px;">
-      <button onclick="navigator.clipboard.writeText(document.getElementById('my-ref-link').value); alert('Referral link copied!');" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Copy</button>
-    </div>
-    <div style="font-size: 0.75rem; color: #15803D;">Share with friends to earn <strong>10.00% promo credit</strong> on your next service! Credit Balance: <strong id="promo-balance">Ksh0.00</strong></div>
+  <div style="display: flex; gap: 4px; margin: 6px 0;">
+    <input type="text" id="my-ref-link" readonly style="font-size: 0.75rem; padding: 6px; width: 100%; background: #FFF; border: 1px solid #86EFAC; border-radius: 4px;">
+    <button onclick="navigator.clipboard.writeText(document.getElementById('my-ref-link').value); alert('Referral link copied!');" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Copy</button>
   </div>
+  <div style="font-size: 0.75rem; color: #15803D;">Share with friends to earn credits on completed bookings. Current Balance: <strong id="promo-balance">Ksh 0.00</strong></div>
 </div>
 
-<!-- Booking Section -->
-<div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-  <div class="card">
-    <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
-      <h3 style="color: var(--primary-deep);"> Book companionship services</h3>
-      <p style="font-size: 0.8rem; color: #64748B;">Pick an appointment date for your errand.</p>
+<!-- Booking Form Card -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+    <h3 style="color: var(--primary-deep); margin: 0;">📅 Book Companionship & Errand Services</h3>
+    <p style="font-size: 0.8rem; color: #64748B; margin-top: 0.25rem;">Choose an appointment slot within working hours (06:00 AM – 06:00 PM).</p>
+  </div>
+
+  <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
+    <div style="position: relative;">
+      <label style="font-size: 0.8rem; font-weight: 600;">Search Errand Services</label>
+      <input type="text" id="patient-catalog-search" placeholder="Type service name..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
+      <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
     </div>
 
-    <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
-      <div style="margin-bottom: 0.5rem; position: relative;">
-        <label style="font-size: 0.8rem; font-weight: 600;">Search Errand services</label>
-        <input type="text" id="patient-catalog-search" placeholder="Type service name (e.g.)..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
-        <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
-      </div>
+    <div id="patient-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem;"></div>
 
-      <div id="patient-selected-items" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem;"></div>
+    <div>
+      <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">
+        Preferred Session Date & Start Time *
+      </label>
+      <input type="datetime-local" id="services-start-time" step="1800" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
+      <small style="color: #64748B; font-size: 0.75rem; display: block; margin-top: 4px;">
+        Operating hours: <strong>06:00 AM – 06:00 PM</strong>. Need a custom schedule? <a href="https://wa.me/254793294189" target="_blank" style="color: var(--secondary-teal); font-weight: 600;">Chat on WhatsApp</a>
+      </small>
+    </div>
 
-      <div style="margin-bottom: 0.75rem;">
-        <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">
-          Preferred Session Date & Start Time *
-        </label>
-        <input 
-          type="datetime-local" 
-          id="services-start-time" 
-          step="1800" 
-          required 
-          style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
-          <p style="text-align: center;">
-                -----------------------------
-          </p>  
-        <small style="color: #64748B; font-size: 0.75rem;">
-          Operating hours: <strong>06:00 AM – 06:00 PM</strong> book within the working hours window
-        </small>
-        <p style="text-align: center;" >
-          ----------------------------         
-        </p>
-        <p style="color: rgb(25, 131, 131);">
-          Need your own personalized schedule, <a href="http://wa.me/+2547198534" color ="green">contuct us </a>
-        </p>
-      </div>
-
-      <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule Caregiver</button>
-    </form>
-  </div>
+    <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule Caregiver</button>
+  </form>
 </div>
 
 <!-- Section 1: Confirmed Service Schedules -->
@@ -100,15 +82,15 @@
 <!-- Section 2: Active Bookings & Billing Table -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">💳 Active Bookings & Payment Status</h3>
-    <p style="font-size: 0.85rem; color: #64748B;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
+    <h3 style="color: var(--primary-deep); margin: 0;">💳 Active Bookings & Payment Status</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
   </div>
 
   <table class="data-table" id="billing-table">
     <thead>
       <tr>
         <th>Booking Code</th>
-        <th>Requested services / services</th>
+        <th>Requested Services</th>
         <th>Total Amount</th>
         <th>Status</th>
         <th>Payment Action</th>
@@ -123,7 +105,7 @@
 <!-- Section 3: Reports Archive Table -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">📄 Days reports Archive</h3>
+    <h3 style="color: var(--primary-deep); margin: 0;">📄 Daily Care & Progress Reports</h3>
   </div>
 
   <table class="data-table" id="results-table">
@@ -144,10 +126,10 @@
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
     <div>
       <h3 style="color: var(--primary-deep); margin: 0;">🌐 Connected Global Doctors & Specialists</h3>
-      <p style="font-size: 0.85rem; color: #64748B; margin: 0.25rem 0 0 0;">Status of cross-border consultation requests placed through the international network.</p>
+      <p style="font-size: 0.85rem; color: #64748B; margin: 0.25rem 0 0 0;">Status of cross-border consultation requests.</p>
     </div>
     <a href="/directory/doctors/" class="clinical-btn btn-outline" style="font-size: 0.8rem; padding: 4px 10px;">
-      Explore Global Directory
+      Explore Directory
     </a>
   </div>
 
@@ -188,31 +170,22 @@
   function showPatientToast(title, message) {
     const toast = document.getElementById("patient-toast-notification");
     if (!toast) return;
-    const titleEl = document.getElementById("toast-title");
-    const msgEl = document.getElementById("toast-message");
-    if (titleEl) titleEl.textContent = title;
-    if (msgEl) msgEl.textContent = message;
+    document.getElementById("toast-title").textContent = title;
+    document.getElementById("toast-message").textContent = message;
     toast.style.display = "flex";
-
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 5000);
+    setTimeout(() => { toast.style.display = "none"; }, 5000);
   }
 
   let catalog = [];
   let selectedServicesIds = [];
 
-  // 1. Fetch & Render Confirmed Schedules
   async function loadPatientSchedules() {
     const tbody = document.querySelector("#patient-schedules-table tbody");
     if (!tbody) return;
 
     try {
       const res = await fetch("/api/v1/schedules/");
-      if (!res.ok) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Server error (${res.status}).</td></tr>`;
-        return;
-      }
+      if (!res.ok) return;
 
       const schedules = await res.json();
       tbody.innerHTML = "";
@@ -224,13 +197,10 @@
 
       schedules.forEach(s => {
         const start = s.start_date ? new Date(s.start_date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : "N/A";
-        const actName = s.services_name || s.service_name || "Care Service";
-        const caregiverName = s.caregiver_name || "Assigned Caregiver";
-
         tbody.innerHTML += `
           <tr>
-            <td><strong>${actName}</strong></td>
-            <td><span style="color: var(--primary-deep); font-weight: 600;">🤝 ${caregiverName}</span></td>
+            <td><strong>${s.services_name || s.service_name || "Care Service"}</strong></td>
+            <td><span style="color: var(--primary-deep); font-weight: 600;">🤝 ${s.caregiver_name || "Assigned Caregiver"}</span></td>
             <td style="font-size: 0.85rem;">${start}</td>
             <td>
               <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
@@ -241,11 +211,10 @@
         `;
       });
     } catch (err) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #EF4444;">Failed to load schedules: ${err.message}</td></tr>`;
+      console.error(err);
     }
   }
 
-  // 2. Fetch & Render Patient Orders / Billing Table
   async function loadPatientOrders() {
     const billTbody = document.querySelector("#billing-table tbody");
     const resTbody = document.querySelector("#results-table tbody");
@@ -277,7 +246,7 @@
               <td>
                 ${o.is_paid 
                   ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Completed</span>`
-                  : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">Pending </span>`}
+                  : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">Pending</span>`}
               </td>
               <td>
                 ${!o.is_paid 
@@ -298,11 +267,10 @@
         }
       });
     } catch (e) {
-      console.error("Error loading patient orders:", e);
+      console.error(e);
     }
   }
 
-  // 3. Fetch Global Connections
   async function loadPatientGlobalConnections() {
     const tbody = document.querySelector("#global-doctors-table tbody");
     if (!tbody) return;
@@ -319,37 +287,29 @@
       }
 
       items.forEach(doc => {
-        const statusHtml = doc.status === "CONNECTED"
-          ? '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Connected</span>'
-          : '<span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #92400E; background: #FEF3C7; border: 1px solid #FCD34D;">Pending Communication</span>';
-
         const flagImg = doc.country_iso ? `<img src="https://flagcdn.com/20x15/${doc.country_iso.toLowerCase()}.png" width="18" height="13" style="vertical-align: middle; margin-right: 4px; border-radius: 2px;">` : '';
-
         tbody.innerHTML += `
           <tr>
             <td><strong>${doc.doctor_name || 'N/A'}</strong></td>
             <td>${doc.specialty || 'General Practitioner'}</td>
             <td style="font-size: 0.85rem;">${flagImg} ${doc.country || ''} <span style="color: #64748B;">${doc.hospital || ''}</span></td>
             <td style="font-size: 0.85rem;">${doc.created_at ? doc.created_at.substring(0, 10) : 'N/A'}</td>
-            <td>${statusHtml}</td>
+            <td><span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">${doc.status || 'Connected'}</span></td>
           </tr>
         `;
       });
     } catch (e) {
-      console.error("Could not load global doctor connections:", e);
+      console.error(e);
     }
   }
 
-  // Selection Badges
   function addPatientService(id, name, price) {
     if (!selectedServicesIds.includes(id)) {
       selectedServicesIds.push(id);
       renderSelectedServices();
     }
-    const searchBox = document.getElementById("patient-search-results");
-    const searchInput = document.getElementById("patient-catalog-search");
-    if (searchBox) searchBox.style.display = "none";
-    if (searchInput) searchInput.value = "";
+    document.getElementById("patient-search-results").style.display = "none";
+    document.getElementById("patient-catalog-search").value = "";
   }
 
   function removePatientService(id) {
@@ -373,64 +333,42 @@
     });
   }
 
-  // Master Initialization
   document.addEventListener("DOMContentLoaded", async () => {
-    // A. Minimum Date Restriction (06:00 AM limit)
     const timeInput = document.getElementById("services-start-time");
     if (timeInput) {
       const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      const day = String(today.getDate()).padStart(2, "0");
-      timeInput.min = `${year}-${month}-${day}T06:00`;
+      timeInput.min = `${today.toISOString().split('T')[0]}T06:00`;
     }
 
-    // B. Fetch Initial Data
     loadPatientSchedules();
     loadPatientOrders();
     loadPatientGlobalConnections();
 
-    // C. Referral profile load
     try {
       const profileRes = await fetch("/api/v1/patient/me/");
       if (profileRes.ok) {
         const p = await profileRes.json();
         const refBox = document.getElementById("referral-box");
-        const refLinkInput = document.getElementById("my-ref-link");
-        const promoBal = document.getElementById("promo-balance");
-
         if (p.patient_type === "INDEPENDENT" && refBox) {
           refBox.style.display = "block";
-          if (refLinkInput) refLinkInput.value = p.referral_link || "";
-          if (promoBal) promoBal.textContent = `Ksh${p.promo_credits || "0.00"}`;
+          document.getElementById("my-ref-link").value = p.referral_link || "";
+          document.getElementById("promo-balance").textContent = `Ksh ${p.promo_credits || "0.00"}`;
         }
       }
-    } catch (e) {
-      console.error("Profile load failed:", e);
-    }
+    } catch (e) {}
 
-    // D. Catalog load
     try {
       const catRes = await fetch("/api/v1/catalog/");
-      if (catRes.ok) {
-        catalog = await catRes.json();
-      }
-    } catch (e) {
-      console.error("Catalog load error:", e);
-    }
+      if (catRes.ok) catalog = await catRes.json();
+    } catch (e) {}
 
-    // E. Catalog search filter listener
     const searchInput = document.getElementById("patient-catalog-search");
     const resultsBox = document.getElementById("patient-search-results");
 
     if (searchInput && resultsBox) {
       searchInput.addEventListener("input", () => {
         const q = searchInput.value.toLowerCase().trim();
-        if (!q) {
-          resultsBox.style.display = "none";
-          resultsBox.innerHTML = "";
-          return;
-        }
+        if (!q) { resultsBox.style.display = "none"; return; }
 
         const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
         resultsBox.innerHTML = "";
@@ -459,7 +397,6 @@
       });
     }
 
-    // F. Form Submit Listener -> Posts to /api/v1/schedules/
     const orderForm = document.getElementById("patient-order-form");
     const submitBtn = document.getElementById("submit-services-btn");
 
@@ -478,18 +415,8 @@
           return;
         }
 
-        const chosenDate = new Date(timeVal);
-        const chosenHour = chosenDate.getHours();
-
-        if (chosenHour < 6 || chosenHour >= 18) {
-          alert("Service hours are strictly between 06:00 AM and 06:00 PM. Please pick a daytime slot.");
-          return;
-        }
-
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Assigning Available Caregiver...";
-        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Scheduling...";
 
         try {
           const res = await fetch("/api/v1/schedules/", {
@@ -500,13 +427,13 @@
             },
             body: JSON.stringify({
               services_id: selectedServicesIds[0],
-              start_date: chosenDate.toISOString()
+              start_date: new Date(timeVal).toISOString()
             })
           });
 
           if (res.ok) {
             const data = await res.json();
-            showPatientToast("Session Booked!", `Caregiver ${data.caregiver_name || 'assigned'} scheduled.`);
+            showPatientToast("Session Booked!", `Caregiver assigned.`);
             selectedServicesIds = [];
             renderSelectedServices();
             orderForm.reset();
@@ -514,15 +441,13 @@
             loadPatientOrders();
           } else {
             const err = await res.json();
-            alert(err.detail || "Booking failed. Please try an alternative slot.");
+            alert(err.detail || "Booking failed.");
           }
         } catch (err) {
-          alert("Network failure communicating with scheduling service.");
+          alert("Network communication failure.");
         } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit Booking & Schedule Caregiver";
-          }
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Booking & Schedule Caregiver";
         }
       });
     }

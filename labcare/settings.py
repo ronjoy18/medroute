@@ -86,7 +86,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "LabCare Diagnostics Core <dispatch@labcare.system>"
-
+DEFAULT_FROM_EMAIL = "LabCare Diagnostics Core <operations@medroute.system>"
+COMPANY_ALERT_EMAIL = "operations@medroute.com"
 TIME_ZONE = 'Africa/Nairobi'
 USE_TZ = True

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- 5-Second Toast Container -->
+<!-- Toast Notification -->
 <div id="caregiver-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
   <span style="font-size: 1.25rem;">✓</span>
   <div>
@@ -10,21 +10,19 @@
   </div>
 </div>
 
-<!-- Header -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
   <div>
     <h1 style="color: var(--primary-deep); margin-bottom: 0.25rem;">Caregiver Profile</h1>
-    <p style="color: #64748B;">Assigned patients and performance evaluations.</p>
+    <p style="color: #64748B;">Assigned patients and service progress updates.</p>
   </div>
 </div>
 
-<!-- Section 1: patient Monitoring Roster -->
-
+<!-- Section 1: Patient Roster -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
-  <div zstyle="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+  <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
     <div>
-      <h3 style="color: var(--primary-deep);">👥 Monitored Practicing patients</h3>
-      <p style="font-size: 0.85rem; color: #64748B;">Enrolled patients appear here immediately upon registration.</p>
+      <h3 style="color: var(--primary-deep);">👥 Monitored Patients</h3>
+      <p style="font-size: 0.85rem; color: #64748B;">Enrolled patients assigned to your care schedule.</p>
     </div>
     <span id="patient-count-badge" style="background: #E0F2FE; color: var(--primary-deep); padding: 4px 10px; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">
       0 patients
@@ -34,10 +32,10 @@
   <table class="data-table" id="patients-roster-table">
     <thead>
       <tr>
-        <th>patient Name</th>
+        <th>Patient Name</th>
         <th>Contact Info</th>
         <th>Enrolled</th>
-        <th>Total services</th>
+        <th>Total Services</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -47,61 +45,49 @@
   </table>
 </div>
 
-<!-- Section 2: Student Performance Report Card -->
+<!-- Section 2: Caregiver Remarks Report Card -->
 <div class="card" style="margin-bottom: 2rem;">
   <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">📝 File Student Performance Report</h3>
+    <h3 style="color: var(--primary-deep); margin: 0;">📝 File Patient Progress Report</h3>
     <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">
-      Submit evaluations visible exclusively to the target student on their dashboard.
+      Submit session observations visible directly on the patient's dashboard.
     </p>
   </div>
 
-  <!-- Single Valid Form -->
   <form id="caregiver-report-form">
-    <!-- 1. Select the specific enrolled student -->
     <div style="margin-bottom: 0.85rem;">
       <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 0.35rem;">
-        Target Student *
+        Target Patient *
       </label>
       <select id="report-patient-select" name="patient" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-slate); border-radius: 4px; background: #F8FAFC;">
-        <option value="">-- Choose Enrolled Student --</option>
+        <option value="">-- Choose Enrolled Patient --</option>
       </select>
     </div>
 
-    <!-- 2. Performance score (1 to 10) -->
-    <!--div style="margin-bottom: 0.85rem;">
+    <div style="margin-bottom: 0.85rem;">
       <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 0.35rem;">
-        errands Safety & Performance Score (1 - 10) *
+        Caregiver Assessment Remarks *
       </label>
-      <input type="number" id="report-score" name="performance_score" min="1" max="10" value="8" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-slate); border-radius: 4px;">
-    </div-->
-
-    <!-- 3. caregiveriveriveriveriveriveriveriveriveriveriveriveriveriveriveriveriveriveriver Remarks -->
-    <div style="margin-bottom: 1.25rem;">
-      <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 0.35rem;">
-        caregiver Assessment Remarks *
-      </label>
-      <textarea id="report-remarks" name="caregiver_remarks" rows="3" required placeholder="Detail swimming progress, stroke technique, breath control, or points of improvement..." style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-slate); border-radius: 4px; font-family: inherit;"></textarea>
+      <textarea id="report-remarks" name="caregiver_remarks" rows="3" required placeholder="Detail mobility, vitals, mood, or clinical follow-up needs..." style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-slate); border-radius: 4px; font-family: inherit;"></textarea>
     </div>
 
     <button id="send-report-btn" type="submit" class="clinical-btn btn-teal" style="width: 100%;">
-      Publish Report to patient
+      Publish Report to Patient
     </button>
   </form>
 </div>
 
-<!-- Section 3: Dispatched Orders Tracker -->
-<!-- Section 3: Assigned Schedule & Dispatched Bookings -->
-<div class="card table-responsive" >
-  <div class="table-responsive" style="margin-bottom: 1rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">🏊 My Assigned Training Sessions</h3>
-    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live feed of patients auto-routed into your calendar.</p>
+<!-- Section 3: Assigned Schedule -->
+<div class="card table-responsive">
+  <div style="margin-bottom: 1rem;">
+    <h3 style="color: var(--primary-deep); margin: 0;">📅 My Assigned Care Sessions</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live timetable of your confirmed assignments.</p>
   </div>
   <table class="data-table" id="orders-table">
     <thead>
       <tr>
         <th>Schedule ID</th>
-        <th>patient / Student</th>
+        <th>Patient</th>
         <th>Service</th>
         <th>Session Window</th>
         <th>Status</th>
@@ -131,43 +117,35 @@
     return cookieValue || "{{ csrf_token }}";
   }
 
-  function showcaregiverToast(title, message) {
+  function showCaregiverToast(title, message) {
     const toast = document.getElementById("caregiver-toast-notification");
     if (!toast) return;
-    const titleEl = document.getElementById("toast-title");
-    const msgEl = document.getElementById("toast-message");
-    if (titleEl) titleEl.textContent = title;
-    if (msgEl) msgEl.textContent = message;
+    document.getElementById("toast-title").textContent = title;
+    document.getElementById("toast-message").textContent = message;
     toast.style.display = "flex";
     setTimeout(() => { toast.style.display = "none"; }, 5000);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // 1. Initial Data Fetch
-    loadpatientsRoster();
-    loadcaregiverOrders();
+    loadPatientsRoster();
+    loadCaregiverOrders();
 
-    // 2. Report Form Submission Handler
     const reportForm = document.getElementById("caregiver-report-form");
     const reportBtn = document.getElementById("send-report-btn");
 
     if (reportForm) {
       reportForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const patientId = document.getElementById("report-patient-select").value;
-        const score = document.getElementById("report-score").value;
         const remarks = document.getElementById("report-remarks").value.trim();
 
         if (!patientId) {
-          alert("Please select a student from the dropdown.");
+          alert("Please select a patient from the dropdown.");
           return;
         }
 
-        if (reportBtn) {
-          reportBtn.disabled = true;
-          reportBtn.textContent = "Publishing Evaluation...";
-        }
+        reportBtn.disabled = true;
+        reportBtn.textContent = "Publishing Evaluation...";
 
         try {
           const res = await fetch("/api/v1/caregiver/reports/", {
@@ -178,32 +156,29 @@
             },
             body: JSON.stringify({
               patient: patientId,
-              performance_score: parseInt(score),
+              performance_score: 10,
               caregiver_remarks: remarks
             })
           });
 
           if (res.ok) {
-            showcaregiverToast("Report Published!", "Evaluation saved and transmitted to student dashboard.");
+            showCaregiverToast("Report Published!", "Evaluation saved and transmitted to patient dashboard.");
             reportForm.reset();
           } else {
             const err = await res.json();
             alert("Submission error: " + (err.detail || JSON.stringify(err)));
           }
         } catch (err) {
-          alert("Network failure publishing performance report.");
+          alert("Network failure publishing progress report.");
         } finally {
-          if (reportBtn) {
-            reportBtn.disabled = false;
-            reportBtn.textContent = "Publish Report to Student";
-          }
+          reportBtn.disabled = false;
+          reportBtn.textContent = "Publish Report to Patient";
         }
       });
     }
   });
 
-  // Load patients and fill dropdowns
-  async function loadpatientsRoster() {
+  async function loadPatientsRoster() {
     try {
       const res = await fetch("/api/v1/caregiver/my-patients/");
       if (!res.ok) return;
@@ -214,7 +189,7 @@
       const badge = document.getElementById("patient-count-badge");
 
       if (badge) badge.textContent = `${patients.length} patient${patients.length === 1 ? '' : 's'}`;
-      if (reportSelect) reportSelect.innerHTML = '<option value="">-- Choose Enrolled Student --</option>';
+      if (reportSelect) reportSelect.innerHTML = '<option value="">-- Choose Enrolled Patient --</option>';
       if (tbody) tbody.innerHTML = "";
 
       if (patients.length === 0 && tbody) {
@@ -239,7 +214,7 @@
               <td><span style="background: #F1F5F9; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">${c.total_orders} services</span></td>
               <td>
                 <button type="button" onclick="quickSelectReportStudent('${c.id}')" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem; margin-right: 4px;">Write Report</button>
-                <button type="button" onclick="unlinkpatient('${c.id}', '${c.full_name}')" class="clinical-btn" style="padding: 4px 8px; font-size: 0.75rem; background: #FEE2E2; color: #DC2626;">Unlink</button>
+                <button type="button" onclick="unlinkPatient('${c.id}', '${c.full_name}')" class="clinical-btn" style="padding: 4px 8px; font-size: 0.75rem; background: #FEE2E2; color: #DC2626;">Unlink</button>
               </td>
             </tr>
           `;
@@ -259,7 +234,7 @@
     }
   }
 
-  async function unlinkpatient(id, name) {
+  async function unlinkPatient(id, name) {
     if (!confirm(`Are you sure you want to remove ${name}?`)) return;
     try {
       const res = await fetch(`/api/v1/caregiver/my-patients/${id}/`, {
@@ -267,54 +242,54 @@
         headers: { "X-CSRFToken": getCookie("csrftoken") }
       });
       if (res.ok) {
-        showcaregiverToast("patient Removed", `${name} unlinked.`);
-        loadpatientsRoster();
+        showCaregiverToast("Patient Removed", `${name} unlinked.`);
+        loadPatientsRoster();
       }
     } catch(e) {}
   }
 
-  async function loadcaregiverOrders() {
-  try {
-    const res = await fetch("/api/v1/schedules/");
-    const tbody = document.querySelector("#orders-table tbody");
-    if (!tbody) return;
+  async function loadCaregiverOrders() {
+    try {
+      const res = await fetch("/api/v1/schedules/");
+      const tbody = document.querySelector("#orders-table tbody");
+      if (!tbody) return;
 
-    if (!res.ok) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">Could not load session calendar.</td></tr>';
-      return;
+      if (!res.ok) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">Could not load session calendar.</td></tr>';
+        return;
+      }
+
+      const schedules = await res.json();
+      tbody.innerHTML = "";
+
+      if (schedules.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No upcoming services assigned at this time.</td></tr>';
+        return;
+      }
+
+      schedules.forEach(s => {
+        const start = new Date(s.start_date || s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+        const end = s.end_time ? new Date(s.end_time).toLocaleTimeString([], { timeStyle: 'short' }) : 'Flexible';
+
+        tbody.innerHTML += `
+          <tr>
+            <td><code>#${String(s.id).substring(0, 8)}</code></td>
+            <td><strong>${s.patient_name || "Enrolled Patient"}</strong></td>
+            <td style="font-size: 0.85rem;">${s.services_name || s.service_name || "Care Plan"}</td>
+            <td style="font-size: 0.85rem; color: #0F172A;">
+              📅 ${start} – ${end}
+            </td>
+            <td>
+              <span style="background: #E0F2FE; color: var(--primary-deep); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                ${s.status}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+    } catch (e) {
+      console.error("Caregiver schedules load error:", e);
     }
-
-    const schedules = await res.json();
-    tbody.innerHTML = "";
-
-    if (schedules.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No upcoming services assigned at this time.</td></tr>';
-      return;
-    }
-
-    schedules.forEach(s => {
-      const start = new Date(s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
-      const end = new Date(s.end_date).toLocaleTimeString([], { timeStyle: 'short' });
-
-      tbody.innerHTML += `
-        <tr>
-          <td><code>#${String(s.id).substring(0, 8)}</code></td>
-          <td><strong>${s.patient_name || "Enrolled Student"}</strong></td>
-          <td style="font-size: 0.85rem;">${s.Service_name || "Lesson"}</td>
-          <td style="font-size: 0.85rem; color: #0F172A;">
-            📅 ${start} – ${end}
-          </td>
-          <td>
-            <span style="background: #E0F2FE; color: var(--primary-deep); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
-              ${s.status}
-            </span>
-          </td>
-        </tr>
-      `;
-    });
-  } catch (e) {
-    console.error("caregiver schedules load error:", e);
   }
-}
 </script>
 {% endblock %}
