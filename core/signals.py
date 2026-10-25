@@ -159,7 +159,7 @@ def notify_on_schedule_creation(sender, instance, created, **kwargs):
     service_title = instance.services.name if instance.services else "Care Routine"
 
     start_str = instance.start_date.strftime("%Y-%m-%d %I:%M %p") if instance.start_date else "TBD"
-    end_str = instance.end_time.strftime("%I:%M %p") if instance.end_time else "Flexible"
+    end_str = instance.end_date.strftime("%I:%M %p") if instance.end_date else "Flexible"
 
     # 3A. Inform Company via Email
     company_subject = f"[Schedule Booked] #{str(instance.id)[:8]} - {patient_name} with {caregiver_name}"

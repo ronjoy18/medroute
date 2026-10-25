@@ -269,7 +269,7 @@
 
       schedules.forEach(s => {
         const start = new Date(s.start_date || s.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
-        const end = s.end_time ? new Date(s.end_time).toLocaleTimeString([], { timeStyle: 'short' }) : 'Flexible';
+        const end = s.end_date ? new Date(s.end_date).toLocaleTimeString([], { timeStyle: 'short' }) : 'Flexible';
 
         tbody.innerHTML += `
           <tr>
