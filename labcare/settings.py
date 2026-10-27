@@ -6,15 +6,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-labcare-production-core-system-seed"
 DEBUG = True #os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']  # Allows Render or any test domain to load the site
+ALLOWED_HOSTS = [
+    '*',
+    'medrouterrands.com',
+    'www.medrouterrands.com',]  # Allows Render or any test domain to load the site
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://medrouterrands.com',
+    'https://www.medrouterrands.com',
     'https://*.onrender.com',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
 BASE_URL = "http://localhost:8000"
-REF_URL = 'https://medroute-xp7i.onrender.com'
+REF_URL = 'https://medrouterrands.com'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
