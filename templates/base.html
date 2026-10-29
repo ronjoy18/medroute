@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Medroute Clinical Systems{% endblock %}</title>
+  <title>{% block title %}Medroute Errands{% endblock %}</title>
   <link rel="stylesheet" href="/static/css/style.css">
+
+  <!-- ============================================================ -->
+  <!-- NON-ESSENTIAL THIRD-PARTY TRACKING (GATED / ZERO-LOAD)        -->
+  <!-- ============================================================ -->
   <script type="text/plain" data-cookie-category="analytics" data-src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
   
-  <!-- Example: Inline initialization -->
   <script type="text/plain" data-cookie-category="analytics">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -15,95 +18,97 @@
     gtag('config', 'G-XXXXXXX');
     console.log("Analytics engine activated legally.");
   </script>
+
   {% block extra_head %}{% endblock %}
 </head>
 <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
+
   <!-- Unified Self-Contained Cookie Consent Banner -->
-<div id="consent-banner-wrapper" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 3px solid #0284c7; color: #f8fafc; z-index: 999999; padding: 1.25rem 1rem; box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.4);">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-    
-    <div style="flex: 1 1 500px;">
-      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
-        <span style="font-size: 1.2rem;">🍪</span>
-        <strong style="font-size: 1rem; color: #ffffff;">Cookie & Privacy Preferences</strong>
+  <div id="consent-banner-wrapper" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 3px solid #0284c7; color: #f8fafc; z-index: 999999; padding: 1.25rem 1rem; box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.4);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      
+      <div style="flex: 1 1 500px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+          <span style="font-size: 1.2rem;">🍪</span>
+          <strong style="font-size: 1rem; color: #ffffff;">Cookie & Privacy Preferences</strong>
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0;">
+          We use essential cookies to maintain secure sessions and process payments[cite: 1]. With your consent, we also run analytical tools to optimize navigation[cite: 1]. Read our 
+          <a href="{% url 'privacy-policy' %}" style="color: #38bdf8; text-decoration: underline;">Privacy & Cookies Policy</a>.
+        </p>
       </div>
-      <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0;">
-        We use essential cookies to maintain secure sessions and process payments. With your consent, we also run analytical tools to optimize navigation. Read our 
-        <a href="{% url 'privacy-policy' %}" style="color: #38bdf8; text-decoration: underline;">Privacy Policy</a>.
-      </p>
-    </div>
 
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <button type="button" id="cookie-reject-btn" class="clinical-btn btn-outline" style="border-color: #64748b; color: #f8fafc; padding: 0.5rem 1rem;">
-        Reject Non-Essential
-      </button>
-      <button type="button" id="cookie-accept-btn" class="clinical-btn btn-teal" style="padding: 0.5rem 1.25rem;">
-        Accept All Cookies
-      </button>
-    </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button type="button" id="cookie-reject-btn" class="clinical-btn btn-outline" style="border-color: #64748b; color: #f8fafc; padding: 0.5rem 1rem;">
+          Reject Non-Essential
+        </button>
+        <button type="button" id="cookie-accept-btn" class="clinical-btn btn-teal" style="padding: 0.5rem 1.25rem;">
+          Accept All Cookies
+        </button>
+      </div>
 
+    </div>
   </div>
-</div>
 
-<script>
-  (function () {
-    const STORAGE_KEY = "medroute_cookie_choice";
+  <script>
+    (function () {
+      const STORAGE_KEY = "medroute_cookie_choice";
 
-    function showBanner() {
-      const banner = document.getElementById("consent-banner-wrapper");
-      if (banner) banner.style.display = "block";
-    }
-
-    function hideBanner() {
-      const banner = document.getElementById("consent-banner-wrapper");
-      if (banner) banner.style.display = "none";
-    }
-
-    function activateAnalytics() {
-      document.querySelectorAll('script[type="text/plain"][data-cookie-category="analytics"]').forEach(s => {
-        const active = document.createElement("script");
-        active.type = "text/javascript";
-        if (s.src) active.src = s.src;
-        if (s.innerHTML) active.innerHTML = s.innerHTML;
-        document.head.appendChild(active);
-        s.remove();
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const savedChoice = localStorage.getItem(STORAGE_KEY);
-
-      if (!savedChoice) {
-        showBanner();
-      } else if (savedChoice === "accepted") {
-        activateAnalytics();
+      function showBanner() {
+        const banner = document.getElementById("consent-banner-wrapper");
+        if (banner) banner.style.display = "block";
       }
 
-      const acceptBtn = document.getElementById("cookie-accept-btn");
-      if (acceptBtn) {
-        acceptBtn.onclick = function () {
-          localStorage.setItem(STORAGE_KEY, "accepted");
-          hideBanner();
+      function hideBanner() {
+        const banner = document.getElementById("consent-banner-wrapper");
+        if (banner) banner.style.display = "none";
+      }
+
+      function activateAnalytics() {
+        document.querySelectorAll('script[type="text/plain"][data-cookie-category="analytics"]').forEach(s => {
+          const active = document.createElement("script");
+          active.type = "text/javascript";
+          if (s.dataset.src) active.src = s.dataset.src;
+          if (s.innerHTML) active.innerHTML = s.innerHTML;
+          document.head.appendChild(active);
+          s.remove();
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const savedChoice = localStorage.getItem(STORAGE_KEY);
+
+        if (!savedChoice) {
+          showBanner();
+        } else if (savedChoice === "accepted") {
           activateAnalytics();
-        };
-      }
+        }
 
-      const rejectBtn = document.getElementById("cookie-reject-btn");
-      if (rejectBtn) {
-        rejectBtn.onclick = function () {
-          localStorage.setItem(STORAGE_KEY, "rejected");
-          hideBanner();
-        };
-      }
-    });
+        const acceptBtn = document.getElementById("cookie-accept-btn");
+        if (acceptBtn) {
+          acceptBtn.onclick = function () {
+            localStorage.setItem(STORAGE_KEY, "accepted");
+            hideBanner();
+            activateAnalytics();
+          };
+        }
 
-    window.reopenCookiePreferences = function () {
-      showBanner();
-    };
-  })();
-</script>
-{% include "includes/_cookie_banner.html" %}
-  <!-- Main Top Bar: Clean White, Distinct, Unbroken -->
+        const rejectBtn = document.getElementById("cookie-reject-btn");
+        if (rejectBtn) {
+          rejectBtn.onclick = function () {
+            localStorage.setItem(STORAGE_KEY, "rejected");
+            hideBanner();
+          };
+        }
+      });
+
+      window.reopenCookiePreferences = function () {
+        showBanner();
+      };
+    })();
+  </script>
+
+  <!-- Main Top Bar -->
   <header class="top-nav">
     <a href="{% url 'index-page' %}" class="brand">
       <span>Medroute</span>
@@ -113,8 +118,6 @@
     <!-- Right-aligned action buttons -->
     <div class="nav-actions">
       {% if request.user.is_authenticated %}
-        <span style="font-weight: 600; font-size: 0.85rem; color: var(--primary-deep); margin-right: 0.25rem;">
-        </span>
         <a href="{% url 'home-page' %}" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;">🏠</a>
         <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href= '/index/page/')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
           Sign Out
@@ -130,7 +133,7 @@
   <!-- Sub Navigation Links Bar -->
   <nav class="sub-nav-bar">
     <a href="{% url 'about-us' %}" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem;">About us</a>
-    <a href="{% url 'global-doctor-directory' %}" class="nav-link">physicians</a>
+    <a href="{% url 'global-doctor-directory' %}" class="nav-link">Doctor Directory</a>
   </nav>
 
   <!-- Main Content Container -->
@@ -138,8 +141,15 @@
     {% block content %}{% endblock %}
   </main>
 
-  <footer style="padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
-    &copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under clinical scope protocols.
+  <!-- Global Footer -->
+  <footer style="padding: 2.5rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
+    <div style="margin-bottom: 0.85rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+      <a href="{% url 'privacy-policy' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Privacy & Cookies Policy</a>[cite: 1]
+      <a href="{% url 'terms-of-use' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Terms of Service</a>
+      <a href="javascript:void(0)" onclick="reopenCookiePreferences()" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">Cookie Preferences</a>[cite: 1]
+    </div>
+    <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols[cite: 1].</p>
+    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: medroute@errands.com | Web: www.medrouterrands.com</p>[cite: 1]
   </footer>
 
   <script src="/static/js/app.js"></script>
