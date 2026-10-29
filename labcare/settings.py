@@ -19,11 +19,11 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
 ]
 BASE_URL = "http://localhost:8000"
-REF_URL = 'https://medrouterrands.com'
-
-INSTALLED_APPS = [
+REF_URL = 'https://medrouterrands.com' 
+      
+INSTALLED_APPS = [    
     "django.contrib.admin",
-    "django.contrib.auth",
+    "django.contrib.auth",  
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",

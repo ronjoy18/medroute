@@ -1,0 +1,27 @@
+<!-- Cookie Consent Banner Component -->
+<div id="consent-banner-wrapper" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--primary-deep, #0f172a); border-top: 3px solid var(--secondary-teal, #0284c7); color: #f8fafc; z-index: 999999; padding: 1.25rem 1rem; box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.3);">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+    
+    <div style="flex: 1 1 550px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+        <span style="font-size: 1.1rem;">🍪</span>
+        <strong style="font-size: 1rem; color: #ffffff;">Your Privacy Choices</strong>
+      </div>
+      <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0;">
+        We use essential cookies to maintain secure authentication and prevent fraud. With your consent, we also utilize performance tracking to optimize care service logistics. Learn more in our 
+        <a href="{% url 'privacy-policy' %}" style="color: var(--accent-mint, #38bdf8); text-decoration: underline;">Privacy Policy</a>.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <button type="button" id="cookie-reject-btn" class="clinical-btn btn-outline" style="border-color: #64748b; color: #f8fafc; padding: 0.55rem 1.15rem;">
+        Reject Non-Essential
+      </button>
+      <button type="button" id="cookie-accept-btn" class="clinical-btn btn-teal" style="padding: 0.55rem 1.25rem;">
+        Accept All Cookies
+      </button>
+    </div>
+
+  </div>
+</div>

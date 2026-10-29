@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Privacy Policy & Data Protection Protocols | Medroute{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script type="text/plain" data-cookie-category="analytics" data-src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  
+  <!-- Example: Inline initialization -->
+  <script type="text/plain" data-cookie-category="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+    console.log("Analytics engine activated legally.");
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+  <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
+    <!-- Unified Self-Contained Cookie Consent Banner -->
+  <div id="consent-banner-wrapper" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 3px solid #0284c7; color: #f8fafc; z-index: 999999; padding: 1.25rem 1rem; box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.4);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      
+      <div style="flex: 1 1 500px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+          <span style="font-size: 1.2rem;">🍪</span>
+          <strong style="font-size: 1rem; color: #ffffff;">Cookie & Privacy Preferences</strong>
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0;">
+          We use essential cookies to maintain secure sessions and process payments. With your consent, we also run analytical tools to optimize navigation. Read our 
+          <a href="{% url 'privacy-policy' %}" style="color: #38bdf8; text-decoration: underline;">Privacy Policy</a>.
+        </p>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button type="button" id="cookie-reject-btn" class="clinical-btn btn-outline" style="border-color: #64748b; color: #f8fafc; padding: 0.5rem 1rem;">
+        Reject Non-Essential
+        </button>
+        <button type="button" id="cookie-accept-btn" class="clinical-btn btn-teal" style="padding: 0.5rem 1.25rem;">
+        Accept All Cookies
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "medroute_cookie_choice";
+
+      function showBanner() {
+        const banner = document.getElementById("consent-banner-wrapper");
+        if (banner) banner.style.display = "block";
+      }
+  
+      function hideBanner() {
+        const banner = document.getElementById("consent-banner-wrapper");
+        if (banner) banner.style.display = "none";
+      }
+
+      function activateAnalytics() {
+        document.querySelectorAll('script[type="text/plain"][data-cookie-category="analytics"]').forEach(s => {
+          const active = document.createElement("script");
+          active.type = "text/javascript";
+          if (s.src) active.src = s.src;
+          if (s.innerHTML) active.innerHTML = s.innerHTML;
+          document.head.appendChild(active);
+          s.remove();
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const savedChoice = localStorage.getItem(STORAGE_KEY);
+  
+        if (!savedChoice) {
+          showBanner();
+        } else if (savedChoice === "accepted") {
+          activateAnalytics();
+        }
+
+        const acceptBtn = document.getElementById("cookie-accept-btn");
+        if (acceptBtn) {
+          acceptBtn.onclick = function () {
+            localStorage.setItem(STORAGE_KEY, "accepted");
+            hideBanner();
+            activateAnalytics();
+          };
+        }
+
+        const rejectBtn = document.getElementById("cookie-reject-btn");
+        if (rejectBtn) {
+          rejectBtn.onclick = function () {
+            localStorage.setItem(STORAGE_KEY, "rejected");
+            hideBanner();
+          };
+        }
+      });
+
+      window.reopenCookiePreferences = function () {
+        showBanner();
+      };
+    })();
+  </script>
+    <!-- Main Top Bar: Clean White, Distinct, Unbroken -->
+    <header class="top-nav">
+      <a href="{% url 'index-page' %}" class="brand">
+        <span>Medroute</span>
+        <span class="brand-teal">Errands</span>
+      </a>
+
+      <!-- Right-aligned action buttons -->
+      <div class="nav-actions">
+        {% if request.user.is_authenticated %}
+          <span style="font-weight: 600; font-size: 0.85rem; color: var(--primary-deep); margin-right: 0.25rem;">
+          </span>
+          <a href="{% url 'home-page' %}" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;">🏠</a>
+          <button onclick="fetch('/api/v1/auth/logout/', {method:'POST', headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>window.location.href= '/index/page/')" class="clinical-btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
+            Sign Out
+          </button>
+        {% else %}
+          <a href="{% url 'auth-page' %}?mode=login&role=patient" class="clinical-btn btn-primary">
+            Login
+          </a>
+        {% endif %}
+      </div>
+    </header>
+
+  <!-- Sub Navigation Links Bar -->
+  <nav class="sub-nav-bar">
+    <a href="{% url 'about-us' %}" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem;">About us</a>
+    <a href="{% url 'global-doctor-directory' %}" class="nav-link"></a>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+ 
+  
+
+
+
+<div style="max-width: 860px; margin: 2rem auto; padding: 0 1rem;">
+  
+  <div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--secondary-teal);">
+    <span class="badge" style="width: fit-content; margin-bottom: 0.5rem;">Legal Document</span>
+    <h1 style="color: var(--primary-deep); font-size: 2rem; margin-bottom: 0.5rem;">Privacy Policy & Data Processing Notice</h1>
+    <p style="color: #64748B; font-size: 0.9rem;">Effective Date: January 1, 2026 | Last Revised: October 2026</p>
+  </div>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 1.5rem; line-height: 1.7; color: #334155;">
+    
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">1. Introduction & Data Controller</h3>
+      <p style="font-size: 0.95rem;">
+        Medroute Systems ("Medroute", "we", "us", or "our") operates platforms providing clinical errands, home caregiving coordination, and specialist tele-referrals. This Privacy Policy outlines how we collect, process, store, and safeguard your personal and health-related data in strict adherence to Kenya’s <strong>Data Protection Act (2019)</strong> and international clinical confidentiality frameworks.
+      </p>
+    </section>
+
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">2. Information We Collect</h3>
+      <p style="font-size: 0.95rem;">We only collect information necessary to coordinate care, process billing, and comply with safety regulations:</p>
+      <ul style="padding-left: 1.25rem; font-size: 0.9rem; margin-top: 0.5rem;">
+        <li><strong>Account Identifiers:</strong> Name, phone number, email address, password hashes, and national identification details.</li>
+        <li><strong>Health & Care Directives:</strong> Specific mobility requirements, medication schedules, and clinical coordinator notes provided during onboarding.</li>
+        <li><strong>Financial Records:</strong> Transaction codes, M-Pesa receipts, and billing history (we do not store raw card numbers or M-Pesa PINs).</li>
+        <li><strong>Technical Logs:</strong> IP addresses, browser agents, and necessary session markers to protect against unauthorized account takeovers.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">3. Lawful Basis for Processing</h3>
+      <p style="font-size: 0.95rem;">We process personal data exclusively under the following legal frameworks:</p>
+      <ul style="padding-left: 1.25rem; font-size: 0.9rem; margin-top: 0.5rem;">
+        <li><strong>Contractual Performance:</strong> To schedule caregivers, dispatch errand couriers, and generate booking invoices.</li>
+        <li><strong>Explicit Consent:</strong> For tracking analytics cookies and optional informational notifications. Consent may be revoked at any time.</li>
+        <li><strong>Legal Compliance:</strong> To maintain verifiable audit trails for medical transport and diagnostic referrals.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">4. Cookie Classification & User Rights</h3>
+      <p style="font-size: 0.95rem;">Our platform categorizes cookies into two tiers:</p>
+      <div style="background: var(--neutral-soft); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-slate); margin-top: 0.5rem;">
+        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Strictly Necessary:</strong> Django session tokens (`sessionid`) and CSRF tokens (`csrftoken`). These are required for login and security verification and do not record marketing profiles.</p>
+        <p style="font-size: 0.85rem; margin: 0;"><strong>Performance & Analytics:</strong> Optional tags deployed only after explicit user approval. You can change your choice at any time using the <em>Cookie Preferences</em> link in the footer.</p>
+      </div>
+    </section>
+
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">5. Third-Party Sub-Processors</h3>
+      <p style="font-size: 0.95rem;">We partner with vetted technical infrastructure providers that uphold industry-standard data security:</p>
+      <ul style="padding-left: 1.25rem; font-size: 0.9rem; margin-top: 0.5rem;">
+        <li><strong>Safaricom Daraja API:</strong> Mobile money payment processing.</li>
+        <li><strong>Cloud Hosting & DB:</strong> Encrypted databases hosted on secure cloud infrastructure with SSL/TLS transmission in transit and AES-256 at rest.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">6. Exercising Your Data Rights</h3>
+      <p style="font-size: 0.95rem;">Under the Data Protection Act, you have the right to request access to your records, object to processing, or request account erasure. To submit a formal inquiry, contact our Data Protection Desk at <a href="mailto:privacy@medroute.com" style="color: var(--secondary-teal); font-weight: 600;">privacy@medroute.com</a>.</p>
+    </section>
+
+  </div>
+</div>
+
+ <footer style="padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
+    &copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under clinical scope protocols.
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

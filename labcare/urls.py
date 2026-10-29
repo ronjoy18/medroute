@@ -8,6 +8,6 @@ urlpatterns = [
     #path("secure/management-portal/", admin.site.urls),  # Keep alias if desired
     path("", include("core.urls")),
 ]
-
+ 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -21,14 +21,23 @@ from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPati
 from labcare import settings
 from .models import GlobalDoctorInquiry, CareGiverProfile
 from core import models 
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.shortcuts import render
+
+
 
 
 # -------------------------------------------------------------
 # Frontend Page Views
 # -------------------------------------------------------------
+def privacy_view(request):
+    return render(request, "legality/privacy_p.html")
+def terms_view(request):
+    return render(request, 'legality/terms.html')
 def index_view(request):
     services = LabService.objects.filter(is_active=True).select_related("category")
     return render(request, "index.html", {"services": services})
+@ensure_csrf_cookie
 def home_view(request):
         return render(request, 'home.html')
 def auth_view(request):

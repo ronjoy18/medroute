@@ -40,5 +40,7 @@ urlpatterns = [
     path("info/", views.info_view, name="info-page"),
     path("api/v1/care-connect/", views.ConnectCaregiverAPIView.as_view(), name="care-connect-api"),
     path("caregiver/thank-you/", views.info_view, name="caregiver-info-page"),
+    path("legality/privacy/", views.privacy_view, name="privacy-policy"),
+    path("terms_of_service/", views.terms_view, name="terms-of-use")
 ]
 
