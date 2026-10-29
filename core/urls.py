@@ -43,5 +43,6 @@ urlpatterns = [
     path("api/v1/orders/<uuid:order_id>/pay/", views.InitiateMpesaPaymentAPIView.as_view(), name="order-mpesa-pay"),
     path("api/v1/orders/<uuid:order_id>/payment-status/", views.CheckPaymentStatusAPIView.as_view(), name="order-payment-status"),
     path("api/v1/mpesa/callback/", views.MpesaCallbackWebhookView.as_view(), name="mpesa-callback"),
+    path("orders/<uuid:order_id>/pay/", views.payment_checkout_view, name="order-checkout-page"),
 ]
 

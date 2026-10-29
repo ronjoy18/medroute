@@ -39,6 +39,9 @@ from django.shortcuts import render
 # -------------------------------------------------------------
 # Frontend Page Views
 # -------------------------------------------------------------
+def payment_checkout_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, "payment_checkout.html", {"order": order})
 def privacy_view(request):
     return render(request, "legality/privacy_p.html")
 def terms_view(request):
