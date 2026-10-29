@@ -1,3 +1,12 @@
+from rest_framework.views import APIView
+
+from rest_framework import permissions, status
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+from .models import Order
+from .mpesa import MpesaClient
 from django.db.models import Q
 import os
 from django.utils import timezone
@@ -821,3 +830,93 @@ class ConnectCaregiverAPIView(views.APIView):
             },
             status=status.HTTP_201_CREATED
         )
+
+class InitiateMpesaPaymentAPIView(APIView):
+    """Triggers the STK PIN prompt on the patient's phone."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        
+        # Pull phone number provided in request body or fallback to user profile
+        phone = request.data.get("phone")
+        if not phone:
+            phone = getattr(order.patient.user, "phone", None) or getattr(order.patient.user, "patient_phone", None)
+
+        if not phone:
+            return Response(
+                {"detail": "Please supply an active M-Pesa phone number to initiate payment."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        success, response_data = MpesaClient.initiate_stk_push(
+            phone_number=phone,
+            amount=order.total_cost,
+            order_id=order.id,
+            account_reference=f"MED#{str(order.id)[:6]}"
+        )
+
+        if success:
+            # Store CheckoutRequestID on the order so the callback can find it
+            order.mpesa_checkout_id = response_data.get("CheckoutRequestID")
+            order.save(update_fields=["mpesa_checkout_id"])
+            return Response({
+                "message": "STK prompt sent to your phone. Enter your M-Pesa PIN to complete payment.",
+                "checkout_id": order.mpesa_checkout_id
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": response_data}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class MpesaCallbackWebhookView(APIView):
+    """
+    Safaricom calls this public webhook asynchronously as soon as the client 
+    enters their PIN (or cancels) on their handset.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        payload = request.data
+        try:
+            stk_callback = payload.get("Body", {}).get("stkCallback", {})
+            result_code = stk_callback.get("ResultCode")
+            checkout_id = stk_callback.get("CheckoutRequestID")
+
+            # Locate the order awaiting this callback
+            order = Order.objects.filter(mpesa_checkout_id=checkout_id).first()
+            if not order:
+                # Acknowledge Safaricom even if order is missing to stop retry storms
+                return Response({"ResultCode": 0, "ResultDesc": "Accepted"}, status=status.HTTP_200_OK)
+
+            if result_code == 0:
+                # 0 indicates Successful payment
+                items = stk_callback.get("CallbackMetadata", {}).get("Item", [])
+                receipt_number = next((i.get("Value") for i in items if i.get("Name") == "MpesaReceiptNumber"), "")
+                
+                # Update order to triggers the post_save signals (emails, ledger updates, etc.)
+                order.is_paid = True
+                order.status = Order.Status.COMPLETED
+                order.payment_reference = receipt_number
+                order.save()
+            else:
+                # User cancelled (e.g., ResultCode 1032) or insufficient balance
+                print(f"M-Pesa payment failed or cancelled: {stk_callback.get('ResultDesc')}")
+
+            return Response({"ResultCode": 0, "ResultDesc": "Success"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error handling M-Pesa Callback: {e}")
+            return Response({"ResultCode": 0, "ResultDesc": "Error handled"}, status=status.HTTP_200_OK)
+
+
+class CheckPaymentStatusAPIView(APIView):
+    """Polled by frontend to check if the webhook has marked the order as paid."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        return Response({
+            "is_paid": order.is_paid,
+            "status": order.status,
+            "payment_reference": getattr(order, "payment_reference", "")
+        })    

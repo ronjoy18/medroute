@@ -195,6 +195,8 @@ class Order(models.Model):
     attached_report_pdf = models.FileField(upload_to=report_upload_directory_path, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    mpesa_checkout_id = models.CharField(max_length=128, blank=True, null=True, db_index=True)
+    payment_reference = models.CharField(max_length=64, blank=True, null=True) # E.g., QKH890LKJ3
 
     def calculate_cost(self):
         return sum(service.price for service in self.services.all())
