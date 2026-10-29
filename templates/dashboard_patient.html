@@ -251,8 +251,8 @@
               <td style="display: flex; gap: 6px; align-items: center;">
                 ${!o.is_paid 
                   ? `
-                    <button type="button" onclick="initiateDirectPayment(event, '${o.id}')" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">M-Pesa</button>
-                    <a href="/orders/${o.id}/pay/" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none;">Checkout</a>
+                    <button type="button" onclick="initiateDirectPayment(event, '${o.id}')" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;"></button>
+                    <a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Pay now</a>
                   `
                   : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
               </td>

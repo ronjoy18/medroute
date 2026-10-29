@@ -18,12 +18,12 @@ MPESA_INITIATOR_PHONE = os.getenv("MPESA_INITIATOR_PHONE", "254793294189")  # Te
 if MPESA_ENVIRONMENT == "production":
     MPESA_AUTH_URL = "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     MPESA_STK_URL = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com/"  # Must be a public HTTPS domain
+    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com"  # Must be a public HTTPS domain
 else:
     MPESA_AUTH_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     MPESA_STK_URL = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     # For local testing, use ngrok or your Render staging link
-    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com/"
+    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com"
 ALLOWED_HOSTS = [
     '*',
     'medrouterrands.com',

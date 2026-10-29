@@ -16,7 +16,7 @@ from .models import (
 
 User = get_user_model()
 COMPANY_EMAIL = getattr(settings, "COMPANY_ALERT_EMAIL", getattr(settings, "DEFAULT_FROM_EMAIL", "admin@medroute.com"))
-BASE_URL = getattr(settings, "BASE_URL", "https://medroute-xp7i.onrender.com").rstrip("/")
+BASE_URL = getattr(settings, "BASE_URL", "https://medrouterrands.com").rstrip("/")
 
 
 # ==============================================================================
