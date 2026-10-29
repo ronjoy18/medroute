@@ -22,7 +22,7 @@
       {% for s in order.services.all %}
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem;">
           <span>{{ s.name }}</span>
-          <strong>Ksh{{ s.price }}</strong>
+          <strong>Ksh {{ s.price }}</strong>
         </div>
       {% empty %}
         <div style="font-size: 0.95rem; color: #475569;">Bespoke / Custom Clinical Request</div>
@@ -37,103 +37,141 @@
 
       <div style="border-top: 1px solid var(--border-slate); margin-top: 0.75rem; padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: baseline;">
         <span style="font-weight: 700; color: var(--primary-deep);">Total Payable</span>
-        <span style="font-size: 1.5rem; font-weight: 800; color: var(--secondary-teal);">Ksh{{ order.total_cost }}</span>
+        <span style="font-size: 1.5rem; font-weight: 800; color: var(--secondary-teal);">Ksh {{ order.total_cost }}</span>
       </div>
     </div>
   </div>
 
-  <!-- Simulated Payment Options -->
-  <div style="margin-bottom: 2rem;">
-    <h4 style="font-size: 0.9rem; color: #64748B; margin-bottom: 0.75rem; text-transform: uppercase;">Select Payment Method</h4>
+  <!-- Payment Options -->
+  <div style="margin-bottom: 1.5rem;">
+    <h4 style="font-size: 0.9rem; color: #64748B; margin-bottom: 0.75rem; text-transform: uppercase;">Payment Details</h4>
     
-    <div style="display: grid; gap: 0.5rem;">
+    <div style="display: grid; gap: 0.5rem; margin-bottom: 1rem;">
       <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border-slate); border-radius: 6px; cursor: pointer;">
         <input type="radio" name="payment_method" value="mpesa" checked>
         <div>
           <strong>M-Pesa / Mobile Money</strong>
-          <p style="font-size: 0.8rem; color: #64748B;">Instant STK push notification confirmation</p>
-        </div>
-      </label>
-
-      <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border-slate); border-radius: 6px; cursor: pointer;">
-        <input type="radio" name="payment_method" value="card">
-        <div>
-          <strong>Credit / Debit Card</strong>
-          <p style="font-size: 0.8rem; color: #64748B;">Visa, Mastercard, or authorized medical insurance debit</p>
+          <p style="font-size: 0.8rem; color: #64748B; margin: 0;">Instant STK push prompt to your phone</p>
         </div>
       </label>
     </div>
+
+    <div>
+      <label for="mpesa-phone-input" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--primary-deep); margin-bottom: 0.35rem;">
+        M-Pesa Mobile Number *
+      </label>
+      <input 
+        type="tel" 
+        id="mpesa-phone-input" 
+        placeholder="07XXXXXXXX or 01XXXXXXXX" 
+        required 
+        style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 6px; font-size: 0.95rem;"
+      >
+      <small style="color: #64748B; font-size: 0.75rem; display: block; margin-top: 4px;">
+        Make sure the handset is unlocked to receive the PIN request.
+      </small>
+    </div>
   </div>
 
-  <button id="confirm-pay-btn" onclick="executePayment('{{ order.id }}')" class="clinical-btn btn-teal" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
-    Confirm & Settle Payment (Ksh{{ order.total_cost }})
+  <button type="button" id="confirm-pay-btn" onclick="executePayment('{{ order.id }}')" class="clinical-btn btn-teal" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
+    Confirm & Settle Payment (Ksh {{ order.total_cost }})
   </button>
 
   <p style="text-align: center; font-size: 0.8rem; color: #94A3B8; margin-top: 1rem;">
-    Payment gateway in active compliance simulation mode. Funds verification registers immediately.
+    Direct mobile money checkout. Transaction status updates automatically upon PIN confirmation.
   </p>
 </div>
+{% endblock %}
 
+{% block extra_scripts %}
 <script>
-
-  
- async function executePayment(orderId) {
-  const btn = document.getElementById("confirm-pay-btn");
-  const phone = prompt("Enter the M-Pesa phone number to prompt (e.g., 07XX... or 01XX...):");
-  
-  if (!phone) return;
-
-  btn.disabled = true;
-  btn.textContent = "Sending STK Prompt to phone...";
-
-  try {
-    const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken")
-      },
-      body: JSON.stringify({ phone: phone })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      btn.textContent = "Awaiting PIN on phone...";
-      
-      // Poll every 3 seconds to see when Safaricom sends the webhook callback
-      const pollInterval = setInterval(async () => {
-        const checkRes = await fetch(`/api/v1/orders/${orderId}/payment-status/`);
-        if (checkRes.ok) {
-          const statusData = await checkRes.json();
-          if (statusData.is_paid) {
-            clearInterval(pollInterval);
-            alert(`Payment Received! Receipt: ${statusData.payment_reference}`);
-            window.location.href = "/dashboard/";
-          }
+  function getCsrfToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, 10) === "csrftoken=") {
+          cookieValue = decodeURIComponent(cookie.substring(10));
+          break;
         }
-      }, 3000);
-
-      // Stop polling after 60 seconds if timeout occurs
-      setTimeout(() => {
-        clearInterval(pollInterval);
-        if (btn.textContent.includes("Awaiting")) {
-          btn.disabled = false;
-          btn.textContent = "Confirm & Settle Payment";
-          alert("STK prompt timed out or was cancelled. Please try again.");
-        }
-      }, 60000);
-
-    } else {
-      alert("M-Pesa error: " + (data.detail || JSON.stringify(data)));
-      btn.disabled = false;
-      btn.textContent = "Confirm & Settle Payment";
+      }
     }
-  } catch (err) {
-    alert("Network communication error.");
-    btn.disabled = false;
-    btn.textContent = "Confirm & Settle Payment";
+    return cookieValue || "{{ csrf_token }}";
   }
-}
+
+  async function executePayment(orderId) {
+    const btn = document.getElementById("confirm-pay-btn");
+    const phoneInput = document.getElementById("mpesa-phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) {
+      alert("Please enter a valid M-Pesa phone number.");
+      if (phoneInput) phoneInput.focus();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Sending STK Prompt to phone...";
+
+    const token = getCsrfToken();
+    console.log("Sending STK push to /api/v1/orders/" + orderId + "/pay/ with CSRF:", Boolean(token));
+
+    try {
+      const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": token
+        },
+        body: JSON.stringify({ phone: phone })
+      });
+
+      console.log("Response status code:", res.status);
+      const data = await res.json();
+      console.log("Response JSON:", data);
+
+      if (res.ok) {
+        btn.textContent = "Awaiting PIN on phone...";
+        
+        // Poll every 3 seconds for payment status update from webhook
+        const pollInterval = setInterval(async () => {
+          try {
+            const checkRes = await fetch(`/api/v1/orders/${orderId}/payment-status/`);
+            if (checkRes.ok) {
+              const statusData = await checkRes.json();
+              if (statusData.is_paid) {
+                clearInterval(pollInterval);
+                alert(`Payment Received! Receipt: ${statusData.payment_reference || 'CONFIRMED'}`);
+                window.location.href = "/dashboard/";
+              }
+            }
+          } catch (pollErr) {
+            console.error("Polling check error:", pollErr);
+          }
+        }, 3000);
+
+        // Cancel polling after 60 seconds
+        setTimeout(() => {
+          clearInterval(pollInterval);
+          if (btn.textContent.includes("Awaiting")) {
+            btn.disabled = false;
+            btn.textContent = "Confirm & Settle Payment (Ksh {{ order.total_cost }})";
+            alert("STK prompt timed out or was cancelled. Please try again.");
+          }
+        }, 60000);
+
+      } else {
+        alert("M-Pesa error: " + (data.detail || JSON.stringify(data)));
+        btn.disabled = false;
+        btn.textContent = "Confirm & Settle Payment (Ksh {{ order.total_cost }})";
+      }
+    } catch (err) {
+      console.error("Payment execution error details:", err);
+      alert("Network communication error: " + err.message);
+      btn.disabled = false;
+      btn.textContent = "Confirm & Settle Payment (Ksh {{ order.total_cost }})";
+    }
+  }
 </script>
 {% endblock %}

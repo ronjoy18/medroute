@@ -82,8 +82,8 @@
 <!-- Section 2: Active Bookings & Billing Table -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">💳 Active Bookings & Payment Status</h3>
-    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
+    <h3 style="color: var(--primary-deep);">💳 Active Bookings & Payment Status</h3>
+    <p style="font-size: 0.85rem; color: #64748B;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
   </div>
 
   <table class="data-table" id="billing-table">
@@ -105,7 +105,7 @@
 <!-- Section 3: Reports Archive Table -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">📄 Daily Care & Progress Reports</h3>
+    <h3 style="color: var(--primary-deep);">📄 Daily Care & Progress Reports</h3>
   </div>
 
   <table class="data-table" id="results-table">
@@ -147,56 +147,6 @@
       <tr><td colspan="5" style="text-align: center; color: #64748B;">Loading international connections...</td></tr>
     </tbody>
   </table>
-</div>
-<div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--primary-deep);">
-    <span class="badge" style="width: fit-content; margin-bottom: 0.5rem;">CLINICAL LOGISTICS</span>
-    <h1 style="color: var(--primary-deep); margin-bottom: 0.5rem; font-size: 1.75rem;">Getting to Healthcare Shouldn't Be a Struggle</h1>
-    <p style="font-size: 1rem; color: #475569; line-height: 1.6;">
-      When your loved one needs dialysis, hospital checks, or urgent lab evaluations, arranging transport is only half the battle. We assist with step-by-step hospital navigation, driver coordination, and medicine drop-offs.
-    </p>
-  </div>
-
-  <!-- Service Sub-Cards -->
-  <div class="card-grid" style="margin-bottom: 2rem;">
-    
-    <div class="card">
-      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">🚗 Medical Transport & Escort</h3>
-      <p style="font-size: 0.9rem; color: #64748B; flex: 1;">
-        Comfortable, sanitized transport with caregiver accompaniment for dialysis sessions, clinic checks, and mobility transfers.
-      </p>
-      <a href="/dashboard/" class="clinical-btn btn-teal" style="margin-top: 1rem; text-align: center;">
-        Arrange Transport
-      </a>
-    </div>
-
-    <div class="card">
-      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">🏥 Hospital Errands & Queuing</h3>
-      <p style="font-size: 0.9rem; color: #64748B; flex: 1;">
-        Navigating reception desks, submitting laboratory specimen samples, and coordinating files while your loved one rests comfortably.
-      </p>
-      <a href="/dashboard/" class="clinical-btn btn-teal" style="margin-top: 1rem; text-align: center;">
-        Request Errand Assistance
-      </a>
-    </div>
-
-    <div class="card">
-      <h3 style="color: var(--primary-deep); margin-bottom: 0.5rem;">💊 Prescription Refill & Delivery</h3>
-      <p style="font-size: 0.9rem; color: #64748B; flex: 1;">
-        Reliable pickup and home delivery of verified prescriptions directly from the hospital pharmacy to your doorstep.
-      </p>
-      <a href="/dashboard/" class="clinical-btn btn-teal" style="margin-top: 1rem; text-align: center;">
-        Order Medicine Delivery
-      </a>
-    </div>
-
-  </div>
-
-  <div class="card" style="text-align: center; background: #F0FDF4; border-color: #BBF7D0;">
-    <h3 style="color: #166534; margin-bottom: 0.5rem;">Focus on Healing. We’ll Handle the Journey.</h3>
-    <p style="font-size: 0.9rem; color: #15803D; margin-bottom: 1rem;">Need urgent assistance for an upcoming dialysis session or specialist visit?</p>
-    <a href="/dashboard/" class="clinical-btn btn-primary" style="display: inline-flex;">Schedule Transport & Errand Support</a>
-  </div>
-
 </div>
 {% endblock %}
 
@@ -298,9 +248,12 @@
                   ? `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #166534; background: #DCFCE7; border: 1px solid #86EFAC;">Completed</span>`
                   : `<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: #991B1B; background: #FEE2E2; border: 1px solid #FCA5A5;">Pending</span>`}
               </td>
-              <td>
+              <td style="display: flex; gap: 6px; align-items: center;">
                 ${!o.is_paid 
-                  ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 10px; font-size: 0.8rem; text-decoration: none;">Pay Now</a>`
+                  ? `
+                    <button type="button" onclick="initiateDirectPayment(event, '${o.id}')" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">M-Pesa</button>
+                    <a href="/orders/${o.id}/pay/" class="clinical-btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none;">Checkout</a>
+                  `
                   : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
               </td>
             </tr>
@@ -318,6 +271,55 @@
       });
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  async function initiateDirectPayment(event, orderId) {
+    if (event && event.preventDefault) event.preventDefault();
+
+    const phone = prompt("Enter your M-Pesa phone number (e.g. 07XXXXXXXX or 2547XXXXXXXX):");
+    if (!phone) return;
+
+    const token = getCsrfToken();
+
+    try {
+      const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": token
+        },
+        body: JSON.stringify({ phone: phone.trim() })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("STK Prompt sent! Enter your M-Pesa PIN on your phone to complete payment.");
+
+        const pollTimer = setInterval(async () => {
+          try {
+            const checkRes = await fetch(`/api/v1/orders/${orderId}/payment-status/`);
+            if (checkRes.ok) {
+              const statusData = await checkRes.json();
+              if (statusData.is_paid) {
+                clearInterval(pollTimer);
+                alert(`Payment confirmed! Receipt: ${statusData.payment_reference || 'N/A'}`);
+                loadPatientOrders();
+              }
+            }
+          } catch (pollErr) {
+            console.error("Polling error:", pollErr);
+          }
+        }, 3000);
+
+        setTimeout(() => clearInterval(pollTimer), 60000);
+      } else {
+        alert("Payment initiation failed: " + (data.detail || JSON.stringify(data)));
+      }
+    } catch (err) {
+      console.error("Direct payment fetch error:", err);
+      alert("Network communication error: " + err.message);
     }
   }
 
