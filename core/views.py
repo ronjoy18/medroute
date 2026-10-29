@@ -344,45 +344,7 @@ class PatientProfileDetailAPIView(views.APIView):
         })
 
 
-class SimulatePaymentAPIView(views.APIView):
-    """Simulated payment endpoint under active development."""
-    permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, order_id):
-        order = get_object_or_404(Order, id=order_id)
-        
-        # Verify permissions
-        if request.user.is_patient() and order.patient.user != request.user:
-            return Response({"detail": "Unauthorized"}, status=403)
-        if request.user.is_doctor() and order.ordering_doctor.user != request.user:
-            return Response({"detail": "Unauthorized"}, status=403)
-
-        if order.is_paid:
-            return Response({"message": "Order is already paid."})
-
-        order.is_paid = True
-        order.save()  # Triggers referral bonuses and signals
-
-        return Response({
-            "message": "Payment simulation successful. Invoice settled and bonuses updated.",
-            "status": "PAID"
-        })
-
-    
-
-def payment_checkout_view(request, order_id):
-    """Renders the dedicated clinical checkout page for a specific order."""
-    if not request.user.is_authenticated:
-        return redirect("auth-page")
-    order = get_object_or_404(Order, id=order_id)
-    
-    # Ownership boundary: Only the owner patient or the ordering doctor can access
-    if request.user.is_patient() and order.patient.user != request.user:
-        raise Http404("Unauthorized order reference.")
-    if request.user.is_doctor() and order.ordering_doctor and order.ordering_doctor.user != request.user:
-        raise Http404("Unauthorized order reference.")
-        
-    return render(request, "payment_checkout.html", {"order": order})
 
 
 class GlobalDoctorDirectoryAPIView(views.APIView):

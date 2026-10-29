@@ -24,8 +24,6 @@ urlpatterns = [
     path("api/v1/doctor/my-patients/", views.DoctorMyPatientsAPIView.as_view(), name="api-doctor-my-patients"),
     path("api/v1/doctor/my-patients/<uuid:patient_id>/", views.DoctorPatientDetailAPIView.as_view(), name="api-doctor-patient-detail"),
     path("api/v1/patient/me/", views.PatientProfileDetailAPIView.as_view(), name="api-patient-me"),
-    path("api/v1/orders/<uuid:order_id>/pay/", views.SimulatePaymentAPIView.as_view(), name="api-simulate-pay"),
-    path("orders/<uuid:order_id>/pay/", views.payment_checkout_view, name="order-payment-page"),
     path("directory/doctors/", views.global_doctor_directory_page, name="global-doctor-directory"),
     path("api/v1/global-doctors/", views.GlobalDoctorDirectoryAPIView.as_view(), name="api-global-doctors"),
     path("api/v1/global-doctors/<int:doctor_id>/connect/", views.GlobalDoctorInquiryCreateAPIView.as_view(), name="api-doctor-connect"),
@@ -41,6 +39,9 @@ urlpatterns = [
     path("api/v1/care-connect/", views.ConnectCaregiverAPIView.as_view(), name="care-connect-api"),
     path("caregiver/thank-you/", views.info_view, name="caregiver-info-page"),
     path("legality/privacy/", views.privacy_view, name="privacy-policy"),
-    path("terms_of_service/", views.terms_view, name="terms-of-use")
+    path("terms_of_service/", views.terms_view, name="terms-of-use"),
+    path("api/v1/orders/<uuid:order_id>/pay/", views.InitiateMpesaPaymentAPIView.as_view(), name="order-mpesa-pay"),
+    path("api/v1/orders/<uuid:order_id>/payment-status/", views.CheckPaymentStatusAPIView.as_view(), name="order-payment-status"),
+    path("api/v1/mpesa/callback/", views.MpesaCallbackWebhookView.as_view(), name="mpesa-callback"),
 ]
 

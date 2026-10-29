@@ -78,31 +78,62 @@
 
   
  async function executePayment(orderId) {
-    const btn = document.getElementById("confirm-pay-btn");
-    btn.disabled = true;
-    btn.textContent = "Verifying Transaction...";
+  const btn = document.getElementById("confirm-pay-btn");
+  const phone = prompt("Enter the M-Pesa phone number to prompt (e.g., 07XX... or 01XX...):");
+  
+  if (!phone) return;
 
-    try {
-      const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken")
+  btn.disabled = true;
+  btn.textContent = "Sending STK Prompt to phone...";
+
+  try {
+    const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: JSON.stringify({ phone: phone })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      btn.textContent = "Awaiting PIN on phone...";
+      
+      // Poll every 3 seconds to see when Safaricom sends the webhook callback
+      const pollInterval = setInterval(async () => {
+        const checkRes = await fetch(`/api/v1/orders/${orderId}/payment-status/`);
+        if (checkRes.ok) {
+          const statusData = await checkRes.json();
+          if (statusData.is_paid) {
+            clearInterval(pollInterval);
+            alert(`Payment Received! Receipt: ${statusData.payment_reference}`);
+            window.location.href = "/dashboard/";
+          }
         }
-      });
+      }, 3000);
 
-      if (res.ok) {
-        alert("Payment Confirmed Successfully!\nThe order is now registered as paid.");
-        window.location.href = "/dashboard/";
-      } else {
-        alert("Transaction could not be authorized. Please try again.");
-        btn.disabled = false;
-        btn.textContent = "Confirm & Settle Payment";
-      }
-    } catch (e) {
-      alert("Network communication failure during payment authorization.");
+      // Stop polling after 60 seconds if timeout occurs
+      setTimeout(() => {
+        clearInterval(pollInterval);
+        if (btn.textContent.includes("Awaiting")) {
+          btn.disabled = false;
+          btn.textContent = "Confirm & Settle Payment";
+          alert("STK prompt timed out or was cancelled. Please try again.");
+        }
+      }, 60000);
+
+    } else {
+      alert("M-Pesa error: " + (data.detail || JSON.stringify(data)));
       btn.disabled = false;
+      btn.textContent = "Confirm & Settle Payment";
     }
+  } catch (err) {
+    alert("Network communication error.");
+    btn.disabled = false;
+    btn.textContent = "Confirm & Settle Payment";
   }
+}
 </script>
 {% endblock %}

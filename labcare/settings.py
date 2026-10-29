@@ -8,22 +8,22 @@ DEBUG = True #os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # settings.py
 MPESA_ENVIRONMENT = "sandbox"  # Change to 'production' for live payments
-MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY", "your_consumer_key")
-MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET", "your_consumer_secret")
+MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY", "Sp7I0mZeGRoA6VRwbtrA5jnJO4djJtWATUmzsn7fptwjpRUX")
+MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET", "Qatn7OGki4GEI9vUIkSRiMc4mxkxxW0hW09F78J93SHUNYIAC5BALiaxji7M0NET")
 MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE", "174379")  # Business ShortCode (Till or Paybill)
 MPESA_PASSKEY = os.getenv("MPESA_PASSKEY", "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919")
-MPESA_INITIATOR_PHONE = os.getenv("MPESA_INITIATOR_PHONE", "254708374149")  # Test phone for sandbox
+MPESA_INITIATOR_PHONE = os.getenv("MPESA_INITIATOR_PHONE", "254793294189")  # Test phone for sandbox
 
 # Daraja URLs
 if MPESA_ENVIRONMENT == "production":
     MPESA_AUTH_URL = "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     MPESA_STK_URL = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-    MPESA_CALLBACK_BASE_URL = "https://medroute-xp7i.onrender.com"  # Must be a public HTTPS domain
+    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com/"  # Must be a public HTTPS domain
 else:
     MPESA_AUTH_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     MPESA_STK_URL = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     # For local testing, use ngrok or your Render staging link
-    MPESA_CALLBACK_BASE_URL = "https://medroute-xp7i.onrender.com"
+    MPESA_CALLBACK_BASE_URL = "https://medrouterrands.com/"
 ALLOWED_HOSTS = [
     '*',
     'medrouterrands.com',
