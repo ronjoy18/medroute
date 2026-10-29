@@ -33,7 +33,7 @@
           <strong style="font-size: 1rem; color: #ffffff;">Cookie & Privacy Preferences</strong>
         </div>
         <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0;">
-          We use essential cookies to maintain secure sessions and process payments[cite: 1]. With your consent, we also run analytical tools to optimize navigation[cite: 1]. Read our 
+          We use essential cookies to maintain secure sessions and process payments. With your consent, we also run analytical tools to optimize navigation. Read our 
           <a href="{% url 'privacy-policy' %}" style="color: #38bdf8; text-decoration: underline;">Privacy & Cookies Policy</a>.
         </p>
       </div>
@@ -144,14 +144,17 @@
   <!-- Global Footer -->
   <footer style="padding: 2.5rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
     <div style="margin-bottom: 0.85rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-      <a href="{% url 'privacy-policy' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Privacy & Cookies Policy</a>[cite: 1]
+      <a href="{% url 'privacy-policy' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Privacy & Cookies Policy</a>
       <a href="{% url 'terms-of-use' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Terms of Service</a>
-      <a href="javascript:void(0)" onclick="reopenCookiePreferences()" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">Cookie Preferences</a>[cite: 1]
+      <a href="javascript:void(0)" onclick="reopenCookiePreferences()" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">Cookie Preferences</a>
+      <a href="{% url 'FAQ' %}" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">FAQ</a>
     </div>
-    <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols[cite: 1].</p>
-    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: medroute@errands.com | Web: www.medrouterrands.com</p>[cite: 1]
+    <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols.</p>
+    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: medroute@errands.com | Web: www.medrouterrands.com</p>
   </footer>
-
+  <div>
+    <a href="{% url 'FAQ' %}">FAQ</a>
+  </div>
   <script src="/static/js/app.js"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
