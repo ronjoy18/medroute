@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Medroute Errands{% endblock %}</title>
@@ -18,8 +19,21 @@
     gtag('config', 'G-XXXXXXX');
     console.log("Analytics engine activated legally.");
   </script>
-
+  
   {% block extra_head %}{% endblock %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Browser Tab Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon-16.png' %}">
+
+    <!-- Apple & High-DPI Mobile Tab/Bookmark Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    
+    <!-- Android / Chrome Manifest -->
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <meta name="theme-color" content="#2563eb">
 </head>
 <body data-authenticated="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
 
@@ -150,10 +164,10 @@
       <a href="{% url 'FAQ' %}" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">FAQ</a>
     </div>
     <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols.</p>
-    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: medroute@errands.com | Web: www.medrouterrands.com</p>
+    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254714699432 | Email: info@medrouterrands.com | Web: www.medrouterrands.com</p>
   </footer>
   <div>
-    <a href="{% url 'FAQ' %}">FAQ</a>
+    
   </div>
   <script src="/static/js/app.js"></script>
   {% block extra_scripts %}{% endblock %}

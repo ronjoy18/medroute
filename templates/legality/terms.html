@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service | Medroute Errands{% endblock %}
+
+{% block content %}
+<main class="legal-wrapper">
+    <div class="legal-card">
+        <header class="legal-header">
+            <h1>Terms of Service</h1>
+            <p>Effective Date: October 2026 &bull; Medroute Errands</p>
+        </header>
+
+        <section class="legal-section">
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing our website, creating an account, or engaging Medroute Errands for care coordination, logistics, laboratory bookings, or companion services, you agree to comply with and be bound by these Terms of Service. If you do not agree with these terms, please discontinue use of our platform and services immediately.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>2. Scope of Services</h2>
+            <p>Medroute Errands provides digital coordination and medical errand facilitation services. Our platform coordinates:</p>
+            <ul>
+                <li>Home-based care and certified caregiver/nurse companionship.</li>
+                <li>Medical appointment scheduling and healthcare provider referrals.</li>
+                <li>Patient transit and medical escort logistics.</li>
+                <li>Diagnostic laboratory test booking, sample collection coordination, and digital report retrieval.</li>
+            </ul>
+        </section>
+
+        <section class="legal-section">
+            <h2>3. Healthcare Disclaimer</h2>
+            <p>Medroute Errands is a logistics and healthcare coordination facilitator, not an emergency medical responder or direct diagnostic testing laboratory. Direct clinical care, diagnoses, and medical advice are delivered independently by certified third-party doctors, nurses, registered caregivers, and licensed clinical laboratories. If you are experiencing a life-threatening medical emergency, please contact local emergency medical services or visit the nearest hospital emergency department immediately.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>4. User Accounts and Verification</h2>
+            <p>When creating an account on our platform (as a Patient, Doctor, or Caregiver), you agree to provide true, accurate, and current information. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. Notify our support team immediately if you suspect unauthorized access to your account.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>5. Service Bookings, Fees, and Payments</h2>
+            <p>Users must adhere to the following scheduling and financial guidelines:</p>
+            <ul>
+                <li><strong>Operating Hours:</strong> Standard scheduled companionship and errand bookings operate strictly between 06:00 AM and 06:00 PM local time.</li>
+                <li><strong>Payment:</strong> Fees for services, tests, or companion sessions are transparently indicated prior to checkout. Payments processed via M-Pesa or other integrated gateways must be settled in full to confirm requests.</li>
+                <li><strong>Cancellations:</strong> Cancellations made before dispatch or laboratory sample mobilization may qualify for credit adjustments or refunds subject to third-party provider costs.</li>
+            </ul>
+        </section>
+
+        <section class="legal-section">
+            <h2>6. Client Responsibilities and Safety</h2>
+            <p>Clients and their authorized representatives agree to:</p>
+            <ul>
+                <li>Provide accurate medical context, mobility limitations, and emergency contacts necessary to deliver safe care.</li>
+                <li>Ensure a safe and respectful environment for visiting caregivers, healthcare practitioners, and transit escorts.</li>
+                <li>Refrain from requesting unlawful activities or using our coordination systems for fraudulent purposes.</li>
+            </ul>
+        </section>
+
+        <section class="legal-section">
+            <h2>7. Privacy and Sensitive Health Data</h2>
+            <p>Your privacy is paramount. Personal details, telephone numbers, and sensitive health information gathered during service onboarding are processed under strict safeguards and shared only with authorized practitioners, caregivers, and diagnostic laboratories directly required to fulfill your care. Please review our <a href="{% url 'privacy-policy' %}" style="color: #3182ce; text-decoration: underline;">Privacy Policy</a> for full details.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>8. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by applicable law, Medroute Errands shall not be liable for any indirect, incidental, or consequential damages resulting from third-party clinical judgments, laboratory equipment errors, traffic-related delays, or service disruptions beyond our reasonable control.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>9. Amendments to Terms</h2>
+            <p>We reserve the right to revise or update these Terms of Service periodically to reflect changes in our operational procedures, partner agreements, or legal requirements. Continued use of our website or services following any updates constitutes acceptance of the amended terms.</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>10. Contact Information</h2>
+            <p>If you have questions regarding these Terms of Service, please reach out through our contact page or write to us at:</p>
+            <p><strong>Email:</strong> info@medrouterrands.com<br>
+            <strong>Platform:</strong> Medroute Errands</p>
+        </section>
+
+        <div class="legal-footer-note">
+            <p>For inquiries regarding data protection, consent, or medical confidentiality, refer to our comprehensive Privacy Policy.</p>
+        </div>
+    </div>
+</main>
+{% endblock %}

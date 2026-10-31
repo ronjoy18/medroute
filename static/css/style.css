@@ -406,3 +406,180 @@ body.home-page {
 
 .rule-tracker li.valid::before { content: "✔"; }
 .rule-tracker li.invalid::before { content: "○"; }
+
+    .legal-wrapper {
+        background-color: #f8fafc;
+        min-height: calc(100vh - 120px);
+        padding: 3rem 1rem;
+    }
+    .legal-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2.5rem 3rem;
+    }
+    .legal-header {
+        border-bottom: 2px solid #edf2f7;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .legal-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 0.5rem;
+    }
+    .legal-header p {
+        color: #718096;
+        font-size: 0.95rem;
+    }
+    .legal-section {
+        margin-bottom: 2.25rem;
+    }
+    .legal-section h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #2b6cb0;
+        margin-bottom: 0.75rem;
+    }
+    .legal-section p, 
+    .legal-section li {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    .legal-section ul {
+        padding-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .legal-section li {
+        margin-bottom: 0.5rem;
+    }
+    .legal-footer-note {
+        background-color: #ebf8ff;
+        border-left: 4px solid #3182ce;
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 2rem;
+    }
+    .legal-footer-note p {
+        color: #2b6cb0;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    @media (max-width: 640px) {
+        .legal-card {
+            padding: 1.5rem;
+        }
+        .legal-header h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+/* Container Layout */
+.custom-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  color: #334155; /* Slate-700 */
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide native input visually while keeping it accessible */
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The visual custom checkbox box */
+.checkbox-box {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.1rem; /* Aligns neatly with standard text baselines */
+  border: 1.5px solid #cbd5e1; /* Slate-300 */
+  border-radius: 4px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Checkmark SVG inside the box */
+.checkbox-box svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #ffffff;
+  transform: scale(0);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover state */
+.custom-checkbox:hover .checkbox-box {
+  border-color: #2563eb; /* Primary Blue */
+}
+
+/* Checked state */
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-box {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-box svg {
+  transform: scale(1);
+}
+
+/* Keyboard accessibility outline (Focus Visible) */
+.custom-checkbox input[type="checkbox"]:focus-visible + .checkbox-box {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.custom-checkbox input[type="checkbox"]:disabled + .checkbox-box {
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled ~ .checkbox-label {
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Links inside labels (T&Cs) */
+.checkbox-label a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.checkbox-label a:hover {
+  color: #1d4ed8;
+}
+
+/* Extra touch for filter list badges */
+.filter-item .badge {
+  font-size: 0.75rem;
+  background-color: #f1f5f9;
+  color: #64748b;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  margin-left: 0.35rem;
+}    

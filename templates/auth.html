@@ -87,7 +87,19 @@
       <label style="display: block; font-weight: 600; font-size: 0.85rem;">Confirm Password</label>
       <input type="password" name="password_confirmation" id="auth-password-confirm" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
     </div>
-
+<!-- Terms & Conditions Checkbox -->
+    <label class="custom-checkbox">
+      <input type="checkbox" name="terms" id="agree-terms" required>
+      <span class="checkbox-box" aria-hidden="true">
+        <!--<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; min-width: 12px; display: block;">
+    <polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline>
+    </svg>-->
+        </svg>
+      </span>
+      <span class="checkbox-label">
+      I accept the <a href="{% url 'terms-of-use' %}">Terms of Service</a> and <a href="{% url 'privacy-policy' %}">Privacy Policy</a>.
+      </span>
+    </label>
     <button type="submit" class="clinical-btn btn-teal" style="width: 100%;">Create Account</button>
   </form>
 </div>
