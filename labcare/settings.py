@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "core.apps.CoreConfig",
+    'django.contrib.sitemaps'
 ]
 
 AUTH_USER_MODEL = "core.User"
@@ -82,9 +83,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "labcare.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'medroute_db',        # Full Database Name from cPanel
+        'USER': 'medroute_Ron',      # Full Database User from cPanel
+        'PASSWORD': 'ron123kanyonga456',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 

@@ -25,6 +25,7 @@ from .serializers import (
     DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer,
     CareRequestSerializer
 )
+from django.http import HttpResponse
 from datetime import date, timedelta
 from .permissions import IsInternalStaff, IsDoctorOwner, IsCareGiverOwner,IsPatientOwner, DocumentAccessPermission
 from labcare import settings
@@ -78,6 +79,20 @@ def dashboard_dispatcher(request):
         return redirect("/admin/")
     return redirect("index-page")
 
+from django.http import HttpResponse
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        "Disallow: /dashboard/",
+        "Disallow: /portal/",
+        "Allow: /static/",
+        "Allow: /media/",
+        "Sitemap: https://medrouterrands.com/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 # -------------------------------------------------------------
 # Authentication Endpoints

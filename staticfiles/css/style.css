@@ -1,69 +1,185 @@
+/* ==========================================================================
+   1. Design Tokens & Color Variables
+   ========================================================================== */
 :root {
-  --primary-deep: #0B4F6C;
-  --secondary-teal: #00A896;
-  --sterile-white: #FFFFFF;
-  --neutral-slate: #0F172A;
-  --neutral-soft: #F8FAFC;
-  --border-slate: #E2E8F0;
-  --alert-red: #EF4444;
-  --success-green: #10B981;
+  --primary-deep: #0f172a;
+  --secondary-teal: #00a896;
+  --sterile-white: #ffffff;
+  --neutral-slate: #0f172a;
+  --neutral-soft: #f8fafc;
+  --border-slate: #e2e8f0;
+  --alert-red: #ef4444;
+  --success-green: #10b981;
+  --page-bg: #0b1320;
+  --text-main: #f8fafc;
+  --text-muted: #e2e8f0;
+  --brand-blue: #0284c7;
+  --accent-mint: #5eead4;
+  --accent-mint-dim: rgba(94, 234, 212, 0.25);
+  --glass-card-bg: linear-gradient(
+    135deg,
+    rgba(14, 116, 144, 0.45) 0%,
+    rgba(15, 118, 110, 0.35) 50%,
+    rgba(6, 78, 59, 0.40) 100%
+  );
 }
 
-* {
+/* ==========================================================================
+   2. Reset & Viewport Constraints (Prevents Android Width Stretching)
+   ========================================================================== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: var(--neutral-soft);
   color: var(--neutral-slate);
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-.clinical-nav {
-  background: var(--sterile-white);
-  border-bottom: 1px solid var(--border-slate);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Dark background ONLY on the welcome/advert home page */
+body.home-page {
+  background-color: var(--page-bg);
+  color: var(--text-main);
 }
 
-.clinical-nav .brand {
-  font-size: 1.5rem;
-  font-weight: 800;
+.main-content {
+  flex: 1;
+  padding: 1.25rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+.star {
+  color: var(--alert-red);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. Distinct White Navigation Bar (Clean & Aligned)
+   ========================================================================== */
+.top-nav {
+  width: 100%;
+  height: 64px;
+  background-color: var(--sterile-white);
+  border-bottom: 2px solid var(--border-slate);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 100;
+}
+
+/* Clickable Brand Logo: No purple link, no underline */
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--primary-deep);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
-.clinical-btn {
-  padding: 0.65rem 1.25rem;
-  border-radius: 6px;
-  border: 1px solid transparent;
+.brand:hover,
+.brand:visited,
+.brand:active {
+  text-decoration: none;
+  color: var(--primary-deep);
+}
+
+.brand-teal {
+  color: var(--secondary-teal);
+}
+
+/* Right-aligned Navigation Controls */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* Secondary Sub-navigation Row (About us & Global Doctors) */
+.sub-nav-bar {
+  background-color: #f1f5f9;
+  border-bottom: 1px solid var(--border-slate);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.nav-link {
+  color: var(--primary-deep);
   font-weight: 600;
+  text-decoration: none;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   4. Preserved Button Styles
+   ========================================================================== */
+.clinical-btn {
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
-.table-responsive {
-  width: 100%;
-  overflow-x: auto; /* Adds horizontal scroll ONLY when table exceeds card width */
-  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS Safari */
+.clinical-btn:hover {
+  text-decoration: none;
 }
 
 .btn-primary {
   background-color: var(--primary-deep);
   color: var(--sterile-white);
+  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
   background-color: #083c53;
+  color: var(--sterile-white);
 }
 
 .btn-teal {
@@ -73,10 +189,11 @@ body {
 
 .btn-teal:hover {
   background-color: #028a7b;
+  color: var(--sterile-white);
 }
 
 .btn-outline {
-  border-color: var(--primary-deep);
+  border: 1px solid var(--primary-deep);
   color: var(--primary-deep);
   background: transparent;
 }
@@ -85,19 +202,28 @@ body {
   background: var(--neutral-soft);
 }
 
-.main-content {
-  flex: 1;
-  padding: 2.5rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
+.btn-phone {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid var(--border-slate);
 }
 
-/* Card Structures */
+.nav-btn.primary {
+  background-color: var(--brand-blue);
+  color: var(--sterile-white);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   5. Card Layouts & Grid Structures
+   ========================================================================== */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
   margin-top: 1.5rem;
 }
 
@@ -105,13 +231,157 @@ body {
   background: var(--sterile-white);
   border: 1px solid var(--border-slate);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-/* Password Engine Elements */
+/* ==========================================================================
+   6. Responsive Tables (Smooth Horizontal Scrolling on Phones)
+   ========================================================================== */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+  border: 1px solid var(--border-slate);
+  border-radius: 8px;
+  background: var(--sterile-white);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-slate);
+  font-size: 0.875rem;
+}
+
+.data-table th {
+  background: var(--neutral-soft);
+  font-weight: 700;
+  color: var(--primary-deep);
+}
+
+/* ==========================================================================
+   7. Glass Card Component (For Welcome Ad Page)
+   ========================================================================== */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  flex: 1;
+}
+
+.glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 75dvh;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--accent-mint-dim);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--card-bg-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  padding: 1.75rem 1.5rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(45, 212, 191, 0.2);
+  color: var(--accent-mint);
+  margin-bottom: 0.75rem;
+}
+
+.card-content h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.card-content p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.advance-arrow {
+  position: relative;
+  z-index: 2;
+  align-self: flex-end;
+  margin: 0 1.5rem 1.5rem 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(94, 234, 212, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--accent-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.advance-arrow svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.advance-arrow:active {
+  transform: scale(0.92);
+  background: rgba(20, 184, 166, 0.3);
+}
+
+.advance-arrow:hover svg {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   8. Password Rule Tracker & Toasts
+   ========================================================================== */
 .rule-tracker {
   list-style: none;
   margin-top: 0.75rem;
@@ -122,7 +392,7 @@ body {
 
 .rule-tracker li {
   font-size: 0.825rem;
-  color: #64748B;
+  color: #64748b;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -134,32 +404,182 @@ body {
   font-weight: 600;
 }
 
-.rule-tracker li.valid::before {
-  content: "✔";
+.rule-tracker li.valid::before { content: "✔"; }
+.rule-tracker li.invalid::before { content: "○"; }
+
+    .legal-wrapper {
+        background-color: #f8fafc;
+        min-height: calc(100vh - 120px);
+        padding: 3rem 1rem;
+    }
+    .legal-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2.5rem 3rem;
+    }
+    .legal-header {
+        border-bottom: 2px solid #edf2f7;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .legal-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 0.5rem;
+    }
+    .legal-header p {
+        color: #718096;
+        font-size: 0.95rem;
+    }
+    .legal-section {
+        margin-bottom: 2.25rem;
+    }
+    .legal-section h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #2b6cb0;
+        margin-bottom: 0.75rem;
+    }
+    .legal-section p, 
+    .legal-section li {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    .legal-section ul {
+        padding-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .legal-section li {
+        margin-bottom: 0.5rem;
+    }
+    .legal-footer-note {
+        background-color: #ebf8ff;
+        border-left: 4px solid #3182ce;
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 2rem;
+    }
+    .legal-footer-note p {
+        color: #2b6cb0;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    @media (max-width: 640px) {
+        .legal-card {
+            padding: 1.5rem;
+        }
+        .legal-header h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+/* Container Layout */
+.custom-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  color: #334155; /* Slate-700 */
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
 }
 
-.rule-tracker li.invalid::before {
-  content: "○";
-}
-
-/* Data Table Architecture */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--sterile-white);
-  border-radius: 8px;
+/* Hide native input visually while keeping it accessible */
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-  border: 1px solid var(--border-slate);
-  margin-top: 1rem;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.data-table th, .data-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border-slate);
+/* The visual custom checkbox box */
+.checkbox-box {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.1rem; /* Aligns neatly with standard text baselines */
+  border: 1.5px solid #cbd5e1; /* Slate-300 */
+  border-radius: 4px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-in-out;
 }
 
-.data-table th {
-  background: var(--neutral-soft);
-  font-weight: 700;
+/* Checkmark SVG inside the box */
+.checkbox-box svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #ffffff;
+  transform: scale(0);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Hover state */
+.custom-checkbox:hover .checkbox-box {
+  border-color: #2563eb; /* Primary Blue */
+}
+
+/* Checked state */
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-box {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-box svg {
+  transform: scale(1);
+}
+
+/* Keyboard accessibility outline (Focus Visible) */
+.custom-checkbox input[type="checkbox"]:focus-visible + .checkbox-box {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.custom-checkbox input[type="checkbox"]:disabled + .checkbox-box {
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled ~ .checkbox-label {
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Links inside labels (T&Cs) */
+.checkbox-label a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.checkbox-label a:hover {
+  color: #1d4ed8;
+}
+
+/* Extra touch for filter list badges */
+.filter-item .badge {
+  font-size: 0.75rem;
+  background-color: #f1f5f9;
+  color: #64748b;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  margin-left: 0.35rem;
+}    
