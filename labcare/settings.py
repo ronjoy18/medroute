@@ -84,18 +84,17 @@ WSGI_APPLICATION = "labcare.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'medroute_db',        # Full Database Name from cPanel
-        'USER': 'medroute_Ron',      # Full Database User from cPanel
-        'PASSWORD': 'ron123kanyonga456',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',  # Use 'django.db.backends.mysql' for MySQL
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
+
+       # 'OPTIONS': {
+          #  'charset': 'utf8mb4',
+          #  'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+       # },
+   # }
+#}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
