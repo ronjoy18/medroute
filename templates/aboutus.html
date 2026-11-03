@@ -2,65 +2,349 @@
 {% load static %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
-  
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">What is Medroute Errands?</h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      Medroute Errands provides rapid diagnostic testing coordination, home medical specimen pickups, and dedicated caregiver routing across the region.
-    </p>
-    <a href="{% url 'index-page' %}" class="clinical-btn btn-teal" style="width: 100%;">
-      Back to Home Catalog
-    </a>
-  </div>
+<div class="legal-wrapper" style="background-color: var(--neutral-soft); padding: 2rem 1rem;">
+  <div class="legal-card" style="max-width: 1050px;">
+    
+    <!-- Hero Header -->
+    <header class="about-hero">
+      <span class="badge" style="background: rgba(0, 168, 150, 0.12); color: var(--secondary-teal);">About Medroute Errands</span>
+      <h1>Bridging Families, Caregivers, & Healthcare Providers</h1>
+      <p class="lead">
+        When someone you love needs ongoing care, managing daily needs, monitoring health, arranging hospital visits, and staying in touch with their physician can quickly become overwhelming. At Medroute Errands, we ensure families never walk this journey alone.
+      </p>
+    </header>
 
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Why Medroute Errands?</h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      We bridge patients, licensed caregivers, and international medical specialists through unified scheduling and guaranteed turnaround times.
-    </p>
-    <a href="{% url 'about-us' %}" class="clinical-btn btn-teal" style="width: 100%;">
-      Explore Our Mission
-    </a>
-  </div>
+    <!-- Mission & Vision -->
+    <section class="mv-grid">
+      <div class="mv-card mission">
+        <h3>Our Mission</h3>
+        <p>To provide accessible, compassionate, and coordinated home-based care and medical support services that improve patients’ well-being and give families peace of mind[cite: 2].</p>
+      </div>
+      <div class="mv-card vision">
+        <h3>Our Vision</h3>
+        <p>To become a trusted leader in integrated home-based care and medical support services in Kenya, transforming how patients, families, caregivers, and healthcare professionals connect and collaborate to deliver accessible, compassionate, and patient-centred care[cite: 2].</p>
+      </div>
+    </section>
 
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Physicians</h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      Expand your reach or seek consultations from internationally verified medical specialists.
-    </p>
-    <a href="{% url 'auth-page' %}?mode=register&role=doctor" class="clinical-btn btn-teal" style="width: 100%;">
-      Register as a Global Doctor
-    </a>
-  </div>
+    <!-- Agency Narrative -->
+    <section class="legal-section">
+      <h2>About Medroute Errands</h2>
+      <p>
+        Based in Kenya, Medroute Errands is a medical support and care-coordination agency that connects families with home-based caregivers, nurses, drivers, and patients’ physicians[cite: 2]. Our services support people living with long-term health conditions, disabilities, or limited mobility who need consistent care, monitoring, and help accessing healthcare[cite: 2].
+      </p>
+      <p style="margin-top: 0.75rem;">
+        We bring together the people and services involved in your loved one's care, ensuring nothing important is managed in isolation[cite: 2].
+      </p>
+    </section>
 
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Caregivers</h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      Schedule home companion care or request verified bedside clinical assistance.
-    </p>
-    <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal" style="width: 100%;">
-      Request a Care Giver
-    </a>
-  </div>
+    <!-- How We Make a Difference (Card Grid) -->
+    <section class="legal-section">
+      <h2>How We Make a Difference</h2>
+      <div class="card-grid" style="margin-top: 1rem;">
+        <div class="card">
+          <div>
+            <h3 style="color: var(--primary-deep); font-size: 1.1rem; margin-bottom: 0.5rem;">1. Home-Based Care That Keeps You Informed[cite: 2]</h3>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.55;">
+              We connect your family with home-based caregivers who assist your loved one with personal care, daily activities, and mobility[cite: 2]. Our nursing team reviews daily caregiver logs and compiles weekly reports to coordinate follow-ups with the client's physician[cite: 2].
+            </p>
+          </div>
+        </div>
 
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Patient Intake</h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      Sign in to check pending test reports, orders, and caregiver appointment schedules.
-    </p>
-    <a href="{% url 'auth-page' %}?mode=login&role=patient" class="clinical-btn btn-teal" style="width: 100%;">
-      Patient Sign In
-    </a>
-  </div>
-  <div class="card">
-    <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Contact us </h2>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      you can contact us through <a href=" https://wa.me/+254793294189" class="clinical-btn btn-teal" style="width: 100%;">Whatsapp</a>
-    </p>
-    <p style="color: #64748B; line-height: 1.6; margin-bottom: 1rem;">
-      Or Call <div style="font-weight: bold; color: #ff4500;">📞 +254793294189</div>
-    </p>
+        <div class="card">
+          <div>
+            <h3 style="color: var(--primary-deep); font-size: 1.1rem; margin-bottom: 0.5rem;">2. Medical Appointments Without the Added Stress[cite: 2]</h3>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.55;">
+              From routine consultations to regular dialysis visits, we arrange comfortable transport, provide caregiver accompaniment, assist with hospital errands, and ensure your loved one returns home safely[cite: 2].
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div>
+            <h3 style="color: var(--primary-deep); font-size: 1.1rem; margin-bottom: 0.5rem;">3. Access to Licensed Medical Specialists[cite: 2]</h3>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.55;">
+              Through our verified network, you can explore available medical professionals across different clinical specialties and connect directly with a verified physician suited to your loved one’s specific diagnostic needs[cite: 2].
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div>
+            <h3 style="color: var(--primary-deep); font-size: 1.1rem; margin-bottom: 0.5rem;">4. One Connected Approach to Care[cite: 2]</h3>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.55;">
+              Care involves family members, caregivers, nurses, drivers, and doctors[cite: 2]. Our integrated digital platform synchronizes updates and clinical observations to support seamless continuity of care[cite: 2].
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Workflow / Animated Architecture Diagram -->
+    <section class="workflow-container">
+      <div class="workflow-intro">
+        <span class="badge" style="background: rgba(2, 132, 199, 0.12); color: var(--brand-blue);">Workflow Architecture</span>
+        <h3>How Medroute Coordinates Care</h3>
+        <p>A closed-loop system connecting patient homes, deployed caregivers, internal nursing officers, medical specialists, and hospital facilities[cite: 2].</p>
+      </div>
+
+      <div class="workflow-canvas-wrapper">
+        <svg class="workflow-svg" viewBox="0 0 780 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Drop Shadows -->
+            <filter id="shadow-card" x="-10%" y="-10%" width="120%" height="125%" filterUnits="userSpaceOnUse">
+              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+            </filter>
+            <filter id="glow-teal" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            
+            <!-- Gradients -->
+            <linearGradient id="grad-medroute" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0f172a" />
+              <stop offset="100%" stop-color="#0e7490" />
+            </linearGradient>
+            <linearGradient id="grad-home" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00a896" />
+              <stop offset="100%" stop-color="#0284c7" />
+            </linearGradient>
+            
+            <!-- Markers -->
+            <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#00a896" />
+            </marker>
+            <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7" />
+            </marker>
+            <marker id="arrow-slate" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#64748b" />
+            </marker>
+          </defs>
+
+          <!-- ================= PATH CONNECTIONS ================= -->
+          <!-- 1. Home <-> Medroute (Top: Deployment, Bottom: Reports) -->
+          <!-- Forward: Medroute sends caregiver to Home -->
+          <path d="M 330 145 C 260 115, 230 115, 175 145" stroke="#00a896" stroke-width="2.5" class="flow-line-reverse" marker-start="url(#arrow-teal)" />
+          
+          <!-- Reverse: Caregiver sends observations / Medroute delivers refined reports -->
+          <path d="M 175 185 C 230 215, 260 215, 330 185" stroke="#0284c7" stroke-width="2.5" class="flow-line-forward" marker-end="url(#arrow-blue)" />
+
+          <!-- 2. Medroute <-> Specialist (Top Right) -->
+          <!-- Medroute sends report to Specialist -->
+          <path d="M 450 145 C 500 110, 540 85, 600 78" stroke="#0284c7" stroke-width="2.5" class="flow-line-forward" marker-end="url(#arrow-blue)" />
+          <!-- Specialist sends back refined review to Medroute -->
+          <path d="M 600 95 C 540 105, 500 140, 450 160" stroke="#00a896" stroke-width="2" class="flow-line-reverse" marker-start="url(#arrow-teal)" />
+
+          <!-- 3. Medroute -> Hospital Service / Errand (Bottom Right) -->
+          <path d="M 450 185 C 510 210, 550 240, 600 260" stroke="#64748b" stroke-width="2.5" class="flow-line-forward" marker-end="url(#arrow-slate)" />
+
+          <!-- ================= FLOW LABELS (BADGES) ================= -->
+          <!-- Label 1: Deploy Caregiver -->
+          <g transform="translate(195, 105)">
+            <rect width="115" height="22" rx="11" fill="#ecfdf5" stroke="#a7f3d0" />
+            <text x="57" y="15" fill="#065f46" font-size="9" font-weight="700" text-anchor="middle">1. Deploys Caregiver</text>
+          </g>
+
+          <!-- Label 2: Daily Reports & Refined Delivery -->
+          <g transform="translate(195, 205)">
+            <rect width="115" height="22" rx="11" fill="#f0f9ff" stroke="#bae6fd" />
+            <text x="57" y="15" fill="#0369a1" font-size="9" font-weight="700" text-anchor="middle">2. Daily / Refined Reports</text>
+          </g>
+
+          <!-- Label 3: Specialist Review Loop -->
+          <g transform="translate(480, 92)">
+            <rect width="105" height="22" rx="11" fill="#f8fafc" stroke="#e2e8f0" />
+            <text x="52" y="15" fill="#334155" font-size="9" font-weight="700" text-anchor="middle">3. Clinical Review Loop</text>
+          </g>
+
+          <!-- Label 4: Hospital Errand Service -->
+          <g transform="translate(485, 230)">
+            <rect width="110" height="22" rx="11" fill="#f1f5f9" stroke="#cbd5e1" />
+            <text x="55" y="15" fill="#475569" font-size="9" font-weight="700" text-anchor="middle">4. Hospital Errand Transit</text>
+          </g>
+
+          <!-- ================= NODE 1: HOME & CAREGIVER ================= -->
+          <g class="anim-float-home" filter="url(#shadow-card)">
+            <!-- Card Background -->
+            <rect x="20" y="105" width="155" height="120" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+            <rect x="20" y="105" width="155" height="6" rx="3" fill="#00a896" />
+            
+            <!-- Animated House Graphic -->
+            <g transform="translate(75, 120)">
+              <!-- Chimney -->
+              <rect x="30" y="8" width="6" height="12" fill="#cbd5e1" />
+              <!-- Roof -->
+              <path d="M 0 20 L 22 2 L 44 20 Z" fill="#00a896" />
+              <!-- Body -->
+              <rect x="6" y="19" width="32" height="24" fill="#f8fafc" stroke="#00a896" stroke-width="1.5" />
+              <!-- Door & Window -->
+              <rect x="18" y="29" width="8" height="14" rx="2" fill="#0f172a" />
+              <rect x="10" y="24" width="5" height="5" fill="#5eead4" />
+              <rect x="29" y="24" width="5" height="5" fill="#5eead4" />
+              <!-- Caregiver Heart Badge -->
+              <circle cx="36" cy="10" r="8" fill="#ef4444" />
+              <path d="M 33 9 C 33 7, 36 6, 36 9 C 36 6, 39 7, 39 9 C 39 11, 36 13, 36 13 C 36 13, 33 11, 33 9 Z" fill="#ffffff" />
+            </g>
+
+            <text x="97" y="185" fill="#0f172a" font-size="12" font-weight="700" text-anchor="middle">Home / Patient</text>
+            <text x="97" y="202" fill="#64748b" font-size="10" text-anchor="middle">&amp; Assigned Caregiver</text>
+          </g>
+
+          <!-- ================= NODE 2: MEDROUTE CENTRAL COORDINATION ================= -->
+          <g class="anim-medroute-hub" filter="url(#shadow-card)">
+            <!-- Central Command Card -->
+            <rect x="330" y="90" width="150" height="150" rx="20" fill="url(#grad-medroute)" />
+            
+            <!-- Glowing Brand Monogram / Headquarters Icon -->
+            <g transform="translate(382, 110)">
+              <!-- Building Outline -->
+              <rect x="0" y="10" width="46" height="42" rx="4" fill="rgba(255, 255, 255, 0.12)" stroke="#5eead4" stroke-width="1.5" />
+              <!-- Lit Windows -->
+              <rect x="6" y="16" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="16" y="16" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="26" y="16" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="6" y="26" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="16" y="26" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="26" y="26" width="6" height="6" rx="1" fill="#5eead4" />
+              <rect x="18" y="38" width="10" height="14" fill="#ffffff" />
+              <!-- Radar Pulse Ring -->
+              <circle cx="23" cy="2" r="6" fill="#00a896" />
+              <circle cx="23" cy="2" r="10" stroke="#5eead4" stroke-width="1.2" opacity="0.6" />
+            </g>
+
+            <text x="405" y="180" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">Medroute Errands</text>
+            <text x="405" y="197" fill="#5eead4" font-size="10" font-weight="600" text-anchor="middle">Nurse Coordination Hub</text>
+            <text x="405" y="214" fill="#94a3b8" font-size="9" text-anchor="middle">Reviews, Triages &amp; Dispatches</text>
+          </g>
+
+          <!-- ================= NODE 3: SPECIALIST / PHYSICIAN ================= -->
+          <g class="anim-float-doc" filter="url(#shadow-card)">
+            <rect x="600" y="35" width="160" height="95" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+            <rect x="600" y="35" width="160" height="5" rx="2" fill="#0284c7" />
+            
+            <!-- Stethoscope & Doctor Icon -->
+            <g transform="translate(615, 52)">
+              <circle cx="16" cy="16" r="14" fill="#e0f2fe" />
+              <!-- Medical Cross -->
+              <path d="M 16 9 L 16 23 M 9 16 L 23 16" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" />
+            </g>
+            
+            <text x="685" y="66" fill="#0f172a" font-size="11" font-weight="700">Specialist Physician</text>
+            <text x="685" y="82" fill="#64748b" font-size="9">Evaluates Health Data</text>
+            <text x="685" y="96" fill="#0284c7" font-size="9" font-weight="600">&amp; Refines Care Directives</text>
+          </g>
+
+          <!-- ================= NODE 4: HOSPITAL ERRAND & CLINIC ================= -->
+          <g class="anim-float-hosp" filter="url(#shadow-card)">
+            <rect x="600" y="210" width="160" height="95" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+            <rect x="600" y="210" width="160" height="5" rx="2" fill="#64748b" />
+            
+            <!-- Hospital / Transit Icon -->
+            <g transform="translate(615, 230)">
+              <circle cx="16" cy="16" r="14" fill="#f1f5f9" />
+              <!-- Hospital Building with Ambulatory Car -->
+              <rect x="7" y="11" width="18" height="14" rx="2" fill="#64748b" />
+              <path d="M 16 14 L 16 20 M 13 17 L 19 17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+            </g>
+
+            <text x="685" y="242" fill="#0f172a" font-size="11" font-weight="700">Hospital Errand Services</text>
+            <text x="685" y="258" fill="#64748b" font-size="9">Assisted Dialysis Visits,</text>
+            <text x="685" y="272" fill="#475569" font-size="9" font-weight="600">Diagnostics &amp; Safe Transit</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Explanatory Legend -->
+      <div class="workflow-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: var(--secondary-teal);"></div>
+          <div>
+            <strong>1. Field Deployment &amp; Vitals</strong>
+            <p>Caregivers deployed to client homes capture daily observations and report back to Medroute nursing leads[cite: 2].</p>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: var(--brand-blue);"></div>
+          <div>
+            <strong>2. Specialist Triage Loop</strong>
+            <p>Medroute compiles weekly summaries, transmits them to doctors, and returns refined instructions to families[cite: 2].</p>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #64748b;"></div>
+          <div>
+            <strong>3. Assisted Transit &amp; Errands</strong>
+            <p>Direct door-to-door coordination for lab collections, prescription pickups, and hospital check-ups[cite: 2].</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="legal-section" style="margin-top: 3rem;">
+      <h2>Why Choose Us</h2>
+      <p style="margin-bottom: 1.25rem;">
+        Inviting someone into your home to care for a loved one requires trust[cite: 2]. At Medroute Errands, we go beyond caregiver placement by providing a support system designed to promote accountability, caregiver well-being, and coordinated care[cite: 2].
+      </p>
+
+      <ul style="list-style: none; padding-left: 0;">
+        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--secondary-teal); font-weight: bold;">✔</span>
+          <strong>1. Nurse-Led Care Coordination:</strong> Our qualified, licensed nurses help coordinate communication between caregivers and the patient's physician[cite: 2]. They review documented care updates and facilitate appropriate follow-up, helping keep the family and healthcare team informed[cite: 2].
+        </li>
+        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--secondary-teal); font-weight: bold;">✔</span>
+          <strong>2. Caregiver Protection and Risk Management:</strong> We provide indemnity protection for our caregivers against risks arising in the course of their duties, subject to applicable policy terms[cite: 2].
+        </li>
+        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--secondary-teal); font-weight: bold;">✔</span>
+          <strong>3. Caregiver Verification and Accountability:</strong> We maintain verified professional records for all deployed personnel, ensuring clear accountability and reliable points of reference[cite: 2].
+        </li>
+        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--secondary-teal); font-weight: bold;">✔</span>
+          <strong>4. Health Insurance for Our Caregivers:</strong> We provide health insurance for our deployed staff because their physical well-being is vital to delivering sustainable, high-quality care[cite: 2].
+        </li>
+        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--secondary-teal); font-weight: bold;">✔</span>
+          <strong>5. Ongoing Emotional &amp; Professional Support:</strong> Caregiving is physically and emotionally demanding[cite: 2]. We provide continuous guidance and encouragement to help our caregivers serve with confidence[cite: 2].
+        </li>
+      </ul>
+    </section>
+
+    <!-- Core Values -->
+    <section class="legal-section">
+      <h2>Our Core Values</h2>
+      <div class="values-grid">
+        <div class="value-box">
+          <h4>Reliability &amp; Accountability[cite: 2]</h4>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5;">We honor our commitments with timely, consistent, and dependable services that families can count on[cite: 2].</p>
+        </div>
+        <div class="value-box">
+          <h4>Accessibility &amp; Inclusivity[cite: 2]</h4>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5;">We reduce structural barriers so vital home healthcare support reaches patients across diverse backgrounds[cite: 2].</p>
+        </div>
+        <div class="value-box">
+          <h4>Compassion &amp; Empathy[cite: 2]</h4>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5;">We treat every patient with warmth, dignity, and deep respect for their unique life circumstances[cite: 2].</p>
+        </div>
+        <div class="value-box">
+          <h4>Patient-Centred Care[cite: 2]</h4>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5;">We honor individual patient preferences and safety to promote total comfort and well-being[cite: 2].</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Footer Note -->
+    <div class="legal-footer-note" style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+      <div>
+        <h3 style="color: #1e3a8a; font-size: 1.15rem; margin-bottom: 0.25rem;">More Than Care at Home. A Support System You Can Trust[cite: 2].</h3>
+        <p style="color: #2b6cb0;">You don't have to coordinate everything alone[cite: 2]. Let's make caring for your loved one safer, organized, and manageable[cite: 2].</p>
+      </div>
+      <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal" style="font-size: 0.95rem; padding: 0.65rem 1.5rem;">
+        Talk to Our Care Coordination Team[cite: 2]
+      </a>
+    </div>
+
   </div>
 </div>
 {% endblock %}

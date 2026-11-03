@@ -583,3 +583,189 @@ body.home-page {
   border-radius: 9999px;
   margin-left: 0.35rem;
 }    
+
+.about-hero {
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto 2.5rem auto;
+  }
+  .about-hero h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--primary-deep);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+  .about-hero p.lead {
+    font-size: 1.15rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .mv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .mv-card {
+    background: var(--sterile-white);
+    border: 1px solid var(--border-slate);
+    border-radius: 12px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04);
+  }
+  .mv-card.mission {
+    border-left: 5px solid var(--secondary-teal);
+  }
+  .mv-card.vision {
+    border-left: 5px solid var(--brand-blue);
+  }
+  .mv-card h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .mv-card.mission h3 { color: var(--secondary-teal); }
+  .mv-card.vision h3 { color: var(--brand-blue); }
+  .mv-card p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #334155;
+  }
+
+  /* Values Pills Grid */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .value-box {
+    background: var(--neutral-soft);
+    border: 1px solid var(--border-slate);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .value-box h4 {
+    color: var(--primary-deep);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ==========================================================================
+     Workflow Interactive & Animated Architecture Diagram
+     ========================================================================== */
+  .workflow-container {
+    background: #ffffff;
+    border: 1px solid var(--border-slate);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+  }
+  .workflow-intro {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 1.5rem auto;
+  }
+  .workflow-intro h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-deep);
+    margin-bottom: 0.35rem;
+  }
+  .workflow-intro p {
+    font-size: 0.95rem;
+    color: #64748b;
+  }
+
+  .workflow-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1rem;
+  }
+
+  .workflow-svg {
+    min-width: 760px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* SVG Animations */
+  @keyframes floatNode {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  @keyframes pulseHub {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0, 168, 150, 0)); }
+    50% { transform: scale(1.02); filter: drop-shadow(0 6px 14px rgba(0, 168, 150, 0.25)); }
+  }
+  @keyframes flowDashForward {
+    from { stroke-dashoffset: 60; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes flowDashReverse {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 60; }
+  }
+  @keyframes travelDoc {
+    0% { transform: translate(190px, 140px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translate(370px, 140px); opacity: 0; }
+  }
+
+  .anim-float-home { animation: floatNode 4s ease-in-out infinite; transform-origin: 110px 170px; }
+  .anim-float-doc { animation: floatNode 4.5s ease-in-out infinite 1s; transform-origin: 670px 80px; }
+  .anim-float-hosp { animation: floatNode 4.2s ease-in-out infinite 0.5s; transform-origin: 670px 260px; }
+  .anim-medroute-hub { animation: pulseHub 3.5s ease-in-out infinite; transform-origin: 390px 170px; }
+
+  .flow-line-forward {
+    stroke-dasharray: 6 6;
+    animation: flowDashForward 2.5s linear infinite;
+  }
+  .flow-line-reverse {
+    stroke-dasharray: 6 6;
+    animation: flowDashReverse 2.5s linear infinite;
+  }
+
+  /* Workflow Legend / Explanation Cards */
+  .workflow-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-slate);
+  }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .legend-item p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.45;
+  }
+  .legend-item strong {
+    color: var(--primary-deep);
+    display: block;
+  }
