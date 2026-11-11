@@ -253,14 +253,28 @@ class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
     caregiver_name = serializers.SerializerMethodField()
     patient_name = serializers.SerializerMethodField()
     service_name = serializers.CharField(source="services.name", read_only=True)
+    patient_notes = serializers.SerializerMethodField()
 
     class Meta:
         model = CompanionshipScheduler
         fields = [
-            "id", "order", "patient", "patient_name", "caregiver",
-            "caregiver_name", "services", "service_name",
-            "start_date", "end_date", "status",
+            "id",
+            "order",
+            "patient",
+            "patient_name",
+            "caregiver",
+            "caregiver_name",
+            "services",
+            "service_name",
+            "start_date",
+            "end_date",
+            "status",
+            "patient_notes",
         ]
+
+    def get_patient_notes(self, obj):
+        latest_req = CareRequest.objects.filter(patient=obj.patient).order_by("-created_at").first()
+        return latest_req.notes if latest_req else ""
 
     def get_caregiver_name(self, obj):
         if obj.caregiver and obj.caregiver.user:
@@ -270,19 +284,27 @@ class CompanionshipSchedulerSerializer(serializers.ModelSerializer):
     def get_patient_name(self, obj):
         if obj.patient and obj.patient.user:
             return obj.patient.user.get_full_name() or obj.patient.user.username
-        return "N/A"        
+        return "N/A"
+
 
 class CareRequestSerializer(serializers.ModelSerializer):
+    service_id = serializers.PrimaryKeyRelatedField(
+        queryset=LabService.objects.filter(is_active=True),
+        source="service",
+        write_only=True
+    )
     service_name = serializers.CharField(source="service.name", read_only=True)
     price = serializers.DecimalField(source="service.price", max_digits=10, decimal_places=2, read_only=True)
+    notes = serializers.CharField(required=False, allow_blank=True, default="")
 
     class Meta:
         model = CareRequest
         fields = [
             "id",
-            "service",
+            "service_id",
             "service_name",
             "price",
+            "notes",
             "patient_name",
             "patient_phone",
             "patient_email",
@@ -290,3 +312,19 @@ class CareRequestSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["patient_name", "patient_phone", "patient_email", "status"]
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        user = request.user
+        patient, _ = PatientProfile.objects.get_or_create(user=user)
+
+        care_request = CareRequest.objects.create(
+            patient=patient,
+            patient_name=user.get_full_name() or user.username,
+            patient_phone=user.phone_number if hasattr(user, "phone_number") else "",
+            patient_email=user.email or "",
+            **validated_data
+        )
+        return care_request
+
+    

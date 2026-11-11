@@ -5,119 +5,77 @@
 {% block meta_description %}Request verified, compassionate home caregivers for elderly companionship, mobility assistance, and patient support in Nairobi.{% endblock %}
 
 {% block content %}
-
-
 <div class="card" style="margin-bottom: 1.5rem;">
-  <h1 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Caregiver Services</h1>
-  <p style="color: #64748B;">Select a home errand or companionship service. Our team will contact you directly to confirm schedule and location details.</p>
+  <h1 style="color: var(--primary-deep); margin-bottom: 0.5rem;">Caregiver Service Inquiry</h1>
+  <p style="color: #64748B;">Select a home-based care service package. Our clinical team will contact you directly to confirm schedule and assessment details.</p>
 </div>
 
-<!-- Toast Container -->
-<div id="patient-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
-  <span style="font-size: 1.25rem;">✓</span>
-  <div>
-    <strong id="toast-title">Request Submitted</strong>
-    <p id="toast-message" style="font-size: 0.85rem; margin: 0; color: #047857;"></p>
-  </div>
-</div>
-
+<!-- Request Form Card -->
 <div class="card" style="margin-bottom: 2rem;">
-  <form id="care-request-form" style="display: flex; flex-direction: column; gap: 1rem;">
-    <div style="position: relative;">
-      <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Search a Service</label>
-      <input type="text" id="service-search-input" placeholder="Type to search service (e.g. Companion, Errands)..." style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 6px;" autocomplete="off">
-      <div id="service-search-results" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 6px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
+  <form id="care-request-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+    {% csrf_token %}
+
+    <!-- 1. Search & Select Service -->
+    <div>
+      <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Search Care Package *</label>
+      <div style="position: relative;">
+        <input 
+          type="text" 
+          id="service-search-input" 
+          placeholder="Type to search service (e.g. Companion, Nursing, Post-Operative)..." 
+          style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 6px;" 
+          autocomplete="off"
+        >
+        <div id="service-search-results" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 6px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
+      </div>
+      <div id="selected-service-badge" style="margin-top: 0.75rem; min-height: 32px;"></div>
     </div>
 
-    <!-- Selected Service Container -->
-    <div id="selected-service-badge" style="min-height: 36px;"></div>
+    <!-- 2. Client / Care Notes -->
+    <div>
+      <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Preliminary Care Requirements or Notes (Optional)</label>
+      <textarea 
+        id="additional-notes" 
+        rows="3" 
+        placeholder="Provide any initial client background, preferred schedules, or special requirements..." 
+        style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-slate); border-radius: 6px; font-family: inherit; font-size: 0.9rem;"
+      ></textarea>
+    </div>
 
-    <button type="submit" id="submit-request-btn" class="clinical-btn btn-primary" style="width: 100%; padding: 0.75rem;">Submit Request</button>
+    <!-- Submit Button -->
+    <button type="submit" id="submit-request-btn" class="clinical-btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 600;">
+      Submit Inquiry
+    </button>
   </form>
 </div>
 
+<!-- Scope of Care Card -->
 <div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--secondary-teal);">
-    <span class="badge" style="width: fit-content; margin-bottom: 0.5rem;">HOME CARE SERVICES</span>
-    <h1 style="color: var(--primary-deep); margin-bottom: 0.5rem; font-size: 1.75rem;">Your Loved One Deserves Quality Care. You Deserve Peace of Mind.</h1>
-    <p style="font-size: 1rem; color: #475569; line-height: 1.6;">
-      Caring for a loved one with a long-term condition, disability, or reduced mobility can be overwhelming. When caregiving becomes a full-time responsibility, you shouldn't have to carry it all by yourself.
-    </p>
-  </div>
-
-  <!-- Scope of Care Card -->
-  <div class="card" style="margin-bottom: 1.5rem;">
-    <h2 style="color: var(--primary-deep); font-size: 1.25rem; margin-bottom: 1rem;">Personalized Home-Based Support</h2>
-    <p style="margin-bottom: 1rem; color: #334155;">
-      At Medroute Errands, we connect families with attentive home-based caregivers who assist with daily routines while documenting your loved one's wellness:
-    </p>
-    <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Personal Care:</strong> Assistance with bathing, dressing, personal hygiene, and comfortable daily routines.</li>
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Mobility Support:</strong> Safe transfers, guided walking, and positional support tailored to client safety.</li>
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Medication Reminders:</strong> Prompting timely intake of prescribed medication based on doctor care plans.</li>
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Vital Signs Monitoring:</strong> Measuring and logging blood pressure, pulse, temperature, and blood oxygen levels ($SpO_2$).</li>
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Daily Care Reports:</strong> Documenting observations, daily mood, and health updates to ensure care continuity.</li>
-      <li style="display: flex; gap: 0.5rem;"><strong style="color: var(--secondary-teal);">• Physician Coordination:</strong> Sharing care sheets with physicians to support informed clinical adjustments.</li>
-    </ul>
-  </div>
-
-  <!-- Process & Workflow Card -->
-  <div class="card" style="margin-bottom: 1.5rem;">
-    <h2 style="color: var(--primary-deep); font-size: 1.25rem; margin-bottom: 1rem;">How Our Care Service Works</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
-      <div style="background: var(--neutral-soft); padding: 1rem; border-radius: 6px;">
-        <strong style="color: var(--primary-deep);">1. Tell Us About Them</strong>
-        <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Share your loved one's medical background, mobility challenges, and specific preferences.</p>
-      </div>
-      <div style="background: var(--neutral-soft); padding: 1rem; border-radius: 6px;">
-        <strong style="color: var(--primary-deep);">2. Matched Assignment</strong>
-        <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">We assign a qualified, verified caregiver suited to your customized care plan.</p>
-      </div>
-      <div style="background: var(--neutral-soft); padding: 1rem; border-radius: 6px;">
-        <strong style="color: var(--primary-deep);">3. Regular Updates</strong>
-        <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Review logged vitals and daily reports through our connected patient dashboard.</p>
-      </div>
-    </div>
-    
-    <div style="margin-top: 1.5rem; text-align: center;">
-      <a href="http://wa.me/+254793294189" class="clinical-btn btn-primary" style="display: inline-flex; padding: 0.75rem 1.5rem;">
-        Talk to Us About Home-Based Care
-      </a>
-    </div>
-  </div>
-
+  <span class="badge" style="width: fit-content; margin-bottom: 0.5rem;">MONTHLY HOME CARE</span>
+  <h2 style="color: var(--primary-deep); margin-bottom: 0.5rem; font-size: 1.4rem;">Your Loved One Deserves Quality Care. You Deserve Peace of Mind.</h2>
+  <p style="font-size: 0.95rem; color: #475569; line-height: 1.6;">
+    Caring for a loved one with chronic health needs, mobility limitations, or recovery care requires dedicated support. Submit an inquiry above and our care coordination staff will reach out to conduct a tailored intake review.
+  </p>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
   function getCsrfToken() {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, 10) === "csrftoken=") {
-          cookieValue = decodeURIComponent(cookie.substring(10));
-          break;
-        }
+    const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    if (csrfInput && csrfInput.value) {
+      return csrfInput.value;
+    }
+    const name = "csrftoken=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i].trim();
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
       }
     }
-    return cookieValue || "{{ csrf_token }}";
-  }
-
-  function showToastAndRedirect(title, message, redirectUrl) {
-    const toast = document.getElementById("patient-toast-notification");
-    if (!toast) {
-      window.location.href = redirectUrl;
-      return;
-    }
-    document.getElementById("toast-title").textContent = title;
-    document.getElementById("toast-message").textContent = message;
-    toast.style.display = "flex";
-
-    setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 1500);
+    return "{{ csrf_token }}";
   }
 
   let catalog = [];
@@ -130,17 +88,17 @@
     const requestForm = document.getElementById("care-request-form");
     const submitBtn = document.getElementById("submit-request-btn");
 
-    // 1. Fetch catalog options
+    // 1. Fetch available services from catalog API
     try {
       const res = await fetch("/api/v1/catalog/");
       if (res.ok) {
         catalog = await res.json();
       }
     } catch (e) {
-      console.error("Could not load services:", e);
+      console.error("Could not load services catalog:", e);
     }
 
-    // 2. Real-time search filtering
+    // 2. Search Autocomplete
     searchInput.addEventListener("input", () => {
       const query = searchInput.value.toLowerCase().trim();
       if (!query) {
@@ -161,8 +119,11 @@
           div.style.cursor = "pointer";
           div.style.borderBottom = "1px solid #F1F5F9";
           div.style.fontSize = "0.9rem";
-          div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: 600;">Ksh ${item.price}</span>`;
-          
+          div.innerHTML = `<strong>${item.name}</strong>`;
+          if (item.price) {
+            div.innerHTML += ` - <span style="color: var(--secondary-teal); font-weight: 600;">Ksh ${item.price}</span>`;
+          }
+
           div.addEventListener("click", () => {
             selectedService = item;
             renderBadge();
@@ -188,7 +149,7 @@
       }
       badgeBox.innerHTML = `
         <div style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px;">
-          <span>Selected: <strong>${selectedService.name}</strong> (Ksh ${selectedService.price})</span>
+          <span>Selected Package: <strong>${selectedService.name}</strong></span>
           <b style="cursor: pointer; color: #EF4444;" onclick="clearSelected()">&times;</b>
         </div>
       `;
@@ -199,24 +160,19 @@
       renderBadge();
     };
 
-    // 3. Form Submit -> Post to API -> Trigger Redirect
+    // 3. Clean Submission & Immediate Redirect to {% url 'info-page' %}
     requestForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Check auth from body tag
-      const isAuthenticated = document.body.dataset.authenticated === "true";
-      if (!isAuthenticated) {
-        window.location.href = "{% url 'auth-page' %}?next=" + encodeURIComponent(window.location.pathname);
+      if (!selectedService) {
+        alert("Please search and select a service package first.");
         return;
       }
 
-      if (!selectedService) {
-        alert("Please search and select a service from the list.");
-        return;
-      }
+      const notes = document.getElementById("additional-notes").value.trim();
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "Registering Request...";
+      submitBtn.textContent = "Submitting Request...";
 
       try {
         const response = await fetch("/api/v1/care-connect/", {
@@ -226,33 +182,30 @@
             "X-CSRFToken": getCsrfToken()
           },
           body: JSON.stringify({
-            service_id: selectedService.id
+            service_id: selectedService.id,
+            notes: notes
           })
         });
 
-        // Backend auth fallback check
         if (response.status === 401 || response.status === 403) {
-          window.location.href = "{% url 'auth-page' %}?next=" + encodeURIComponent(window.location.pathname);
+          window.location.assign("{% url 'auth-page' %}?next=" + encodeURIComponent(window.location.pathname));
           return;
         }
 
         const data = await response.json();
 
         if (response.ok) {
-          showToastAndRedirect(
-            "Request Received!",
-            "Your caregiver errand request has been logged.",
-            data.redirect_url || "/caregiver/thank-you/"
-          );
+          // Direct navigation to info page using url name
+          window.location.assign("{% url 'info-page' %}");
         } else {
-          alert(data.detail || "Submission could not be completed.");
+          alert("Submission could not be completed: " + (data.detail || JSON.stringify(data)));
           submitBtn.disabled = false;
-          submitBtn.textContent = "Submit Request";
+          submitBtn.textContent = "Submit Inquiry";
         }
       } catch (err) {
         alert("Network communication error. Please try again.");
         submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Request";
+        submitBtn.textContent = "Submit Inquiry";
       }
     });
   });

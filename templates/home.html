@@ -1,10 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome | Medroute Errands</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+  <title>{% block title %}Medroute Errands | Healthcare Logistics and caregiving{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Medroute Errands provides trusted home caregiving, laboratory diagnostics coordination, and assisted medical transport across Nairobi and Kenya.{% endblock %}">
+
+  <link rel="canonical" href="https://medrouterrands.com{{ request.path }}">
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+  <link rel="icon" type="image/png" sizes="48x48" href="{% static 'images/icon-48.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/icon-192.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon-192.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon-192.png' %}">
+
+  <!-- Open Graph / WhatsApp Previews -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://medrouterrands.com{{ request.path }}">
+  <meta property="og:title" content="Medroute Errands | Healthcare Logistics & Caregiver Services">
+  <meta property="og:description" content="Book diagnostic laboratory tests, schedule verified companion caregivers, and arrange assisted clinical appointments from home.">
+  <meta property="og:image" content="https://medrouterrands.com{% static 'images/icon-192.png' %}">
+
+  <!-- Restored Original Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+ 
+
+  <!-- ============================================================ -->
+  <!-- NON-ESSENTIAL THIRD-PARTY TRACKING (GATED / ZERO-LOAD)        -->
+  <!-- ============================================================ -->
+  <script type="text/plain" data-cookie-category="analytics" data-src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  
+  <script type="text/plain" data-cookie-category="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+    console.log("Analytics engine activated legally.");
+  </script>
+
+  {% block extra_head %}{% endblock %}
 </head>
 <body class="home-page">
 
@@ -21,13 +59,13 @@
 
   <!-- Glass Advert Card -->
   <main class="page-container">
-    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1JNBVHGYPN11EWD0SnQcp33F28ocfem9a-DsEUXIkg&s=10');">
+    <section class="glass-card" style="--card-bg-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8nP37YgZab0mavmCXCvZiZxDVmxJoBTMLsEmh5AU74Q&s=10');">
       <div class="card-content">
         <span class="badge">MEDROUTE ERRANDS</span>
         <h2>Modern Caregiving</h2>
-        <p>Care That Smiles Back</p>
-        <p>Balance work, life, and family without losing your own spark. From mobility assistance to attentive health routines, our friendly caregivers bring dignified, cheerful support home—so you can enjoy simply being family again.</p>
-        <p>See How Easy Care Can Be 👉</p>
+        <p style="font-weight: 600; color: var(--secondary-teal);">Care That Smiles Back</p>
+        <p>Balance work, life, and family without losing your own spark. From mobility assistance to attentive health routines, our friendly caregivers bring dignified, cheerful support home so you can enjoy simply being family again.</p>
+        <p style="margin-top: 0.5rem; font-weight: 600;">See How Easy Care Can Be </p>
       </div>
 
       <!-- Arrow advances user directly to the index catalog -->
@@ -39,14 +77,14 @@
       </button>
     </section>    
   </main>
-  <main class="page-container">
+  </a><main class="page-container">
     <section class="glass-card" style="--card-bg-image: url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80');">
       <div class="card-content">
         <span class="badge">MEDROUTE ERRANDS</span>
         <h2>Medical errands and logistics</h2>
         <p style="font-weight: 600; color: var(--secondary-teal);">Getting to the Hospital Shouldn't Be a Burden</p>
         <p>Dialysis sessions, clinical checkups, or prescription refills shouldn't overwhelm your family. We offer comfortable medical transport, caregiver accompaniment, and hospital errand handling.</p>
-        <p style="margin-top: 0.5rem; font-weight: 600;">Arrange Transport & Errands 👉</p>
+        <p style="margin-top: 0.5rem; font-weight: 600;">Arrange Transport & Errands </p>
       </div>
       <button class="advance-arrow" aria-label="Explore Medical Errands" onclick="window.location.href='/dashboard/'">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -63,7 +101,7 @@
         <h2>Connect to a Specialist</h2>
         <p style="font-weight: 600; color: var(--secondary-teal);">The Right Doctor, Without the Stress</p>
         <p>Skip hospital queues and endless searching. Browse our verified network of cardiologists, surgeons, gynecologists, and specialists to connect from the comfort of your home.</p>
-       <p style="margin-top: 0.5rem; font-weight: 600;">Find Your Specialist Today 👉</p>
+       <p style="margin-top: 0.5rem; font-weight: 600;">Find Your Specialist Today </p>
       </div>
       <button class="advance-arrow" aria-label="Find a Specialist" onclick="window.location.href='/directory/doctors/'">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -72,7 +110,7 @@
         </svg>
       </button>
     </section>
-  </main>
+  </main></a>
   <main class="page-container">
     <section class="glass-card" style="--card-bg-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80');">
       <div class="card-content">
@@ -80,7 +118,7 @@
         <h2>Physician Partnership</h2>
         <p style="font-weight: 600; color: var(--secondary-teal);">Are You a Licensed Medical Specialist?</p>
         <p>Expand your clinical footprint. Join our verified telehealth and referral network to connect with vetted home-care patients seeking your professional expertise.</p>
-        <p style="margin-top: 0.5rem; font-weight: 600;">Join Our Medical Network 👉</p>
+        <p style="margin-top: 0.5rem; font-weight: 600;">Join Our Medical Network </p>
       </div>
       <button class="advance-arrow" aria-label="Doctor Portal" onclick="window.location.href='/auth/?mode=register&role=doctor'">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -90,5 +128,20 @@
       </button>
     </section>
   </main>
+  <footer style="padding: 2.5rem 1rem; text-align: center; border-top: 1px solid var(--border-slate); background: #ffffff; font-size: 0.85rem; color: #64748B; margin-top: auto;">
+    <div style="margin-bottom: 0.85rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+      <a href="{% url 'privacy-policy' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Privacy & Cookies Policy</a>
+      <a href="{% url 'terms-of-use' %}" class="nav-link" style="color: var(--primary-deep); font-weight: 600;">Terms of Service</a>
+      <a href="javascript:void(0)" onclick="reopenCookiePreferences()" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">Cookie Preferences</a>
+      <a href="{% url 'FAQ' %}" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">FAQ</a>
+    </div>
+    <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols.</p>
+    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: info@medrouterrands.com | Web: www.medrouterrands.com</p>
+  </footer>
+  <div>
+    <!--a href="{% url 'FAQ' %}">FAQ</a-->
+  </div>
+  <script src="/static/js/app.js"></script>
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>

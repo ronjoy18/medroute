@@ -6,7 +6,8 @@ from django.contrib.sitemaps.views import sitemap
 from core.sitemaps import StaticViewSitemap
 from core.views import robots_txt
 from django.http import HttpResponse
-
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 sitemaps = {
     'static': StaticViewSitemap,
@@ -39,19 +40,13 @@ def robots_txt(request):
     
 urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
-    path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
     path("admin/", admin.site.urls),
     #path("secure/management-portal/", admin.site.urls),  # Keep alias if desired
     path("", include("core.urls")),
+    path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("images/favicon.ico"),permanent=True,),name="favicon",),
 ]
  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-def trigger_error(request):
-  division_by_zero = 1 / 0
-
-urlpatterns += [
-    path('sentry-debug/', trigger_error),
-]

@@ -16,7 +16,7 @@ from .models import (
 
 User = get_user_model()
 COMPANY_EMAIL = getattr(settings, "COMPANY_ALERT_EMAIL", getattr(settings, "DEFAULT_FROM_EMAIL", "admin@medroute.com"))
-BASE_URL = getattr(settings, "BASE_URL", "https://medrouterrands.com").rstrip("/")
+REF_URL = getattr(settings, "REF_URL", "https://medrouterrands.com").rstrip("/")
 
 
 # ==============================================================================
@@ -43,7 +43,7 @@ def send_welcome_and_onboarding_emails(sender, instance, created, **kwargs):
             f"  2. Specialist Board Certification\n"
             f"  3. National Identification or Passport\n\n"
             f"You can review your console and setup here:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Best regards,\n"
             f"Medroute Credentialing Board"
         )
@@ -60,7 +60,7 @@ def send_welcome_and_onboarding_emails(sender, instance, created, **kwargs):
             f"  2. Valid Certificate of Good Conduct\n"
             f"  3. Copy of National ID\n\n"
             f"Access your caregiver portal here:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Best regards,\n"
             f"Medroute Operations Team"
         )
@@ -72,7 +72,7 @@ def send_welcome_and_onboarding_emails(sender, instance, created, **kwargs):
             f"Dear {full_name},\n\n"
             f"Your Medroute account has been registered successfully.\n\n"
             f"You can order tests, book errand assistance, and view reports at your dashboard:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Warm regards,\n"
             f"Medroute Support Team"
         )
@@ -128,7 +128,7 @@ def handle_care_request_notifications(sender, instance, created, **kwargs):
             f"Our care coordination team has received your details (Phone: {patient_phone}) "
             f"and will call you shortly to discuss specific needs and schedule your session.\n\n"
             f"You can review your account activity anytime:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Warm regards,\n"
             f"Medroute Errands Team"
         )
@@ -191,7 +191,7 @@ def notify_on_schedule_creation(sender, instance, created, **kwargs):
             f"Assigned Caregiver: {caregiver_name}\n"
             f"Date & Time: {start_str} to {end_str}\n\n"
             f"View your live itinerary at:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Medroute Scheduling Desk"
         )
         send_mail(
@@ -214,7 +214,7 @@ def notify_on_schedule_creation(sender, instance, created, **kwargs):
             f"Start Time: {start_str}\n"
             f"End Time: {end_str}\n\n"
             f"Open your roster to review client details:\n"
-            f"{BASE_URL}/dashboard/\n\n"
+            f"{REF_URL}/dashboard/\n\n"
             f"Medroute Operations Desk"
         )
         send_mail(
@@ -260,7 +260,7 @@ def notify_company_and_parties_on_payment(sender, instance, created, **kwargs):
                 f"Dear {patient_name},\n\n"
                 f"We received your payment of Ksh {instance.total_cost} for Order #{str(instance.id)[:8]}.\n\n"
                 f"Your service is cleared and ongoing. View your invoice status:\n"
-                f"{BASE_URL}/dashboard/\n\n"
+                f"{REF_URL}/dashboard/\n\n"
                 f"Medroute Accounts Team"
             )
             send_mail(

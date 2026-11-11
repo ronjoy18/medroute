@@ -149,7 +149,7 @@ class LabService(models.Model):
     category = models.ForeignKey(ServiceCategory, on_delete=models.PROTECT, related_name="services")
     name = models.CharField(max_length=256)
     code = models.CharField(max_length=32, unique=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank =True, null=True)
     turnaround_time_hours = models.PositiveIntegerField(default=24)
     preparation_instructions = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
@@ -189,7 +189,7 @@ class Order(models.Model):
     booking_start= models.DateTimeField(auto_now_add=True)
     booking_end=models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=32, choices=Status.choices, default=Status.PENDING)
-    total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"), blank=True)
     is_paid = models.BooleanField(default=False)
     clinical_notes = models.TextField(blank=True)
     attached_report_pdf = models.FileField(upload_to=report_upload_directory_path, null=True, blank=True)
@@ -305,3 +305,28 @@ class CareRequest(models.Model):
 
     def __str__(self):
         return f"{self.patient_name} - {self.service.name} ({self.status})"
+
+
+
+class AssesmentTitles:
+    title = models.CharField(max_length=256, blank=False, name=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    #order = models.ForeignKey(Order ,on_delete=models.SET_NULL, blunk= True, null= True, related_name= 'ass_orders') # dont have a dirty mind)
+    #patients =models.ForeignKey(PatientProfile,on_delete=models.SET_NULL, null =True, blank=True, related_name='assesed_patient' )
+
+    class Meta:
+        verbose_name_plural = "Service Categories"
+
+    def __str__(self):
+        return f"{self.title}"
+
+class AssesmentForm:
+    name = models.CharField(max_length=256)
+    title = models.ForeignKey(AssesmentTitles, on_delete=models.CASCADE, related_name='ass_form')
+    order = models.ForeignKey(Order ,on_delete=models.SET_NULL, blunk= True, null= True, related_name= 'ass_orders') # dont have a dirty mind)
+    patients =models.ForeignKey(PatientProfile,on_delete=models.SET_NULL, null =True, blank=True, related_name='assesed_patient' )
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"), blank=True)
+
+    def __str__(self):
+        return f"{self.title} {self.name}" 
+    

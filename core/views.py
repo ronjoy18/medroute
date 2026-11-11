@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 
 from rest_framework import permissions, status
-
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
@@ -21,7 +21,7 @@ from django.utils.dateparse import parse_datetime
 import uuid
 from .models import User, CareRequest,CareGiverProfile, DoctorProfile,CompanionshipScheduler, PatientProfile, LabService, Order, ReferralLedger
 from .serializers import (
-    UserRegistrationSerializer, LabServiceSerializer, OrderSerializer, 
+    UserRegistrationSerializer, LabServiceSerializer, OrderSerializer,
     DoctorOnboardPatientSerializer, ReferralLedgerSerializer, CompanionshipSchedulerSerializer,
     CareRequestSerializer
 )
@@ -32,39 +32,53 @@ from labcare import settings
 from .models import GlobalDoctorInquiry, CareGiverProfile
 from core import models 
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+#from .constants import CARE_SERVICES_CATALOG
 
 
 
 # -------------------------------------------------------------
 # Frontend Page Views
 # -------------------------------------------------------------
+
 def payment_checkout_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, "payment_checkout.html", {"order": order})
+
 def faq_view(request):
     return render(request, 'faq.html')
+
 def privacy_view(request):
     return render(request, "legality/privacy_p.html")
+
 def terms_view(request):
     return render(request, 'legality/terms.html')
+
 def index_view(request):
     services = LabService.objects.filter(is_active=True).select_related("category")
     return render(request, "index.html", {"services": services})
-@ensure_csrf_cookie
+
 def home_view(request):
         return render(request, 'home.html')
+
 def auth_view(request):
     return render(request, "auth.html")
+
 def connectcare_view(request):
     return render (request, 'contactus.html')
+
 def internal_login_view(request):
     return render(request, "internal_login.html")
+
 def about_view(request):
     return render(request, 'aboutus.html')
+
+
 def info_view(request):
+    
     return render(request, 'info.html')
+
 
 def dashboard_dispatcher(request):
     if not request.user.is_authenticated:
@@ -764,12 +778,12 @@ class AboutUsAPIView(views.APIView):
         }
         return render(request, 'aboutus.html', context)
 
-class ConnectCaregiverAPIView(views.APIView):
-    # This automatically returns HTTP 401 if request.user is not logged in
+class ConnectCaregiverAPIView(APIView):
+    """Processes the unified JSON payload from Vanilla JS."""
     permission_classes = [permissions.IsAuthenticated]
 
-    def handle_exception(self, exc, ):
-        # Optional: return the redirect URL explicitly if unauthenticated
+    def handle_exception(self, exc):
+        # Intercept 401/403 to provide the frontend with the explicit auth redirect URL
         response = super().handle_exception(exc)
         if response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]:
             response.data = {
@@ -779,39 +793,27 @@ class ConnectCaregiverAPIView(views.APIView):
         return response
 
     def post(self, request):
-        user = request.user
-        patient, _ = PatientProfile.objects.get_or_create(user=user)
+        # Guarantee PatientProfile exists before serializer creation
+        PatientProfile.objects.get_or_create(user=request.user)
 
-        service_id = request.data.get("service_id")
-        if not service_id:
+        serializer = CareRequestSerializer(
+            data=request.data,
+            context={
+                'request': request
+            }
+        )
+        if serializer.is_valid():
+            care_request = serializer.save()
             return Response(
-                {"detail": "Please select a service before submitting."},
-                status=status.HTTP_400_BAD_REQUEST
+                {
+                    "id": str(care_request.id),
+                    "message": "Care request registered successfully.",
+                    "redirect_url": "/info/"
+                },
+                status=status.HTTP_201_CREATED
             )
-
-        service = get_object_or_404(LabService, id=service_id, is_active=True)
-
-        full_name = user.get_full_name() or user.username
-        phone = user.phone_number #getattr(user, "phone", "") or getattr(user, "patient_phone", "")
-        email = user.email or ""
-
-        care_request = CareRequest.objects.create(
-            patient=patient,
-            service=service,
-            patient_name=full_name,
-            patient_phone=phone,
-            patient_email=email,
-            status=CareRequest.RequestStatus.PENDING
-        )
-
-        return Response(
-            {
-                "id": care_request.id,
-                "message": "Care request registered successfully.",
-                "redirect_url": "/caregiver/thank-you/"
-            },
-            status=status.HTTP_201_CREATED
-        )
+        print(f"CareRequest Validation Errors: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class InitiateMpesaPaymentAPIView(APIView):
     """Triggers the STK PIN prompt on the patient's phone."""
@@ -902,3 +904,25 @@ class CheckPaymentStatusAPIView(APIView):
             "status": order.status,
             "payment_reference": getattr(order, "payment_reference", "")
         })    
+    
+
+class ReferralLedgerAPIView(generics.ListAPIView):
+    serializer_class = ReferralLedgerSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def calculate_bonus(self, request):
+        bonus = get_object_or_404(ReferralLedger, id=id)
+        anount = bonus.bonus_amount
+        totals = bonus.order_amount_snapshot
+        percentage = bonus.allocated_percentage
+
+        bonus_amount = totals * percentage/100
+        context = {
+            "bonus": bonus,
+            "rebate": bonus_amount,
+            "percentage": percentage
+        }
+
+        return render(request, )    
+        
+

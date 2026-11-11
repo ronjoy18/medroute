@@ -9,15 +9,17 @@
   <title>{% block title %}Medroute Errands | Healthcare Logistics & Laboratory Services{% endblock %}</title>
 
   <!-- Search Engine Snippet Description (150-160 characters recommended) -->
-  <meta name="description" content="{% block meta_description %}Medroute Errands provides trusted home and mobile caregiving, digital specialists and medical reports coordination, and assisted medical errands and companionship.{% endblock %}">
+  <meta name="description" content="{% block meta_description %}Medroute Errands provides trusted home caregiving, laboratory diagnostics coordination, and assisted medical transport across Nairobi and Kenya.{% endblock %}">
 
   <!-- Canonical Link -->
   <link rel="canonical" href="https://medrouterrands.com{{ request.path }}">
 
-  <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-  <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+ <!-- Favicon and App Icons -->
+<link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+<link rel="icon" type="image/png" sizes="48x48" href="{% static 'images/icon-48.png' %}">
+<link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/icon-192.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon-192.png' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon-192.png' %}">
 
   <!-- Open Graph / WhatsApp Previews -->
@@ -176,10 +178,10 @@
       <a href="{% url 'FAQ' %}" class="nav-link" style="color: var(--secondary-teal); font-weight: 600;">FAQ</a>
     </div>
     <p style="margin: 0.25rem 0;">&copy; 2026 Medroute Systems. Medical confidentiality and data isolation enforced under Kenya DPA 2019 protocols.</p>
-    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: medroute@errands.com | Web: www.medrouterrands.com</p>
+    <p style="margin: 0.25rem 0; font-size: 0.8rem; color: #94A3B8;">Telephone: +254793294189 | Email: info@medrouterrands.com | Web: www.medrouterrands.com</p>
   </footer>
   <div>
-    <a href="{% url 'FAQ' %}">FAQ</a>
+    <!--a href="{% url 'FAQ' %}">FAQ</a-->
   </div>
   <script src="/static/js/app.js"></script>
   {% block extra_scripts %}{% endblock %}

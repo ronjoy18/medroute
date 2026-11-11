@@ -13,9 +13,9 @@
 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
   <div>
     <h1 style="color: var(--primary-deep); margin-bottom: 0.25rem;">{{ request.user.username }}'s Workspace</h1>
-    <p style="color: #64748B;">Manage bookings, caregiver schedules, bills, and doctor inquiries.</p>
+    <p style="color: #64748B;">Manage day errand schedules, home care inquiries, bills, and doctor connections.</p>
   </div>
-  <a href="{% url 'api-home-care' %}" class="clinical-btn btn-teal">Connect to Caregiver</a>
+  <a href="/connect-care-giver/" class="clinical-btn btn-teal">Request  Caregiver</a>
 </div>
 
 <!-- Referral & Promo Balance Box -->
@@ -28,17 +28,85 @@
   <div style="font-size: 0.75rem; color: #15803D;">Share with friends to earn credits on completed bookings. Current Balance: <strong id="promo-balance">Ksh 0.00</strong></div>
 </div>
 
-<!-- Booking Form Card -->
+<!-- Section 1: Monthly Home Care Intake Requests (From Connect Caregiver Form) 
+<div class="card table-responsive" style="margin-bottom: 2rem;">
+  <div style="margin-bottom: 0.75rem;">
+    <h3 style="color: var(--primary-deep); margin: 0;">📋 Home Caregiver Requests</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">
+      Long-term and monthly care requests awaiting coordination team contact.
+    </p>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Service Selected</th>
+        <th>Assessed Conditions</th>
+        <th>Special Notes</th>
+        <th>Requested On</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in care_requests %}
+        <tr>
+          <td><strong>{{ req.service.name }}</strong></td>
+          <td style="max-width: 320px;">
+            {% if req.assessment_data %}
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                {% for category, conditions in req.assessment_data.items %}
+                  {% for cond in conditions %}
+                    <span style="background: #F1F5F9; color: #334155; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">
+                      {{ cond }}
+                    </span>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            {% else %}
+              <span style="color: #94A3B8; font-size: 0.8rem;">No conditions specified</span>
+            {% endif %}
+          </td>
+          <td style="font-size: 0.85rem; color: #475569;">{{ req.notes|default:"—" }}</td>
+          <td style="font-size: 0.85rem;">{{ req.created_at|date:"d M Y, H:i" }}</td>
+          <td>
+            {% if req.status == "PENDING" %}
+              <span style="background: #FEF3C7; color: #92400E; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                Pending Contact
+              </span>
+            {% elif req.status == "CONTACTED" %}
+              <span style="background: #DBEAFE; color: #1E40AF; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                Contacted
+              </span>
+            {% elif req.status == "COMPLETED" %}
+              <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                Scheduled
+              </span>
+            {% else %}
+              <span style="background: #F1F5F9; color: #475569; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">
+                {{ req.get_status_display }}
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" style="text-align: center; color: #64748B;">No monthly care requests submitted. Need full-time care? Click "Request Monthly Caregiver" above.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div-->
+
+<!-- Section 2: Direct Errand & Day Care Booking Form (The Restored Scheduler) -->
 <div class="card" style="margin-bottom: 2rem;">
   <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">📅 Book Companionship & Errand Services</h3>
-    <p style="font-size: 0.8rem; color: #64748B; margin-top: 0.25rem;">Choose an appointment slot within working hours (06:00 AM – 06:00 PM).</p>
+    <h3 style="color: var(--primary-deep); margin: 0;">📅 Book Single-Day Errand or Companion Service</h3>
+    <p style="font-size: 0.8rem; color: #64748B; margin-top: 0.25rem;">Instant session booking within working hours (06:00 AM – 06:00 PM).</p>
   </div>
 
   <form id="patient-order-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
     <div style="position: relative;">
       <label style="font-size: 0.8rem; font-weight: 600;">Search Errand Services</label>
-      <input type="text" id="patient-catalog-search" placeholder="Type service name..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
+      <input type="text" id="patient-catalog-search" placeholder="Type errand service name..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;" autocomplete="off">
       <div id="patient-search-results" style="max-height: 140px; overflow-y: auto; border: 1px solid var(--border-slate); border-radius: 4px; display: none; background: #FFF; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: absolute; width: 100%; z-index: 10;"></div>
     </div>
 
@@ -46,7 +114,7 @@
 
     <div>
       <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">
-        Preferred Session Date & Start Time *
+        Preferred Session Date &amp; Start Time *
       </label>
       <input type="datetime-local" id="services-start-time" step="1800" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-slate); border-radius: 4px;">
       <small style="color: #64748B; font-size: 0.75rem; display: block; margin-top: 4px;">
@@ -54,15 +122,15 @@
       </small>
     </div>
 
-    <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking & Schedule Caregiver</button>
+    <button type="submit" id="submit-services-btn" class="clinical-btn btn-primary" style="width: 100%;">Submit Booking &amp; Schedule Caregiver</button>
   </form>
 </div>
 
-<!-- Section 1: Confirmed Service Schedules -->
+<!-- Section 3: Confirmed Service Schedules (Assigned Day Caregivers & Contacted Inquiries) -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep); margin: 0;">📅 My Confirmed Service Schedules</h3>
-    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live timetable with your automatically assigned caregivers.</p>
+    <h3 style="color: var(--primary-deep); margin: 0;">📅 My Confirmed Errand &amp; Care Schedules</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live timetable showing your assigned caregivers and session times.</p>
   </div>
   <table class="data-table" id="patient-schedules-table">
     <thead>
@@ -79,10 +147,10 @@
   </table>
 </div>
 
-<!-- Section 2: Active Bookings & Billing Table -->
+<!-- Section 4: Active Bookings & Billing Table -->
 <div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">💳 Active Bookings & Payment Status</h3>
+    <h3 style="color: var(--primary-deep);">💳 Active Bookings &amp; Payment Status</h3>
     <p style="font-size: 0.85rem; color: #64748B;">All booked sessions appear here. Click "Pay Now" to settle invoices.</p>
   </div>
 
@@ -102,30 +170,11 @@
   </table>
 </div>
 
-<!-- Section 3: Reports Archive Table -->
-<div class="card table-responsive" style="margin-bottom: 2rem;">
-  <div style="margin-bottom: 0.75rem;">
-    <h3 style="color: var(--primary-deep);">📄 Daily Care & Progress Reports</h3>
-  </div>
-
-  <table class="data-table" id="results-table">
-    <thead>
-      <tr>
-        <th>Intake Code</th>
-        <th>Submission Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="2" style="text-align: center; color: #64748B;">Loading authorized reports...</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- Section 4: Connected Global Doctors -->
+<!-- Section 5: Connected Global Doctors -->
 <div class="card table-responsive">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
     <div>
-      <h3 style="color: var(--primary-deep); margin: 0;">🌐 Connected Global Doctors & Specialists</h3>
+      <h3 style="color: var(--primary-deep); margin: 0;">🌐 Connected Global Doctors &amp; Specialists</h3>
       <p style="font-size: 0.85rem; color: #64748B; margin: 0.25rem 0 0 0;">Status of cross-border consultation requests.</p>
     </div>
     <a href="/directory/doctors/" class="clinical-btn btn-outline" style="font-size: 0.8rem; padding: 4px 10px;">
@@ -138,7 +187,7 @@
       <tr>
         <th>Physician</th>
         <th>Specialization</th>
-        <th>Country & Hospital</th>
+        <th>Country &amp; Hospital</th>
         <th>Requested On</th>
         <th>Connection Status</th>
       </tr>
@@ -153,6 +202,10 @@
 {% block extra_scripts %}
 <script>
   function getCsrfToken() {
+    const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    if (csrfInput && csrfInput.value) {
+      return csrfInput.value;
+    }
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
       const cookies = document.cookie.split(";");
@@ -191,7 +244,7 @@
       tbody.innerHTML = "";
 
       if (!Array.isArray(schedules) || schedules.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No confirmed schedules yet. Pick a service above to book.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #64748B;">No confirmed care schedules yet. Assignments will appear here once booked.</td></tr>';
         return;
       }
 
@@ -204,7 +257,7 @@
             <td style="font-size: 0.85rem;">${start}</td>
             <td>
               <span style="background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
-                ${s.status || 'CONFIRMED'}
+                ${s.status || 'SCHEDULED'}
               </span>
             </td>
           </tr>
@@ -217,19 +270,14 @@
 
   async function loadPatientOrders() {
     const billTbody = document.querySelector("#billing-table tbody");
-    const resTbody = document.querySelector("#results-table tbody");
-
     try {
       const res = await fetch("/api/v1/orders/");
       if (!res.ok) return;
       const orders = await res.json();
 
       if (billTbody) billTbody.innerHTML = "";
-      if (resTbody) resTbody.innerHTML = "";
-
       if (!Array.isArray(orders) || orders.length === 0) {
         if (billTbody) billTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No active bookings found.</td></tr>';
-        if (resTbody) resTbody.innerHTML = '<tr><td colspan="2" style="text-align: center; color: #64748B;">No reports archived yet.</td></tr>';
         return;
       }
 
@@ -241,7 +289,7 @@
           billTbody.innerHTML += `
             <tr>
               <td><code>#${o.id.substring(0, 8)}</code></td>
-              <td style="font-size: 0.85rem; max-width: 250px;">${allItems || 'Clinical Service'}</td>
+              <td style="font-size: 0.85rem; max-width: 250px;">${allItems || 'Errand / Companionship Service'}</td>
               <td><strong>Ksh ${o.total_cost}</strong></td>
               <td>
                 ${o.is_paid 
@@ -250,76 +298,15 @@
               </td>
               <td style="display: flex; gap: 6px; align-items: center;">
                 ${!o.is_paid 
-                  ? `
-                    <button type="button" onclick="initiateDirectPayment(event, '${o.id}')" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;"></button>
-                    <a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Pay now</a>
-                  `
+                  ? `<a href="/orders/${o.id}/pay/" class="clinical-btn btn-teal" style="padding: 4px 8px; font-size: 0.75rem;">Pay now</a>`
                   : `<span style="color: #166534; font-size: 0.8rem; font-weight: 700;">✓ Settled</span>`}
               </td>
-            </tr>
-          `;
-        }
-
-        if (resTbody) {
-          resTbody.innerHTML += `
-            <tr>
-              <td><code>#${o.id.substring(0, 8)}</code></td>
-              <td style="font-size: 0.85rem;">${o.created_at ? o.created_at.substring(0, 10) : 'N/A'}</td>
             </tr>
           `;
         }
       });
     } catch (e) {
       console.error(e);
-    }
-  }
-
-  async function initiateDirectPayment(event, orderId) {
-    if (event && event.preventDefault) event.preventDefault();
-
-    const phone = prompt("Enter your M-Pesa phone number (e.g. 07XXXXXXXX or 2547XXXXXXXX):");
-    if (!phone) return;
-
-    const token = getCsrfToken();
-
-    try {
-      const res = await fetch(`/api/v1/orders/${orderId}/pay/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": token
-        },
-        body: JSON.stringify({ phone: phone.trim() })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("STK Prompt sent! Enter your M-Pesa PIN on your phone to complete payment.");
-
-        const pollTimer = setInterval(async () => {
-          try {
-            const checkRes = await fetch(`/api/v1/orders/${orderId}/payment-status/`);
-            if (checkRes.ok) {
-              const statusData = await checkRes.json();
-              if (statusData.is_paid) {
-                clearInterval(pollTimer);
-                alert(`Payment confirmed! Receipt: ${statusData.payment_reference || 'N/A'}`);
-                loadPatientOrders();
-              }
-            }
-          } catch (pollErr) {
-            console.error("Polling error:", pollErr);
-          }
-        }, 3000);
-
-        setTimeout(() => clearInterval(pollTimer), 60000);
-      } else {
-        alert("Payment initiation failed: " + (data.detail || JSON.stringify(data)));
-      }
-    } catch (err) {
-      console.error("Direct payment fetch error:", err);
-      alert("Network communication error: " + err.message);
     }
   }
 
@@ -378,7 +365,7 @@
       if (item) {
         box.innerHTML += `
           <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
-            ${item.name} (Ksh ${item.price})
+            ${item.name} - Ksh ${item.price}
             <b style="cursor: pointer; color: red;" onclick="removePatientService(${item.id})">&times;</b>
           </span>`;
       }
@@ -396,6 +383,7 @@
     loadPatientOrders();
     loadPatientGlobalConnections();
 
+    // 1. Load patient profile info & referral link
     try {
       const profileRes = await fetch("/api/v1/patient/me/");
       if (profileRes.ok) {
@@ -409,32 +397,41 @@
       }
     } catch (e) {}
 
-    try {
-      const catRes = await fetch("/api/v1/catalog/");
-      if (catRes.ok) catalog = await catRes.json();
-    } catch (e) {}
-
+    // 2. Load services catalog for the live booking search box
     const searchInput = document.getElementById("patient-catalog-search");
     const resultsBox = document.getElementById("patient-search-results");
 
+    try {
+      const catRes = await fetch("/api/v1/catalog/");
+      if (catRes.ok) {
+        catalog = await catRes.json();
+      }
+    } catch (e) {
+      console.error("Could not load catalog for booking:", e);
+    }
+
     if (searchInput && resultsBox) {
       searchInput.addEventListener("input", () => {
-        const q = searchInput.value.toLowerCase().trim();
-        if (!q) { resultsBox.style.display = "none"; return; }
+        const query = searchInput.value.toLowerCase().trim();
+        if (!query) {
+          resultsBox.style.display = "none";
+          resultsBox.innerHTML = "";
+          return;
+        }
 
-        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(q));
+        const filtered = catalog.filter(item => (item.name || "").toLowerCase().includes(query));
         resultsBox.innerHTML = "";
 
         if (filtered.length === 0) {
-          resultsBox.innerHTML = "<div style='padding: 8px 10px; font-size: 0.8rem; color: #64748B;'>No matching services found.</div>";
+          resultsBox.innerHTML = "<div style='padding: 8px; font-size: 0.8rem; color: #64748B;'>No matching errand services.</div>";
         } else {
           filtered.forEach(item => {
             const div = document.createElement("div");
-            div.style.padding = "8px 10px";
+            div.style.padding = "8px";
             div.style.cursor = "pointer";
             div.style.borderBottom = "1px solid #F1F5F9";
             div.style.fontSize = "0.85rem";
-            div.innerHTML = `<strong>${item.name}</strong> - <span style="color: var(--secondary-teal); font-weight: bold;">Ksh ${item.price}</span>`;
+            div.innerHTML = `<strong>${item.name}</strong> - Ksh ${item.price}`;
             div.addEventListener("click", () => addPatientService(item.id, item.name, item.price));
             resultsBox.appendChild(div);
           });
@@ -449,6 +446,7 @@
       });
     }
 
+    // 3. Direct Errand Form Submission
     const orderForm = document.getElementById("patient-order-form");
     const submitBtn = document.getElementById("submit-services-btn");
 
@@ -457,18 +455,18 @@
         e.preventDefault();
 
         if (selectedServicesIds.length === 0) {
-          alert("Please select at least one service from the search bar.");
+          alert("Please search and select at least one errand or companionship service.");
           return;
         }
 
-        const timeVal = document.getElementById("services-start-time").value;
-        if (!timeVal) {
-          alert("Please specify a session date and start time.");
+        const startTime = document.getElementById("services-start-time").value;
+        if (!startTime) {
+          alert("Please specify a session date and time.");
           return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = "Scheduling...";
+        submitBtn.textContent = "Scheduling Caregiver...";
 
         try {
           const res = await fetch("/api/v1/schedules/", {
@@ -479,24 +477,24 @@
             },
             body: JSON.stringify({
               services_id: selectedServicesIds[0],
-              start_date: new Date(timeVal).toISOString()
+              start_date: startTime
             })
           });
 
+          const data = await res.json();
+
           if (res.ok) {
-            const data = await res.json();
-            showPatientToast("Session Booked!", `Caregiver assigned.`);
+            showPatientToast("Booking Confirmed!", "Your errand service has been scheduled.");
             selectedServicesIds = [];
             renderSelectedServices();
             orderForm.reset();
             loadPatientSchedules();
             loadPatientOrders();
           } else {
-            const err = await res.json();
-            alert(err.detail || "Booking failed.");
+            alert(data.detail || "Unable to confirm booking. Please try a different time slot.");
           }
         } catch (err) {
-          alert("Network communication failure.");
+          alert("Network failure while booking errand service.");
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = "Submit Booking & Schedule Caregiver";

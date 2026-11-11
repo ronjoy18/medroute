@@ -1,25 +1,91 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main style="max-width: 680px; margin: 3rem auto; padding: 0 1rem;">
-  <section class="card" style="text-align: center; padding: 3rem 2rem; border-top: 4px solid var(--secondary-teal);">
-    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
-    <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em;">Inquiry Received</span>
+<main style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
+  <!-- Section 1: Thank You Note Card -->
+  <section class="card" style="text-align: center; padding: 2.5rem 2rem; border-top: 4px solid var(--secondary-teal); margin-bottom: 2rem;">
+    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🤝</div>
+    <span style="background: #E0F2FE; color: var(--primary-deep); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em;">
+      Inquiry &amp; Assessment Received
+    </span>
     
-    <h2 style="color: var(--primary-deep); margin: 1rem 0 0.5rem 0;">Request Received</h2>
+    <h2 style="color: var(--primary-deep); margin: 1rem 0 0.5rem 0;">Thank You for Your Request!</h2>
     <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-bottom: 0.5rem;">
-      Thank you for requesting a caregiver.
+      Your home care request has been securely logged with our clinical coordination team.
     </p>
-    <p style="color: #64748B; font-size: 0.9rem; line-height: 1.5; margin-bottom: 2rem;">
-      Our coordination team will review your account details and contact you directly via phone or email to schedule your errand.
+    <p style="color: #64748B; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+      Our clinical team will review your submitted care needs and reach out via phone to verify client instructions before scheduling your caregiver.
     </p>
 
     <div style="display: flex; justify-content: center; gap: 1rem;">
-      <a href="{% url 'index-page' %}" class="clinical-btn btn-primary" style="padding: 0.65rem 1.5rem;">Explore Catalog</a>
-      <div style="background-color: white;">
-        <a href="/dashboard/" class="clinical-btn btn-outline" style="padding: 0.65rem 1.5rem;">Go to Dashboard</a>
-      </div>
+      <a href="/dashboard/" class="clinical-btn btn-primary" style="padding: 0.65rem 1.5rem;">Go to Patient Dashboard</a>
+      <a href="{% url 'index-page' %}" class="clinical-btn btn-outline" style="padding: 0.65rem 1.5rem;">Explore Catalog</a>
     </div>
   </section>
+
+  <!-- Section 2: Booked Service & Selected Conditions Table -->
+  {% if care_request %}
+    <div class="card" style="padding: 2rem; background: #FFF;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #E2E8F0; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+        <div>
+          <h3 style="color: var(--primary-deep); margin: 0;">Prescribed Home Care Plan</h3>
+          <p style="color: #64748B; margin: 0.25rem 0 0 0;">
+            Booked Service: <strong style="color: var(--secondary-teal);">{{ care_request.service.name }}</strong>
+          </p>
+          <p style="color: #64748B; margin: 0;">Patient: <strong>{{ care_request.patient_name }}</strong></p>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.8rem; color: #64748B;">Submission Date:</span><br>
+          <strong style="color: #0F172A;">{{ care_request.created_at|date:"d M Y, H:i" }}</strong><br>
+          <span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; background: #FEF3C7; color: #92400E;">
+            {{ care_request.get_status_display }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Loop over the JSON dictionary >
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+        <thead>
+          <tr style="background-color: #F8FAFC; border-bottom: 2px solid #CBD5E1;">
+            <th style="text-align: left; padding: 0.75rem; color: #334155; width: 35%;">Care Category</th>
+            <th style="text-align: left; padding: 0.75rem; color: #334155;">Specified Conditions &amp; Requirements</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category, conditions in care_request.assessment_data.items %}
+            <tr style="border-bottom: 1px solid #E2E8F0;">
+              <td style="padding: 1rem 0.75rem; vertical-align: top; font-weight: bold; color: #1E3A8A;">
+                {{ category }}
+              </td>
+              <td style="padding: 1rem 0.75rem;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                  {% for cond in conditions %}
+                    <li style="color: #334155; margin-bottom: 0.25rem;">{{ cond }}</li>
+                  {% endfor %}
+                </ul>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2" style="padding: 1rem; text-align: center; color: #64748B;">
+                No specific conditions selected. Caregiver will provide general assistance.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if care_request.notes %}
+        <div style="background: #F8FAFC; padding: 1rem; border-radius: 6px; border-left: 4px solid var(--secondary-teal);">
+          <h4 style="margin: 0 0 0.35rem 0; color: #1E3A8A; font-size: 0.95rem;">Additional Notes / Custom Instructions:</h4>
+          <p style="margin: 0; color: #334155; line-height: 1.5; font-size: 0.9rem;">{{ care_request.notes }}</p>
+        </div-->
+      {% endif %}
+
+      <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <button onclick="window.print()" class="clinical-btn btn-outline">Print / Save as PDF</button>
+      </div>
+    </div>
+  {% endif %}
 </main>
 {% endblock %}

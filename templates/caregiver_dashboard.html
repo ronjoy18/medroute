@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+
 {% block content %}
 <!-- Toast Notification -->
 <div id="caregiver-toast-notification" style="display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 99999; background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); align-items: center; gap: 0.75rem;">
@@ -78,7 +78,7 @@
 </div>
 
 <!-- Section 3: Assigned Schedule -->
-<div class="card table-responsive">
+<div class="card table-responsive" style="margin-bottom: 2rem;">
   <div style="margin-bottom: 1rem;">
     <h3 style="color: var(--primary-deep); margin: 0;">📅 My Assigned Care Sessions</h3>
     <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Live timetable of your confirmed assignments.</p>
@@ -98,6 +98,20 @@
     </tbody>
   </table>
 </div>
+
+<!-- Section 4: Patient Conditions & Assessment Overview for Caregiver >
+<div class="card" style="margin-bottom: 2rem;">
+  <div style="border-bottom: 1px solid var(--border-slate); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+    <h3 style="color: var(--primary-deep); margin: 0;">🩺 Patient Clinical &amp; Daily Living Conditions</h3>
+    <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">
+      Intake conditions and special needs submitted by your assigned patients.
+    </p>
+  </div>
+
+  <div id="caregiver-patient-conditions-container" style="display: flex; flex-direction: column; gap: 1rem;">
+    <p style="color: #64748B; font-size: 0.85rem;">Loading patient assessment profiles...</p>
+  </div>
+</div-->
 {% endblock %}
 
 {% block extra_scripts %}
@@ -252,6 +266,7 @@
     try {
       const res = await fetch("/api/v1/schedules/");
       const tbody = document.querySelector("#orders-table tbody");
+      const conditionsContainer = document.getElementById("caregiver-patient-conditions-container");
       if (!tbody) return;
 
       if (!res.ok) {
@@ -261,9 +276,11 @@
 
       const schedules = await res.json();
       tbody.innerHTML = "";
+      if (conditionsContainer) conditionsContainer.innerHTML = "";
 
       if (schedules.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748B;">No upcoming services assigned at this time.</td></tr>';
+        if (conditionsContainer) conditionsContainer.innerHTML = '<p style="color: #64748B; font-size: 0.85rem;">No active patient condition profiles available.</p>';
         return;
       }
 
@@ -286,6 +303,42 @@
             </td>
           </tr>
         `;
+
+        // Render Condition Card for Caregiver
+        if (conditionsContainer) {
+          let conditionsHtml = "";
+          const conditionsObj = s.patient_conditions || {};
+
+          if (Object.keys(conditionsObj).length > 0) {
+            for (const [cat, condList] of Object.entries(conditionsObj)) {
+              conditionsHtml += `
+                <div style="margin-bottom: 0.5rem;">
+                  <strong style="color: #1E3A8A; font-size: 0.8rem; text-transform: uppercase;">${cat}:</strong>
+                  <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px;">
+                    ${condList.map(c => `<span style="background: #F1F5F9; color: #334155; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">${c}</span>`).join("")}
+                  </div>
+                </div>
+              `;
+            }
+          } else {
+            conditionsHtml = '<p style="color: #64748B; font-size: 0.8rem; margin: 0;">No specific clinical conditions specified.</p>';
+          }
+
+          conditionsContainer.innerHTML += `
+            <div style="border: 1px solid #E2E8F0; border-radius: 6px; padding: 1rem; background: #FFF;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid #F1F5F9; padding-bottom: 0.25rem;">
+                <h4 style="margin: 0; color: var(--primary-deep); font-size: 0.95rem;">Patient: ${s.patient_name}</h4>
+                <span style="font-size: 0.75rem; color: #64748B;">Service: <strong>${s.services_name || s.service_name || "Care Plan"}</strong></span>
+              </div>
+              ${conditionsHtml}
+              ${s.patient_notes ? `
+                <div style="background: #F8FAFC; border-left: 3px solid var(--secondary-teal); padding: 6px 10px; margin-top: 0.5rem; font-size: 0.8rem; color: #475569;">
+                  <strong>Special Instructions:</strong> ${s.patient_notes}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
       });
     } catch (e) {
       console.error("Caregiver schedules load error:", e);
